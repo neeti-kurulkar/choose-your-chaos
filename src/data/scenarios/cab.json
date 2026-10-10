@@ -10,8 +10,12 @@
       "narrator": "Congratulations. A stranger has volunteered to drive you through the night. The app says he’s lovely. The app also says the Wi-Fi is free.",
       "panel": {
         "art": "cab-arrives",
-        "alt": "10:40 pm. A yellow ZoomZoom cab pulls up under a streetlight. The app says: Ramesh, 4.9 stars. You stand on the kerb, seen from behind, phone in hand.",
-        "sfx": "SCREECH"
+        "alt": "10:40 pm. A yellow ZoomZoom cab brakes to a stop under a streetlight. Through the window, the driver, Ramesh, waves; he is wearing giant sunglasses at night. You stand on the kerb, seen from behind, phone in hand. The app card says: Ramesh, 4.9 stars, ZZ 04 Z 4949, arriving now.",
+        "sfx": "SCREECH",
+        "sfxAt": [
+          300,
+          60
+        ]
       },
       "choices": [
         {
@@ -19,7 +23,8 @@
           "text": "Hop in quickly, it’s late and cold.",
           "reaction": "Efficient. The plate number is a surprise for later.",
           "label": "Hopped straight in",
-          "weight": -1
+          "weight": -1,
+          "gag": "cab-1a"
         },
         {
           "id": "b",
@@ -27,7 +32,8 @@
           "reaction": "Look at you, running a background check at 10:40 pm.",
           "label": "Checked the plate and photo",
           "weight": 1,
-          "move": "The plate check"
+          "move": "The plate check",
+          "gag": "cab-1b"
         },
         {
           "id": "c",
@@ -35,7 +41,8 @@
           "reaction": "A paper trail, delivered in three seconds. Bureaucracy, but make it useful.",
           "label": "Sent the plate to a friend",
           "weight": 1,
-          "move": "The paper trail"
+          "move": "The paper trail",
+          "gag": "cab-1c"
         },
         {
           "id": "d",
@@ -43,7 +50,8 @@
           "reaction": "Direct, polite, devastatingly efficient. The driver is briefly impressed.",
           "label": "Asked him to confirm the booking name",
           "weight": 1,
-          "move": "The booking-name test"
+          "move": "The booking-name test",
+          "gag": "cab-1d"
         }
       ],
       "another": {
@@ -58,10 +66,14 @@
       "narrator": "The trip has begun. So has the small talk.",
       "panel": {
         "art": "cab-interior",
-        "alt": "Inside the cab, from the back seat. The driver’s huge night-time sunglasses fill the rear-view mirror. Your phone shows 20 minutes to Lakeview Colony.",
+        "alt": "Inside the cab, from the back seat. Streetlights slide past the windshield. In the rear-view mirror: Ramesh's giant sunglasses. The radio shows FM 98.3. Your phone says 20 minutes to Lakeview Colony.",
         "bubble": {
-          "speaker": "Driver",
-          "text": "Madam, music? Old songs, new songs?"
+          "speaker": "Ramesh",
+          "text": "Madam, music? Old songs, new songs?",
+          "at": [
+            150,
+            92
+          ]
         }
       },
       "choices": [
@@ -71,21 +83,24 @@
           "reaction": "A friend now has your live location. Your friend is asleep, but still.",
           "label": "Shared the live trip",
           "weight": 1,
-          "move": "Trip sharing"
+          "move": "Trip sharing",
+          "gag": "cab-2a"
         },
         {
           "id": "b",
           "text": "Put on headphones and stare out of the window.",
           "reaction": "The universal signal for “no thanks”. Unfortunately it also means nobody’s watching the road.",
           "label": "Headphones on, eyes on the window",
-          "weight": 0
+          "weight": 0,
+          "gag": "cab-2b"
         },
         {
           "id": "c",
           "text": "Make light conversation to keep things friendly.",
           "reaction": "Charming. He now knows your office, your sister’s name and your lunch order.",
           "label": "Kept the small talk going",
-          "weight": -1
+          "weight": -1,
+          "gag": "cab-2c"
         },
         {
           "id": "d",
@@ -93,7 +108,8 @@
           "reaction": "Quietly supervising a GPS. A hobby with surprising benefits.",
           "label": "Kept the map open",
           "weight": 1,
-          "move": "Keep the map open"
+          "move": "Keep the map open",
+          "gag": "cab-2d"
         }
       ],
       "another": {
@@ -108,8 +124,12 @@
       "narrator": "Ten minutes in, the cab turns onto a road your map doesn’t show. The GPS is making a face. You can’t see it, but you can feel it.",
       "panel": {
         "art": "map-mismatch",
-        "alt": "Your phone’s map. The planned route runs straight up the main road, but the cab icon turns off onto a side road the map doesn’t show. The GPS looks unimpressed.",
-        "sfx": "BEEP"
+        "alt": "The road in the windshield swings away to one side as the cab turns. Close-up of your phone: the blue route goes straight up the main road, but the cab icon turns off onto a dotted side road the map doesn't show. The GPS icon looks unimpressed.",
+        "sfx": "BEEP",
+        "sfxAt": [
+          300,
+          150
+        ]
       },
       "choices": [
         {
@@ -117,7 +137,8 @@
           "text": "Say nothing, he probably knows a shortcut.",
           "reaction": "Bold strategy. Let’s see how the shortcut feels about you.",
           "label": "Let the shortcut slide",
-          "weight": -1
+          "weight": -1,
+          "gag": "cab-3a"
         },
         {
           "id": "b",
@@ -125,7 +146,8 @@
           "reaction": "A polite question. Also the most inconvenient thing you could do to a bad plan.",
           "label": "Asked about the route",
           "weight": 1,
-          "move": "The polite question"
+          "move": "The polite question",
+          "gag": "cab-3b"
         },
         {
           "id": "c",
@@ -133,7 +155,8 @@
           "reaction": "Acting skills: unlocked. Everyone in the car is now aware of your friend’s existence.",
           "label": "Called a friend, out loud",
           "weight": 1,
-          "move": "The very audible phone call"
+          "move": "The very audible phone call",
+          "gag": "cab-3c"
         },
         {
           "id": "d",
@@ -141,7 +164,8 @@
           "reaction": "Hydration, the most convincing excuse in history.",
           "label": "Asked for a water stop",
           "weight": 1,
-          "move": "The strategic water break"
+          "move": "The strategic water break",
+          "gag": "cab-3d"
         }
       ],
       "another": {
@@ -156,8 +180,12 @@
       "narrator": "A lit tea stall ahead. Your phone is at 12%. Plot twist: your battery has joined the story.",
       "panel": {
         "art": "tea-stall",
-        "alt": "Through the cab window, a brightly lit chai stall with a steaming kettle and a few people around it. Your phone battery reads 12%.",
-        "sfx": "BZZT"
+        "alt": "Through the cab's side window, the cab slows beside a brightly lit chai stall. The chai-wala pours tea in a long arc; steam rises. Your phone battery reads 12% and is blinking.",
+        "sfx": "BZZT",
+        "sfxAt": [
+          140,
+          30
+        ]
       },
       "choices": [
         {
@@ -165,7 +193,8 @@
           "text": "Keep sitting, the ride will end eventually.",
           "reaction": "Patience is a virtue. So is arriving.",
           "label": "Waited it out",
-          "weight": -1
+          "weight": -1,
+          "gag": "cab-4a"
         },
         {
           "id": "b",
@@ -173,7 +202,8 @@
           "reaction": "Exiting a bad deal with grace. Economists would be proud.",
           "label": "Got out at the tea stall",
           "weight": 1,
-          "move": "The graceful exit"
+          "move": "The graceful exit",
+          "gag": "cab-4b"
         },
         {
           "id": "c",
@@ -181,49 +211,105 @@
           "reaction": "Not panic. A plan, with backup on speaker.",
           "label": "Called the emergency number",
           "weight": 1,
-          "move": "Calling 112"
+          "move": "Calling 112",
+          "gag": "cab-4c"
         },
         {
           "id": "d",
-          "text": "Message ZoomZoom support through the app while the trip is being shared.",
+          "text": "Message ZoomZoom support through the app.",
           "reaction": "Customer service: the unlikely hero of the story. Please hold.",
           "label": "Messaged the app’s support",
           "weight": 1,
-          "move": "The support ticket"
+          "move": "The support ticket",
+          "gag": "cab-4d"
         }
       ],
       "another": {
         "choice": "b",
         "why": "A busy, well-lit place is a good spot to end a ride that doesn’t feel right. You can always book another.",
         "move": "The graceful exit"
+      },
+      "variants": {
+        "from": "turn",
+        "by": {
+          "d": {
+            "narrator": "He pulls over at the lit tea stall for your water. Your phone is at 12%. Plot twist: your battery has joined the story."
+          }
+        }
       }
     }
   ],
   "endings": {
     "good": {
-      "title": "Five Stars, One Footnote",
-      "art": "home-door",
-      "alt": "You at your front door under a porch light. Your phone shows a five-star review with a small asterisk.",
-      "narration": "Ramesh found the main road with remarkable speed. It turns out routes are easier to follow when someone is watching them. You arrive home at 11:20 pm. The review you write begins: “Short cut, long story.”",
+      "hint": "Want the other ending? Go with the flow this time: hop in, chat, trust the shortcut, sit tight.",
       "moves": [
         "Trip sharing",
         "The polite question",
-        "The strategic water break"
+        "The graceful exit"
       ],
-      "hint": "Want the scenic route? Go with the flow this time: hop in, chat, trust the shortcut, sit tight."
+      "variants": [
+        {
+          "id": "chai",
+          "when": {
+            "stage": "truth",
+            "choices": [
+              "b"
+            ]
+          },
+          "title": "Chai, Upgraded",
+          "art": "ending-chai",
+          "alt": "You stand at the lit chai stall holding a cup of tea. A new yellow cab pulls in; its card says Lakshmi, 4.97 stars, charger in car, 3 minutes away.",
+          "narration": "You step out at the tea stall. The chai-wala takes one look at your face and hands you a cutting chai, on the house, “for the drama.” Your next cab arrives in three minutes: Lakshmi, 4.97 stars, phone charger already plugged in. Somewhere behind you, Ramesh is still looking for his shortcut."
+        },
+        {
+          "id": "dispatch",
+          "when": {
+            "stage": "truth",
+            "choices": [
+              "c"
+            ]
+          },
+          "title": "Dispatch Has Joined the Ride",
+          "art": "ending-dispatch",
+          "alt": "The cab is back on the main road under the streetlights. Your phone shows a call to 112, on call for 1 minute 42 seconds. A speech bubble: “Passing the big hoarding of the smiling jeweller…”",
+          "narration": "You stay on the line and describe every landmark like a cricket commentator: “Passing the closed petrol pump. Now the big hoarding of the smiling jeweller.” Ramesh hears all of it. The main road reappears in under a minute. At your gate he asks, very politely, who you were talking to. “A friend,” you say. “A very official one.”"
+        },
+        {
+          "id": "narrated",
+          "when": {
+            "stage": "truth",
+            "choices": [
+              "d"
+            ]
+          },
+          "title": "The Most Narrated Ride in History",
+          "art": "ending-narrated",
+          "alt": "Inside the cab. Ramesh's speech bubbles stack up: “Madam, main road.” “Madam, signal.” “Madam, speed breaker.” “Madam, your gate.”",
+          "narration": "Two minutes after your message to ZoomZoom support, Ramesh’s phone rings. After that call, he announces every single turn like a tour guide: “Madam, main road. Madam, signal. Madam, speed breaker. Madam, your gate.” You arrive two minutes early. The app asks Ramesh to rate you. Five stars: “Madam very alert. Will not try shortcut again.”"
+        }
+      ]
     },
     "funnyBad": {
-      "title": "The Scenic Route Tour",
-      "art": "scenic-route",
-      "alt": "A montage: a looping flyover, a fuel pump with a CLOSED board, wedding lights and a band. Your phone battery reads 1%.",
-      "narration": "You arrive 50 minutes late, having seen three flyovers, a closed fuel pump and a wedding. The driver says, “Madam, short cut.” Your battery is at 1%. Your dignity has been rated “pending”.",
+      "title": "Mummy Has Entered the Chat",
+      "art": "ending-search-party",
+      "alt": "Your front door at night. Mummy, Papa and the neighbour aunty crowd the doorway holding phones. A family WhatsApp group called “Find Beta” shows messages: CALL ME, I have torch, shared location, bringing samosa. Your phone is dead. A 9 am notification: ₹186 for “route optimisation”.",
+      "narration": "You reach home 50 minutes late to find Mummy, Papa, the neighbour aunty and a cousin on video call running a WhatsApp group called “Find Beta”, complete with a map and a snacks plan. At 9 am, ZoomZoom charges you ₹186 extra for “route optimisation”.",
       "moves": [
         "Speak up early",
         "Keep the map open",
         "Charge your phone, always"
       ],
-      "hint": "For the good ending: check the car, share the trip, ask about the route, and get out somewhere well lit.",
-      "extraMove": "Charge your phone, always"
+      "extraMove": "Charge your phone, always",
+      "hint": "For a good ending: check the car, share the trip, ask about the route, then pick your exit. There are three different good endings, depending on how you get out.",
+      "lead": {
+        "from": "truth",
+        "default": "Your phone dies somewhere between the second flyover and a stranger’s baraat.",
+        "by": {
+          "b": "You step out at the tea stall, and your phone dies mid-booking. The next cab takes forty minutes and a borrowed charger.",
+          "c": "Your call drops when the battery hits zero, somewhere near a stranger’s baraat. The operator calls back. Your phone does not answer.",
+          "d": "ZoomZoom support replies “We’re looking into it”, and then your phone dies near a stranger’s baraat."
+        }
+      }
     }
   },
   "realLife": {

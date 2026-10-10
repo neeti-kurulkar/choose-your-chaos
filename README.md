@@ -4,7 +4,7 @@ A short, sarcastic, comic-panel choose-your-path game about everyday safety
 situations for adult women in India. A university HCI course prototype.
 Static front end only: no backend, nothing leaves the browser.
 
-**Status:** Stage 3B (account placeholder, "Tell us your experience", privacy page, admin demo).
+**Status:** Stage 4 (all four scenarios playable, each with three good endings and one funny-bad ending).
 
 ## Run it
 
@@ -36,7 +36,12 @@ First test run only: `npx playwright install chromium`.
 | Fonts, type scale, spacing | `src/styles/tokens.css` |
 | Scenario list, card titles and taglines | `src/data/scenarios/index.json` |
 | Scenario text, choices, endings, threshold | `src/data/scenarios/<id>.json` |
-| Illustrations and their entrance animations | `src/art/index.js` |
+| Illustrations and their animations (GSAP) | `src/art/<scenario>.js`; shared people/phone kit in `src/art/gkit.js` |
+| Per-choice gags under the narrator | `src/art/gags.js` (cab), `src/art/gags2.js` (others) + `"gag"` on a choice |
+| Animation plugins, eases, shared effects, idle “life” | `src/art/motion.js` (DrawSVG, MotionPath, CustomWiggle) |
+| Joke-by-joke tone check | `docs/content-review.md` |
+| How every scene follows from earlier choices | `docs/flow-audit.md` (regenerate: `node scripts/flow-audit.mjs`) |
+| Scenes that change with an earlier choice | `"variants"` on a stage in the scenario JSON (see `docs/data-schema.md`) |
 | Helplines (with sources and verified dates) | `src/data/helplines.json`; see `docs/verification-report.md` |
 | Profile and "Tell us" options (age bands, settings…) | `src/js/options.js` |
 | Fake entries on the hidden triage page | `src/data/sample-submissions.json` |
@@ -62,6 +67,7 @@ src/
     player.js         scenario engine (scene -> pause -> choice -> reaction,
                       scoring, back one choice, skip scene, pause menu)
     ending.js         ending card, Moves unlocked, tally, "Your route" debrief
+    endings.js        picks the ending (good variants keyed to a move)
     storage.js        safe localStorage wrapper (works when storage is blocked)
     prefs.js          text size
     profile.js        getProfile() for future filtering (placeholder)
@@ -70,7 +76,8 @@ src/
     pii.js            simple personal-details check for free text
     forms.js          shared form builders
     views/            one module per page
-  art/index.js        SVG illustrations + entrance animations
+  art/                SVG scenes animated with GSAP (cab, dinner, commute,
+                      wedding), gags.js, gkit.js shared drawing kit
   data/               scenario and helpline content (JSON)
 docs/                 schema, illustration list, screenshots per stage
 tests/                Playwright tests

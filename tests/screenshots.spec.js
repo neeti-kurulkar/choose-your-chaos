@@ -1,7 +1,7 @@
 // Per-stage screenshots: npm run screenshots
 import { test } from '@playwright/test';
 
-const dir = 'docs/screenshots/stage-3b';
+const dir = 'docs/screenshots/stage-4';
 const SHOTS = [
   ['serious', '/#/serious'],
   ['tell-us', '/#/tell-us'],
@@ -38,6 +38,7 @@ test('shot player, pause menu, mobile menu', async ({ page, isMobile }, info) =>
 });
 
 test('shot scenes and endings', async ({ page }, info) => {
+  test.setTimeout(90000);
   await page.goto('/#/play/cab');
   const shot = (n) => page.screenshot({ path: `${dir}/${n}-${info.project.name}.png` });
   const picks = [1, 0, 1, 1];
@@ -47,17 +48,17 @@ test('shot scenes and endings', async ({ page }, info) => {
     await shot(`scene-${i + 1}`);
     await page.locator('.player .choice').nth(picks[i]).click();
     if (i === 1) { await page.waitForTimeout(350); await shot('reaction'); }
-    await page.locator('.reaction [data-next]').click();
+    await page.locator('.reaction').click();
   }
   await page.waitForTimeout(900);
   await page.screenshot({ path: `${dir}/ending-good-${info.project.name}.png`, fullPage: true });
-  await page.getByRole('button', { name: 'See the funny-bad ending' }).click();
+  await page.getByRole('button', { name: 'See the other ending' }).click();
   await page.waitForTimeout(300);
   await shot('hint');
   for (const n of [0, 2, 0, 0]) {
     await page.locator('.player [data-skip]').click({ timeout: 500 }).catch(() => {});
     await page.locator('.player .choice').nth(n).click();
-    await page.locator('.reaction [data-next]').click();
+    await page.locator('.reaction').click();
   }
   await page.waitForTimeout(900);
   await page.screenshot({ path: `${dir}/ending-funnybad-${info.project.name}.png`, fullPage: true });
@@ -81,3 +82,17 @@ test('shot sign-up form, profile and tell-us warning', async ({ page }, info) =>
   await page.locator('.pii-warning').scrollIntoViewIfNeeded();
   await page.screenshot({ path: `${dir}/pii-warning-${info.project.name}.png` });
 });
+
+for (const id of ['dinner', 'commute', 'wedding']) {
+  test(`shot ${id} opening + an ending`, async ({ page }, info) => {
+    test.setTimeout(60000);
+    await page.goto(`/#/play/${id}`);
+    await page.locator('.player [data-skip]').click({ timeout: 3000 }).catch(() => {});
+    await page.locator('.player .choice').first().waitFor({ timeout: 12000 });
+    await page.waitForTimeout(500);
+    await page.locator('.player').screenshot({ path: `${dir}/${id}-scene-1-${info.project.name}.png` });
+    await page.locator('.player .choice').nth(1).click();
+    await page.waitForTimeout(1500);
+    await page.locator('.player').screenshot({ path: `${dir}/${id}-reaction-${info.project.name}.png` });
+  });
+}

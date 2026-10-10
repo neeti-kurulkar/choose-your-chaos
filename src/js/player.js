@@ -1,11 +1,17 @@
-// Scenario player: one fixed "screen", no page scrolling.
-// Flow per stage: scene animates -> freezes -> choices slide in ->
-// narrator reaction pops up -> Next cuts to the next scene.
+// Scenario player: one full canvas, no page scrolling.
+// Per stage: the scene plays (narration at the top) -> it settles and the
+// choices rise onto the canvas at the bottom -> you choose -> the narrator's
+// reaction pops up for a few seconds and fades -> cut to the next scene.
 // After the last stage the hidden weights are totalled against the
 // scenario's threshold and the ending + debrief page is shown.
 
 import { ART } from '../art/index.js';
+import { GAGS } from '../art/gags.js';
 import { renderEnding } from './ending.js';
+import { resolveStage } from './endings.js';
+export { resolveStage };
+import { gsap, life } from '../art/motion.js';
+import { load, save } from './storage.js';
 
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const KEYS = 'ABCD';
@@ -17,10 +23,40 @@ export const esc = (t = '') =>
 
 /** Sum of hidden weights; skipped stages (choice null) count as 0. */
 export function scoreOf(scenario, history) {
-  return history.reduce((sum, h) => sum + (h.choice === null ? 0 : scenario.stages[h.stage].choices[h.choice].weight), 0);
+  return history.reduce((sum, h) => sum + (h.choice === null ? 0 : resolveStage(scenario, h.stage, history).choices[h.choice].weight), 0);
 }
 export const endingFor = (scenario, history) =>
   scoreOf(scenario, history) >= scenario.threshold ? 'good' : 'funnyBad';
+
+/**
+ * Place the 400x250 art "band" inside the canvas: narration needs room at
+ * the top, choices at the bottom. Art extends beyond the band, so the extra
+ * space shows more sky and road instead of empty bars.
+ */
+export function fitBand(screen) {
+  const W = screen.clientWidth;
+  const H = screen.clientHeight;
+  if (!W || !H) return;
+  const portrait = W / H < 1;
+  let s;
+  let top;
+  if (portrait) {
+    // tall phones: narration above, choices below, scene in between
+    top = H * 0.19;
+    s = Math.max(80, Math.min(W / 1.6, H - top - H * 0.45)) / 250;
+  } else {
+    // wide screens: a thin strip for narration on top, the bottom quarter
+    // for choices; the art carries on sideways to fill the width
+    top = H * 0.06;
+    s = Math.min(W / 400, (H * 0.7) / 250);
+  }
+  const left = (W - 400 * s) / 2;
+  const vb = `${-left / s} ${-top / s} ${W / s} ${H / s}`;
+  screen.querySelectorAll('.scene > svg').forEach((el) => el.setAttribute('viewBox', vb));
+  screen.style.setProperty('--band-top', `${top}px`);
+  screen.style.setProperty('--band-left', `${left}px`);
+  screen.style.setProperty('--band-s', String(s));
+}
 
 /**
  * @param {HTMLElement} root  empty container
@@ -35,7 +71,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
   let token = 0; // invalidates in-flight scene animations after back/skip/restart
 
   const anim = (el, frames, o) =>
-    el.animate(frames, { fill: 'both', easing: 'ease-out', ...o, duration: reduced() || fast ? 1 : o.duration });
+    el.animate(frames, { fill: 'both', easing: 'ease-out', ...o, ...(reduced() || fast ? { duration: 1, delay: 0 } : {}) });
   const pop = (el) =>
     el
       ? anim(el, [
@@ -44,19 +80,78 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
           { opacity: 1, transform: 'none' },
         ], { duration: 450, easing: 'cubic-bezier(.34,1.56,.64,1)' }).finished
       : Promise.resolve();
-  const kit = { anim, pop };
+
+  // GSAP timelines from scene art are tracked so Fast-forward, Pause,
+  // reduced motion and scene changes control them.
+  const tracked = new Set();
+  function track(tl, { idle = false } = {}) {
+    tracked.add(tl);
+    if (!idle && (reduced() || fast)) tl.progress(1);
+    return new Promise((resolve) => {
+      if (idle || tl.progress() === 1) resolve();
+      else tl.eventCallback('onComplete', resolve);
+    });
+  }
+  const killTracked = () => { tracked.forEach((t) => t.kill()); tracked.clear(); };
+  const kit = { anim, pop, gsap, track, reduced };
+
+  // Auto-advance: the reaction shows for a few seconds, then the next scene
+  // starts. Switchable in the Pause menu (WCAG 2.2.1 Timing Adjustable).
+  let autoAdvance = load('autoAdvance', true) !== false;
+  let timer = null;
+  let timerEnds = 0;
+  let timerLeft = 0;
+  // How long the reaction stays once fully shown: short, then it gets out of the way.
+  const readTime = (text) => Math.min(3200, Math.max(1600, 900 + text.length * 22));
+  function startTimer(ms) {
+    clearTimeout(timer);
+    timerLeft = ms;
+    timerEnds = Date.now() + ms;
+    timer = setTimeout(advance, ms);
+  }
+  function pauseTimer() {
+    if (!timer) return;
+    clearTimeout(timer);
+    timer = null;
+    timerLeft = Math.max(0, timerEnds - Date.now());
+  }
+  function resumeTimer() {
+    if (stage.querySelector('.reaction') && autoAdvance && timerLeft > 0 && !timer) startTimer(timerLeft);
+  }
+  const stopTimer = () => { clearTimeout(timer); timer = null; timerLeft = 0; };
+
+  let player, stage, screen, tray, progress, stateLabel, skipBtn, dialog, resizeObs;
+
+  // Deadpan needs timing: lines appear sentence by sentence, with a beat
+  // before each one (longer before the last). Screen readers get the
+  // whole line at once from a visually hidden copy.
+  const sentences = (text) => text.match(/[^.!?…]+[.!?…]+["”’)]*\s*|[^.!?…]+$/g) || [text];
+  const beatsHtml = (text) =>
+    `<span class="visually-hidden">${esc(text)}</span><span aria-hidden="true">${sentences(text)
+      .map((t) => `<span class="beat">${esc(t)}</span>`).join('')}</span>`;
+  function revealBeats(el) {
+    const beats = [...el.querySelectorAll('.beat')];
+    let t = 0;
+    const runs = beats.map((b, i) => {
+      if (i > 0) t += (i === beats.length - 1 ? 750 : 450) + beats[i - 1].textContent.length * 12;
+      return anim(b, [{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 220, delay: t }).finished;
+    });
+    return Promise.all(runs).catch(() => {});
+  }
 
   function shell() {
     root.innerHTML = `
     <div class="player" role="region" aria-label="${esc(scenario.title)}">
       <div class="player__bar">
         <span data-progress></span>
-        <button type="button" class="btn btn--quiet btn--small" data-skip>Fast-forward</button>
+        <button type="button" class="btn btn--quiet btn--small" data-skip aria-label="Fast-forward"><span aria-hidden="true">»</span><span class="hide-sm" aria-hidden="true"> Fast-forward</span></button>
         <span class="player__state"><i aria-hidden="true"></i><span data-state class="hide-sm">Playing</span></span>
         <button type="button" class="btn btn--small" data-pause>Pause / Exit</button>
       </div>
-      <div class="player__screen"></div>
-      <div class="player__tray"></div>
+      <div class="player__stage">
+        <div class="player__screen"></div>
+        <div class="player__tray"></div>
+      </div>
     </div>
     <dialog class="pause-menu" aria-labelledby="pause-title">
       <h2 id="pause-title">Paused</h2>
@@ -65,6 +160,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
         <button type="button" class="btn btn--primary" data-resume>Resume</button>
         <button type="button" class="btn" data-back hidden>Back one choice</button>
         <button type="button" class="btn" data-skipscene>Skip this scene</button>
+        <button type="button" class="btn" data-auto aria-pressed="true">Auto-advance: on</button>
         <button type="button" class="btn" data-restart>Restart scenario</button>
         <a class="btn" href="${exitHref}">Exit to scenarios</a>
         <a class="btn btn--quiet" href="#/serious">On a serious note</a>
@@ -73,7 +169,6 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
     wireShell();
   }
 
-  let player, screen, tray, progress, stateLabel, skipBtn, dialog;
   const ownAnims = () => document.getAnimations().filter((a) => player.contains(a.effect?.target));
 
   function setPaused(paused) {
@@ -82,107 +177,162 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
     skipBtn.hidden = paused;
   }
 
-  async function playStage(i, { direction = 1 } = {}) {
+  async function playStage(i, { direction = 1, quick = false } = {}) {
     const my = ++token;
     index = i;
-    fast = false;
-    player.querySelector('.reaction')?.remove();
-    const stage = scenario.stages[i];
-    const art = ART[stage.panel.art];
+    fast = quick; // rewinding jumps straight to the choices
+    stopTimer();
+    killTracked();
+    stage.querySelector('.reaction')?.remove();
+    stage.querySelector('.gag')?.remove();
+    stage.classList.remove('has-choices');
+    const st = resolveStage(scenario, i, history);
+    const art = ART[st.panel.art];
     const hadFocus = player.contains(document.activeElement) || dialog.open;
     setPaused(false);
-    progress.textContent = `Stage ${i + 1} of ${scenario.stages.length}. ${stage.title}`;
-    tray.innerHTML = `<div class="player__wait"><p>Watch the scene…</p>${hint ? `<p class="player__hint"><strong>Hint:</strong> ${esc(hint)}</p>` : ''}</div>`;
+    progress.textContent = `Stage ${i + 1} of ${scenario.stages.length}. ${st.title}`;
+    tray.innerHTML = hint ? `<p class="player__hint"><strong>Hint:</strong> ${esc(hint)}</p>` : '';
 
     const next = document.createElement('div');
-    next.className = 'scene';
+    next.className = `scene${art?.gsap ? ' scene--gsap' : ''}`;
     next.setAttribute('role', 'img');
-    next.setAttribute('aria-label', stage.panel.alt);
-    const b = stage.panel.bubble;
+    next.setAttribute('aria-label', st.panel.alt);
+    const b = st.panel.bubble;
+    const [bx, by] = b?.at || [250, 70];
+    const [sx, sy] = st.panel.sfxAt || [288, 120];
     next.innerHTML = `${art ? art.svg : ''}
-      ${stage.panel.sfx ? `<div class="scene__sfx sfx" aria-hidden="true">${BURST}<span class="sfx__word">${esc(stage.panel.sfx)}!</span></div>` : ''}
-      ${b ? `<p class="bubble scene__bubble"><span class="visually-hidden">${esc(b.speaker)} says: </span>${esc(b.text)}</p>` : ''}`;
+      ${st.panel.sfx ? `<div class="scene__sfx sfx" aria-hidden="true" style="--sx:${sx};--sy:${sy}">${BURST}<span class="sfx__word">${esc(st.panel.sfx)}!</span></div>` : ''}
+      ${b ? `<p class="bubble scene__bubble${b.tail === 'right' ? ' bubble--right' : ''}" style="--bx:${bx};--by:${by}"><span class="visually-hidden">${esc(b.speaker)} says: </span>${esc(b.text)}</p>` : ''}`;
     const caption = document.createElement('p');
     caption.className = 'narrator scene__caption';
     caption.setAttribute('aria-live', 'polite');
-    caption.innerHTML = `<span class="visually-hidden">Narrator: </span>${esc(stage.narrator)}`;
+    caption.innerHTML = `<span class="visually-hidden">Narrator: </span>${beatsHtml(st.narrator)}`;
 
     const old = [...screen.children];
     screen.append(next, caption);
+    fitBand(screen);
     old.forEach((el) => {
       if (el.classList.contains('scene')) {
-        anim(el, [{ transform: 'none', opacity: 1 }, { transform: `translateX(${-60 * direction}%)`, opacity: 0 }], { duration: 450, easing: 'ease-in' })
+        anim(el, [{ opacity: 1 }, { opacity: 0 }], { duration: 400, easing: 'ease-in' })
           .finished.then(() => el.remove(), () => el.remove());
       } else el.remove();
     });
-    if (old.length) await anim(next, [{ transform: `translateX(${100 * direction}%)` }, { transform: 'none' }], { duration: 450 }).finished;
+    if (old.length) await anim(next, [{ opacity: 0, transform: `translateX(${4 * direction}%)` }, { opacity: 1, transform: 'none' }], { duration: 450 }).finished;
     if (my !== token) return;
-    await anim(caption, [{ opacity: 0, transform: 'translateY(-12px)' }, { opacity: 1, transform: 'none' }], { duration: 300 }).finished;
-    if (b && my === token) await anim(next.querySelector('.scene__bubble'), [{ opacity: 0, transform: 'scale(.5)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.34,1.56,.64,1)' }).finished;
-    if (art && my === token) await art.play(next, kit).catch(() => {});
+    // Sentences start hidden (CSS) and only ever appear one at a time.
+    const captionDone = revealBeats(caption);
+    anim(caption, [{ opacity: 0, transform: 'translateY(-10px)' }, { opacity: 1, transform: 'none' }], { duration: 250 });
+    const sceneDone = art ? art.play(next, kit).catch(() => {}) : Promise.resolve();
+    // Character speech bubbles start hidden (CSS) and pop in once.
+    let bubbleShown = false;
+    const showBubble = () => {
+      const el = next.querySelector('.scene__bubble');
+      if (!el || bubbleShown || my !== token) return;
+      bubbleShown = true;
+      anim(el, [{ opacity: 0, transform: 'scale(.5)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.34,1.56,.64,1)' });
+    };
+    if (b) setTimeout(showBubble, reduced() || fast ? 0 : 1200);
+    await Promise.all([sceneDone, captionDone]);
     if (!alive || my !== token) return;
-    showChoices(stage, hadFocus || player.contains(document.activeElement));
+    showBubble(); // e.g. after Fast-forward
+    if (!reduced()) life(next, track); // blinks, sways, breathing while you choose
+    showChoices(st, hadFocus || player.contains(document.activeElement));
   }
 
-  function showChoices(stage, moveFocus) {
+  function showChoices(st, moveFocus) {
     setPaused(true);
-    tray.innerHTML = `<h3 class="visually-hidden" tabindex="-1">Your move</h3><ol class="choices">${stage.choices
-      .map((c, n) => `<li><button type="button" class="choice" aria-pressed="false" data-n="${n}"><span class="choice__key" aria-hidden="true">${KEYS[n]}</span><span>${esc(c.text)}</span></button></li>`)
+    stage.classList.add('has-choices');
+    tray.innerHTML = `<h3 class="visually-hidden" tabindex="-1">Your move</h3><ol class="choices">${st.choices
+      .map((c, n) => `<li><button type="button" class="choice" data-n="${n}"><span class="choice__key" aria-hidden="true">${KEYS[n]}</span><span>${esc(c.text)}</span></button></li>`)
       .join('')}</ol>`;
-    anim(tray.querySelector('.choices'), [{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }], { duration: 280 });
+    tray.querySelectorAll('.choice').forEach((btn, n) =>
+      anim(btn, [{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'none' }], { duration: 260, delay: n * 60 }),
+    );
     if (moveFocus) tray.querySelector('h3').focus();
     tray.querySelectorAll('.choice').forEach((btn) =>
-      btn.addEventListener('click', () => choose(stage, Number(btn.dataset.n), btn)),
+      btn.addEventListener('click', () => choose(st, Number(btn.dataset.n))),
     );
     syncBack();
   }
 
-  function choose(stage, n, btn) {
-    tray.querySelectorAll('.choice').forEach((b) => { b.disabled = true; });
-    btn.setAttribute('aria-pressed', 'true');
-    history.push({ stage: index, choice: n });
-    syncBack();
-    const last = index === scenario.stages.length - 1;
-    const c = stage.choices[n];
-    const box = document.createElement('div');
-    box.className = 'reaction';
-    box.setAttribute('role', 'dialog');
-    box.setAttribute('aria-label', 'Narrator reaction');
-    box.innerHTML = `<span class="reaction__who" aria-hidden="true">Narrator</span>
-      <p class="reaction__text">${esc(c.reaction)}</p>
-      <p class="reaction__chose">You chose ${KEYS[n]}: ${esc(c.text)}</p>
-      <div class="reaction__actions">
-        <button type="button" class="btn" data-next>${last ? 'See how it ends' : 'Next scene'}</button>
-        <button type="button" class="btn btn--quiet reaction__undo" data-undo>Back one choice</button>
-      </div>`;
-    player.append(box);
-    anim(box, [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'scale(1.04)', offset: 0.7 }, { opacity: 1, transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.34,1.56,.64,1)' });
-    const next = box.querySelector('[data-next]');
-    next.focus();
-    next.addEventListener('click', advance);
-    box.querySelector('[data-undo]').addEventListener('click', backOne);
+  function fadeOverlays(out) {
+    ['.scene__caption', '.scene__bubble'].forEach((sel) => {
+      const el = screen.querySelector(sel);
+      if (!el) return;
+      if (out) el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' });
+      else el.getAnimations().forEach((a) => a.cancel());
+    });
   }
 
-  function advance() {
-    player.querySelector('.reaction')?.remove();
+  function choose(st, n) {
+    history.push({ stage: index, choice: n });
+    syncBack();
+    stage.classList.remove('has-choices');
+    tray.innerHTML = '';
+    fadeOverlays(true);
+    const c = st.choices[n];
+    const last = index === scenario.stages.length - 1;
+    // The reaction is one big tappable speech bubble: tap to skip ahead.
+    const box = document.createElement('button');
+    box.type = 'button';
+    box.className = 'reaction';
+    box.innerHTML = `<span class="reaction__who" aria-hidden="true">Narrator</span>
+      <span class="reaction__text">${beatsHtml(c.reaction)}</span>
+      ${autoAdvance
+        ? `<span class="visually-hidden reaction__hint">. Continues automatically, or press to ${last ? 'see how it ends' : 'go to the next scene'}.</span>`
+        : `<span class="reaction__next">${last ? 'See how it ends' : 'Next scene'} ›</span>`}`;
+    stage.append(box);
+    anim(box, [{ opacity: 0, transform: 'translateY(-10px) scale(.92)' }, { opacity: 1, transform: 'none' }], { duration: 280, easing: 'cubic-bezier(.34,1.56,.64,1)' });
+    box.focus();
+    box.addEventListener('click', advance);
+    // A small visual gag that undercuts (or seconds) the narrator's line.
+    const gag = c.gag && GAGS[c.gag];
+    if (gag) {
+      const inset = document.createElement('div');
+      inset.className = 'gag';
+      inset.setAttribute('aria-hidden', 'true'); // the reaction text carries the meaning
+      inset.innerHTML = gag.svg;
+      stage.append(inset);
+      anim(inset, [{ opacity: 0, transform: 'scale(.6) rotate(-6deg)' }, { opacity: 1, transform: 'rotate(-2deg)' }], { duration: 320, delay: 150, easing: 'cubic-bezier(.34,1.56,.64,1)' });
+      gag.play?.(inset, kit);
+    }
+    const my = token;
+    revealBeats(box).then(() => {
+      if (autoAdvance && my === token && box.isConnected) startTimer(readTime(c.reaction));
+    });
+  }
+
+  async function advance() {
+    stopTimer();
+    const box = stage.querySelector('.reaction');
+    if (box) {
+      box.disabled = true;
+      const inset = stage.querySelector('.gag');
+      if (inset) anim(inset, [{ opacity: 1 }, { opacity: 0 }], { duration: 200 });
+      await anim(box, [{ opacity: 1 }, { opacity: 0, transform: 'translateY(-8px)' }], { duration: 220 }).finished.catch(() => {});
+      box.remove();
+      inset?.remove();
+    }
     if (index >= scenario.stages.length - 1) finish();
     else playStage(index + 1);
   }
 
   // Undo the most recent choice. If it was on this stage (reaction showing),
-  // just re-open the choices; otherwise rewind to the previous stage.
+  // re-open the choices; otherwise rewind to the previous stage.
   function backOne() {
     const last = history.pop();
     if (!last) return;
     syncBack();
-    const box = player.querySelector('.reaction');
+    stopTimer();
+    const box = stage.querySelector('.reaction');
+    stage.querySelector('.gag')?.remove();
     if (box && last.stage === index) {
       box.remove();
-      showChoices(scenario.stages[index], true);
+      fadeOverlays(false);
+      showChoices(resolveStage(scenario, index, history), true);
       return;
     }
-    fast = true;
-    playStage(last.stage, { direction: -1 });
+    playStage(last.stage, { direction: -1, quick: true });
   }
 
   function skipScene() {
@@ -198,6 +348,8 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
 
   function finish() {
     token++;
+    killTracked();
+    resizeObs?.disconnect();
     const ending = endingFor(scenario, history);
     renderEnding(root, scenario, history, ending, {
       exitHref,
@@ -214,6 +366,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
 
   function wireShell() {
     player = root.querySelector('.player');
+    stage = root.querySelector('.player__stage');
     screen = root.querySelector('.player__screen');
     tray = root.querySelector('.player__tray');
     progress = root.querySelector('[data-progress]');
@@ -221,25 +374,37 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
     skipBtn = root.querySelector('[data-skip]');
     dialog = root.querySelector('dialog');
 
+    resizeObs?.disconnect();
+    resizeObs = new ResizeObserver(() => fitBand(screen));
+    resizeObs.observe(screen);
+
     skipBtn.addEventListener('click', () => {
       fast = true;
+      tracked.forEach((t) => { if (t.repeat() !== -1 && t.progress() < 1) t.progress(1); });
       ownAnims().forEach((a) => {
         if (a.playState === 'running' && a.effect.getComputedTiming().endTime !== Infinity) a.finish();
       });
     });
 
-    // Pause / Exit: freezes every animation in the player until resumed.
+    // Pause / Exit: freezes every animation and the reaction timer.
     let frozen = [];
+    let frozenG = [];
     root.querySelector('[data-pause]').addEventListener('click', () => {
       frozen = ownAnims().filter((a) => a.playState === 'running');
       frozen.forEach((a) => a.pause());
+      frozenG = [...tracked].filter((t) => t.isActive());
+      frozenG.forEach((t) => t.pause());
+      pauseTimer();
       player.classList.add('is-frozen');
       dialog.showModal();
     });
     dialog.addEventListener('close', () => {
       player.classList.remove('is-frozen');
       frozen.forEach((a) => a.play());
+      frozenG.forEach((t) => t.resume());
       frozen = [];
+      frozenG = [];
+      resumeTimer();
     });
     const act = (sel, fn) => root.querySelector(sel).addEventListener('click', () => { dialog.close(); fn(); });
     act('[data-resume]', () => {});
@@ -247,9 +412,27 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
     act('[data-skipscene]', skipScene);
     act('[data-restart]', () => restart(hint));
     dialog.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => dialog.close()));
+
+    const autoBtn = root.querySelector('[data-auto]');
+    const syncAuto = () => {
+      autoBtn.setAttribute('aria-pressed', String(autoAdvance));
+      autoBtn.textContent = `Auto-advance: ${autoAdvance ? 'on' : 'off'}`;
+    };
+    syncAuto();
+    autoBtn.addEventListener('click', () => {
+      autoAdvance = !autoAdvance;
+      save('autoAdvance', autoAdvance);
+      syncAuto();
+      const box = stage.querySelector('.reaction');
+      if (box && !autoAdvance) {
+        timerLeft = 0;
+        box.querySelector('.reaction__hint')?.remove();
+        box.insertAdjacentHTML('beforeend', `<span class="reaction__next">${index === scenario.stages.length - 1 ? 'See how it ends' : 'Next scene'} ›</span>`);
+      }
+    });
   }
 
   shell();
   playStage(0);
-  return () => { alive = false; token++; if (dialog?.open) dialog.close(); };
+  return () => { alive = false; token++; stopTimer(); killTracked(); resizeObs?.disconnect(); if (dialog?.open) dialog.close(); };
 }

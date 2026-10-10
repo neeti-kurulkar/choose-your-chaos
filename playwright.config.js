@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: 'tests',
+  workers: 3, // GSAP scenes are CPU-heavy; more workers makes timings flaky
   use: { baseURL: 'http://localhost:4173' },
   webServer: {
     command: 'npm run build && npx vite preview --port 4173 --strictPort',

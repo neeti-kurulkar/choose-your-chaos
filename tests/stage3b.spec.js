@@ -16,13 +16,14 @@ async function step(page, label = 'Next') {
 }
 
 test('guest can play a whole scenario without logging in', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' }); // timing-independent
   await page.goto('/#/play/cab');
   for (const n of [1, 0, 1, 1]) {
     await page.locator('.player [data-skip]').click({ timeout: 500 }).catch(() => {});
     await page.locator('.player .choice').nth(n).click();
-    await page.locator('.reaction [data-next]').click();
+    await page.locator('.reaction').click();
   }
-  await expect(page.getByRole('heading', { name: 'Five Stars, One Footnote' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Chai, Upgraded' })).toBeVisible();
   expect(await stored(page, 'cyc:profile')).toBeNull();
 });
 

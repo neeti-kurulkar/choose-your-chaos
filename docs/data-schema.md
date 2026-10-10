@@ -107,6 +107,7 @@ src/data/
 | `weight` | `1` \| `0` \| `-1` | Hidden. smart = +1, neutral = 0, unhelpful = -1. Never shown to the player. |
 | `reaction` | string | Narrator one-liner shown immediately after choosing. Must not blame the player. |
 | `label` | string | Short past-tense summary used in the "Your route" debrief. |
+| `gag` | string? | Key of a small comic inset shown under the narrator's reaction (`src/art/gags*.js`). Decorative; the reaction text carries the meaning. |
 | `move` | string? | Name of the move, for +1 choices. Listed under "Moves unlocked" on the good ending. |
 
 Each stage also has an optional `another` object, shown in the debrief when
@@ -249,3 +250,24 @@ Every item **must** have a `source` (official or government URL) and a
 ## 7. Display preferences
 
 `cyc:textSize` (`s`/`m`/`l`) and `cyc:palette` (Stage 0 only; removed once a palette is chosen).
+
+## Scene variants (continuity)
+
+A stage can change with an earlier choice. Anything listed replaces the default:
+
+```json
+"variants": {
+  "from": "crowd",
+  "by": {
+    "a": { "narrator": "…", "panel": { "art": "c-after-aunties", "alt": "…" }, "choices": [ … ] }
+  }
+}
+```
+
+An ending can open with a line that fits where the story left you:
+
+```json
+"lead": { "from": "photo", "default": "…", "by": { "c": "…" } }
+```
+
+Skipped stages use the default. `node scripts/flow-audit.mjs` regenerates `docs/flow-audit.md` from this data.

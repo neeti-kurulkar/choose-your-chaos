@@ -1,0 +1,439 @@
+{
+  "id": "dinner",
+  "version": 2,
+  "title": "The “Simple Dinner” Invite",
+  "threshold": 3,
+  "stages": [
+    {
+      "id": "first-reply",
+      "title": "The first reply",
+      "narrator": "11:47 pm. Vikram Sir, Senior Manager, has messaged. He has said “growth” four times today. This is the fifth.",
+      "panel": {
+        "art": "d-invite",
+        "alt": "Your bedroom at 11:47 pm. A sticky note counts how many times Vikram Sir said “growth” today: it ticks from 4 to 5. Your phone buzzes with his ChatChat message, status “Using ChatChat for Growth”: “Great work today! Let’s discuss your growht over dinner tomorrow. Just us, no distractions :)” (with a typo).",
+        "sfx": "PING",
+        "sfxAt": [
+          120,
+          30
+        ]
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Reply “Sure sir!” and figure it out later.",
+          "reaction": "Enthusiasm: noted. Calendar: alarmed. Future you has already started drafting excuses.",
+          "label": "Said yes on autopilot",
+          "weight": -1,
+          "gag": "din-1a"
+        },
+        {
+          "id": "b",
+          "text": "Reply: “Happy to discuss. Could we do it in the office, say 11 am?”",
+          "reaction": "Moving the meeting from candlelight to tubelight. Romance has never been so fluorescent.",
+          "label": "Moved it to office hours",
+          "move": "The office-hours reschedule",
+          "weight": 1,
+          "gag": "din-1b"
+        },
+        {
+          "id": "c",
+          "text": "Reply: “Thanks! Shall I add Meera too? She’s on the same project.”",
+          "reaction": "Inviting a witness and calling it teamwork. Corporate jiu-jitsu, black belt.",
+          "label": "Suggested adding a teammate",
+          "move": "The plus-one manoeuvre",
+          "weight": 1,
+          "gag": "din-1c"
+        },
+        {
+          "id": "d",
+          "text": "Leave it on “seen” and hope it goes away.",
+          "reaction": "The blue ticks have spoken. Unfortunately, so will he.",
+          "label": "Left it on seen",
+          "weight": 0,
+          "gag": "din-1d"
+        }
+      ],
+      "another": {
+        "choice": "b",
+        "move": "The office-hours reschedule",
+        "why": "Answering in work hours and suggesting a workplace setting keeps it professional without a confrontation."
+      }
+    },
+    {
+      "id": "push",
+      "title": "He pushes",
+      "narrator": "11:58 pm. He’s typing. He’s still typing. Nothing good has ever taken this long to type.",
+      "panel": {
+        "art": "d-push",
+        "alt": "The chat continues. You haven’t replied. He writes again: “Hello?? Seen and no reply? Dinner is more relaxed. Don’t be so formal ;)”",
+        "sfx": "PING",
+        "sfxAt": [
+          120,
+          30
+        ]
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "“Haha okay, maybe a quick dinner then.”",
+          "reaction": "The word “quick” has never once made a dinner shorter. Ask any wedding.",
+          "label": "Agreed to a “quick” dinner",
+          "weight": -1,
+          "gag": "din-2a"
+        },
+        {
+          "id": "b",
+          "text": "“I prefer to keep work discussions in the office. Tuesday 11 am works for me.”",
+          "reaction": "Polite. Specific. Immovable. A sentence with a spine and a calendar invite.",
+          "label": "Repeated: office hours only",
+          "move": "The polite broken record",
+          "weight": 1,
+          "gag": "din-2b"
+        },
+        {
+          "id": "c",
+          "text": "Change the subject to the project deadline.",
+          "reaction": "A bold pivot to spreadsheets. He is not deterred. He is, however, now aware of the deadline.",
+          "label": "Changed the subject",
+          "weight": 0,
+          "gag": "din-2c"
+        },
+        {
+          "id": "d",
+          "text": "“Let me check with my manager what we should cover.”",
+          "reaction": "Summoning the org chart. Very few dinners survive contact with a reporting line.",
+          "label": "Looped in your manager",
+          "move": "Loop in the org chart",
+          "weight": 1,
+          "gag": "din-2d"
+        }
+      ],
+      "another": {
+        "choice": "b",
+        "move": "The polite broken record",
+        "why": "Repeating a clear, polite “office hours” answer works because there is nothing to argue with."
+      },
+      "variants": {
+        "from": "first-reply",
+        "by": {
+          "a": {
+            "panel": {
+              "art": "d-push-a",
+              "alt": "The chat continues. You replied “Sure sir!”. He replies: “Great! 9 pm then. Somewhere relaxed. Don’t be so formal ;)”",
+              "sfxAt": [
+                120,
+                30
+              ]
+            }
+          },
+          "b": {
+            "panel": {
+              "art": "d-push-b",
+              "alt": "The chat continues. You suggested the office at 11 am. He replies: “Office is so boring yaar. Dinner is more relaxed. Don’t be so formal ;)”",
+              "sfxAt": [
+                120,
+                30
+              ]
+            }
+          },
+          "c": {
+            "panel": {
+              "art": "d-push-c",
+              "alt": "The chat continues. You suggested adding Meera from the same project. He replies: “Haha no need for Meera. Just us is more relaxed. Don’t be so formal ;)”",
+              "sfxAt": [
+                120,
+                30
+              ]
+            }
+          },
+          "d": {
+            "panel": {
+              "art": "d-push",
+              "alt": "The chat continues. You haven’t replied. He writes again: “Hello?? Seen and no reply? Dinner is more relaxed. Don’t be so formal ;)”",
+              "sfxAt": [
+                120,
+                30
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "evidence",
+      "title": "Documenting vs deleting",
+      "narrator": "8:05 am. The chat is still there. So is the wink. Your thumb hovers over “Delete for me”: the button that has ended many problems, and zero cases.",
+      "panel": {
+        "art": "d-evidence",
+        "alt": "Morning light. His latest messages: “Don’t be so formal ;)” and “Tomorrow 9 pm? I’ll send the location.” Your thumb hovers over a menu: Screenshot, or Delete for me."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Delete the whole chat. Out of sight, out of mind.",
+          "reaction": "Tidy. Unfortunately, so is the evidence. He’d be thrilled, if he knew.",
+          "label": "Deleted the chat",
+          "weight": -1,
+          "gag": "din-3a"
+        },
+        {
+          "id": "b",
+          "text": "Take screenshots that show his name, the date and the time, and save them somewhere safe.",
+          "reaction": "Screenshots with timestamps, saved in a folder called “Growth Archive”. Beautiful.",
+          "label": "Saved screenshots in a “Growth Archive”",
+          "move": "Keep the receipts",
+          "weight": 1,
+          "gag": "din-3b"
+        },
+        {
+          "id": "c",
+          "text": "Write a short note of what happened and when, and email it to yourself.",
+          "reaction": "A dated email to yourself. Future you sends her thanks.",
+          "label": "Emailed yourself a dated note",
+          "move": "The email-to-self diary",
+          "weight": 1,
+          "gag": "din-3c"
+        },
+        {
+          "id": "d",
+          "text": "Send it to a trusted friend: “Is this weird or is it me?”",
+          "reaction": "It’s not you. Your friend replied in four seconds, with three skulls and a voice note that’s just screaming.",
+          "label": "Checked with a friend",
+          "move": "The reality-check friend",
+          "weight": 1,
+          "gag": "din-3d"
+        }
+      ],
+      "another": {
+        "choice": "b",
+        "move": "Keep the receipts",
+        "why": "Screenshots with names, dates and times help if you ever decide to raise it. Deleting can’t be undone."
+      },
+      "variants": {
+        "from": "push",
+        "by": {
+          "a": {
+            "panel": {
+              "art": "d-evidence-a",
+              "alt": "Morning light. His messages: “Great! 9 pm, Hotel Bliss.” and “I’ll send the location ;)”. Your thumb hovers over a menu: Screenshot, or Delete for me."
+            }
+          },
+          "b": {
+            "panel": {
+              "art": "d-evidence-b",
+              "alt": "Morning light. His messages: “Ok ok, office.” and “But think about dinner ;)”. Your thumb hovers over a menu: Screenshot, or Delete for me."
+            }
+          },
+          "c": {
+            "panel": {
+              "art": "d-evidence-c",
+              "alt": "Morning light. His messages: “Forget the deadline yaar.” and “Dinner tomorrow? ;)”. Your thumb hovers over a menu: Screenshot, or Delete for me."
+            }
+          },
+          "d": {
+            "panel": {
+              "art": "d-evidence-d",
+              "alt": "Morning light. His messages: “Arre, no need to involve him! Just a casual dinner.” and “Delete this chat ok? ;)”. Your thumb hovers over a menu: Screenshot, or Delete for me."
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "tell",
+      "title": "Deciding who to tell",
+      "narrator": "1 pm. The samosas are cold. The chai is hot. Meera leans in: “Did Vikram Sir message you last night?”",
+      "panel": {
+        "art": "d-cafe",
+        "alt": "The office cafeteria at lunchtime. Meera leans across the table with her chai. A poster on the wall reads: Internal Committee, Room 4B, you can talk to us."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Say “Nope, nothing” and keep it to yourself.",
+          "reaction": "Very considerate. Mostly to him.",
+          "label": "Kept it to yourself",
+          "weight": -1,
+          "gag": "din-4a"
+        },
+        {
+          "id": "b",
+          "text": "Tell Meera, and ask if anyone else got messages like this.",
+          "reaction": "Meera opens her phone. Turns out you’re not the first. Turns out there’s a group chat.",
+          "label": "Told a trusted colleague",
+          "move": "Find the others",
+          "weight": 1,
+          "gag": "din-4b"
+        },
+        {
+          "id": "c",
+          "text": "Ask the Internal Committee how raising a concern works, and what happens next.",
+          "reaction": "Reading the manual before deciding. Bold. Rare. Effective.",
+          "label": "Asked how the Internal Committee works",
+          "move": "Ask the Internal Committee",
+          "weight": 1,
+          "gag": "din-4c"
+        },
+        {
+          "id": "d",
+          "text": "Show your manager the chat.",
+          "reaction": "Your manager reads the chat, puts down the samosa and says, “Leave it with me.” The samosa understood the assignment.",
+          "label": "Showed your manager the chat",
+          "move": "Escalate with receipts",
+          "weight": 1,
+          "gag": "din-4d"
+        }
+      ],
+      "another": {
+        "choice": "c",
+        "move": "Ask the Internal Committee",
+        "why": "Workplaces with 10 or more employees must have an Internal Committee under the POSH Act. Asking how it works doesn’t commit you to anything."
+      },
+      "variants": {
+        "from": "evidence",
+        "by": {
+          "a": {
+            "narrator": "1 pm. Cold samosas, hot chai. On your phone: a deleted chat and a feeling. Meera leans in: “Did Vikram Sir message you last night?”",
+            "panel": {
+              "art": "d-cafe-a",
+              "alt": "The office cafeteria. Your phone, in your hand, shows an empty chat. Meera leans across the table, curious."
+            },
+            "choices": [
+              {
+                "id": "a",
+                "text": "Say “Nope, nothing” and keep it to yourself.",
+                "reaction": "Very considerate. Mostly to him.",
+                "label": "Kept it to yourself",
+                "weight": -1,
+                "gag": "din-4a"
+              },
+              {
+                "id": "b",
+                "text": "Tell Meera, and ask if anyone else got messages like this.",
+                "reaction": "Meera opens her phone. Turns out you’re not the first. Turns out there’s a group chat.",
+                "label": "Told a trusted colleague",
+                "move": "Find the others",
+                "weight": 1,
+                "gag": "din-4b"
+              },
+              {
+                "id": "c",
+                "text": "Ask the Internal Committee how raising a concern works, and what happens next.",
+                "reaction": "Reading the manual before deciding. Bold. Rare. Effective.",
+                "label": "Asked how the Internal Committee works",
+                "move": "Ask the Internal Committee",
+                "weight": 1,
+                "gag": "din-4c"
+              },
+              {
+                "id": "d",
+                "text": "Tell your manager what happened.",
+                "reaction": "Your manager listens, puts down the samosa and says, “Leave it with me.” The samosa understood the assignment.",
+                "label": "Told your manager",
+                "move": "Escalate with receipts",
+                "weight": 1,
+                "gag": "din-4d"
+              }
+            ]
+          },
+          "b": {
+            "narrator": "1 pm. Cold samosas, hot chai. In your pocket: a folder called “Growth Archive (6)”. Meera leans in: “Did Vikram Sir message you last night?”",
+            "panel": {
+              "art": "d-cafe-b",
+              "alt": "The office cafeteria. Your phone, in your hand, shows a photo folder: Growth Archive, 6 screenshots. Meera leans across the table, curious."
+            }
+          },
+          "c": {
+            "narrator": "1 pm. Cold samosas, hot chai. In your inbox: a dated email to yourself. Meera leans in: “Did Vikram Sir message you last night?”",
+            "panel": {
+              "art": "d-cafe-c",
+              "alt": "The office cafeteria. Your phone, in your hand, shows an email to yourself: What happened, 8:05 am. Meera leans across the table, curious."
+            }
+          },
+          "d": {
+            "narrator": "1 pm. Cold samosas, hot chai. Your friend’s three skulls are still on your screen. Meera leans in: “Did Vikram Sir message you last night?”",
+            "panel": {
+              "art": "d-cafe-d",
+              "alt": "The office cafeteria. Your phone, in your hand, shows three skull emojis from your friend. Meera leans across the table, curious."
+            }
+          }
+        }
+      }
+    }
+  ],
+  "endings": {
+    "good": {
+      "hint": "Want the other ending? Be agreeable this time: say yes, keep the peace, tidy up the chat, keep it to yourself.",
+      "moves": [
+        "The office-hours reschedule",
+        "Keep the receipts",
+        "Ask the Internal Committee"
+      ],
+      "variants": [
+        {
+          "id": "group",
+          "when": {
+            "stage": "tell",
+            "choices": [
+              "b"
+            ]
+          },
+          "title": "The Group Chat Awakens",
+          "art": "d-end-group",
+          "alt": "A group chat called “Also Got The Dinner Text (5)”: five identical screenshots, each with the same typo, “growht”. HR replies: “We see the pattern.” Vikram Sir’s status now says “Busy”.",
+          "narration": "By 3 pm, “Also Got The Dinner Text” has five members. Everyone got the exact same message, at almost the exact same time, with the exact same typo: “growht”. He copy-pastes. HR receives five identical screenshots and replies within the hour: “We see the pattern.” Vikram Sir’s status changes from “Using ChatChat for Growth” to “Busy”."
+        },
+        {
+          "id": "ic",
+          "when": {
+            "stage": "tell",
+            "choices": [
+              "c"
+            ]
+          },
+          "title": "Minutes of the Meeting",
+          "art": "d-end-ic",
+          "alt": "A training room: “Professional Boundaries 101”. Vikram Sir sits alone in the front row taking notes. Beside it, his social post: “Humbled to have completed a transformative learning journey. #Growth”, 3 likes.",
+          "narration": "The Internal Committee explains the process in twelve calm minutes and never once asks “are you sure?”. Your complaint goes in, with everything you saved attached. Two weeks later, Vikram Sir is in the front row of “Professional Boundaries 101”, taking notes. That evening he posts: “Humbled to have completed a transformative learning journey. #Growth”. It gets three likes. One is from HR."
+        },
+        {
+          "id": "manager",
+          "when": {
+            "stage": "tell",
+            "choices": [
+              "d"
+            ]
+          },
+          "title": "Growth, Discussed (In Daylight)",
+          "art": "d-end-manager",
+          "alt": "An updated meeting invite: 11 am, Glass Room 2, under a bright tubelight. Agenda: 1. Your growth. 2. His boundaries. The growth counter reads 0.",
+          "narration": "Your manager moves the “growth discussion” to 11 am, Glass Room 2, under the brightest tubelight in the building. Agenda: 1. Your growth. 2. His boundaries. It lasts nine minutes. Vikram Sir says “growth” zero times. The counter finally stops."
+        }
+      ]
+    },
+    "funnyBad": {
+      "title": "The Calendar Hostage Situation",
+      "art": "d-end-calendar",
+      "alt": "A calendar covered in excuse sticky notes, and a recurring invite: “Dinner (Growth), every Friday, no end date”, declined 11 times. A pop-up asks: Are you okay?",
+      "narration": "You spend three weeks dodging dinners with increasingly creative excuses: a cousin’s wedding, two dentists, a mysterious fever and a cat you do not own. Then he sends a recurring invite: “Dinner (Growth)”, every Friday, no end date. You have declined it eleven times. Your calendar app has started asking if you’re okay.",
+      "moves": [
+        "The polite broken record",
+        "Keep the receipts",
+        "Say it once, in writing"
+      ],
+      "extraMove": "Say it once, in writing",
+      "hint": "For a good ending: keep it in office hours, say it plainly, keep the receipts, then pick who you tell. Each choice of who you tell leads to a different good ending."
+    }
+  },
+  "realLife": {
+    "disclaimer": "This was satire. Real situations are messier, faster and scarier than a comic. There is no perfect response, and nothing that happens to you is your fault. These are ideas, not rules.",
+    "tips": [
+      "You can keep work conversations to work hours and work places. “Let’s do this in the office” is a complete answer.",
+      "Save messages that make you uncomfortable, with screenshots that show the name, date and time. Keep them even if you don’t plan to do anything yet.",
+      "Write down what happened and when, while it’s fresh.",
+      "Talk to someone you trust at work. You may not be the only one.",
+      "Workplaces with 10 or more employees must have an Internal Committee under the POSH Act. You can also complain through the government’s SHe-Box portal.",
+      "If you ever feel unsafe, call 112."
+    ]
+  }
+}

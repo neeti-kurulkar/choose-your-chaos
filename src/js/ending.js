@@ -5,6 +5,8 @@
 import { ART } from '../art/index.js';
 import { esc } from './player.js';
 import { markSeen, getSeen } from './progress.js';
+import { allEndings, pickEnding, resolveStage } from './endings.js';
+import { gsap } from '../art/motion.js';
 
 // Good ending: the moves the player actually used (choices with a "move").
 // Funny-bad: the "another" moves for stages that didn't go well, plus the
@@ -12,7 +14,8 @@ import { markSeen, getSeen } from './progress.js';
 export function movesFor(scenario, history, key) {
   const ending = scenario.endings[key];
   const out = [];
-  scenario.stages.forEach((stage, i) => {
+  scenario.stages.forEach((_, i) => {
+    const stage = resolveStage(scenario, i, history);
     const h = history.find((x) => x.stage === i);
     const c = h && h.choice !== null ? stage.choices[h.choice] : null;
     if (key === 'good' && c?.move && c.weight > 0) out.push(c.move);
@@ -23,18 +26,18 @@ export function movesFor(scenario, history, key) {
   return unique.length ? unique : ending.moves;
 }
 
-const LABEL = { good: 'Good ending', funnyBad: 'Funny-bad ending' };
 const KEYS = 'ABCD';
 
 export function renderEnding(root, scenario, history, key, { exitHref, onReplay }) {
-  const ending = scenario.endings[key];
-  const other = key === 'good' ? 'funnyBad' : 'good';
-  markSeen(scenario.id, key);
+  const ending = pickEnding(scenario, history, key);
+  markSeen(scenario.id, ending.id);
   const seen = getSeen(scenario.id);
+  const every = allEndings(scenario);
   const art = ART[ending.art];
   const moves = movesFor(scenario, history, key);
 
-  const route = scenario.stages.map((stage, i) => {
+  const route = scenario.stages.map((_, i) => {
+    const stage = resolveStage(scenario, i, history);
     const h = history.find((x) => x.stage === i);
     const c = h && h.choice !== null ? stage.choices[h.choice] : null;
     const alt = stage.another && (!c || c.weight < 1) ? stage.choices.find((x) => x.id === stage.another.choice) : null;
@@ -46,25 +49,23 @@ export function renderEnding(root, scenario, history, key, { exitHref, onReplay 
   }).join('');
 
   root.innerHTML = `
-  <article class="ending ending--${key}">
+  <article class="ending">
     <header class="ending__card">
       <div class="ending__art" role="img" aria-label="${esc(ending.alt)}">${art ? art.svg : ''}</div>
-      <p class="ending__stamp">${LABEL[key]}</p>
       <h2 class="ending__title" tabindex="-1">${esc(ending.title)}</h2>
     </header>
     <p class="narrator ending__narration"><span class="narrator__who">Narrator</span>${esc(ending.narration)}</p>
 
     <section class="moves" aria-labelledby="moves-title">
       <h3 id="moves-title">Moves unlocked</h3>
-      <p class="moves__intro">${key === 'good' ? 'The moves that got you here:' : 'Moves to try next time:'}</p>
       <ul>${moves.map((m) => `<li>${esc(m)}</li>`).join('')}</ul>
     </section>
 
-    <p class="tally">Endings seen: ${seen.length} of 2
-      <span class="tally__list">(${['good', 'funnyBad'].map((k) => `${LABEL[k]}: ${seen.includes(k) ? 'seen' : 'not yet'}`).join('; ')})</span></p>
+    <p class="tally">Endings found: ${every.filter((e) => seen.includes(e.id)).length} of ${every.length}
+      <span class="tally__list">${every.map((e) => (seen.includes(e.id) ? `“${esc(e.title)}”` : '???')).join(' · ')}</span></p>
 
     <div class="btn-row ending__actions">
-      <button type="button" class="btn btn--primary" data-other>See the ${LABEL[other].toLowerCase()}</button>
+      <button type="button" class="btn btn--primary" data-other>See the other ending</button>
       <button type="button" class="btn" data-again>Play again</button>
       <a class="btn btn--quiet" href="${exitHref}">Back to scenarios</a>
     </div>
@@ -94,13 +95,12 @@ export function renderEnding(root, scenario, history, key, { exitHref, onReplay 
   if (art && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const card = root.querySelector('.ending__card');
     card.animate([{ opacity: 0, transform: 'scale(.9) rotate(-1deg)' }, { opacity: 1, transform: 'none' }], { duration: 350, easing: 'ease-out' });
-    root.querySelector('.ending__stamp').animate(
-      [{ opacity: 0, transform: 'scale(2.2) rotate(-14deg)' }, { opacity: 1, transform: 'rotate(-6deg)' }],
-      { duration: 380, delay: 300, easing: 'cubic-bezier(.34,1.56,.64,1)', fill: 'backwards' },
-    );
     const kit = {
       anim: (el, f, o) => el.animate(f, { fill: 'both', easing: 'ease-out', ...o }),
       pop: () => Promise.resolve(),
+      gsap,
+      track: (tl) => new Promise((r) => tl.eventCallback('onComplete', r)),
+      reduced: () => false,
     };
     art.play(root.querySelector('.ending__art'), kit).catch(() => {});
   }

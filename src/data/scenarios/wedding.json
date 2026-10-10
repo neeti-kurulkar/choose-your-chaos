@@ -1,0 +1,418 @@
+{
+  "id": "wedding",
+  "version": 2,
+  "title": "The Wedding Uncle Special",
+  "threshold": 3,
+  "stages": [
+    {
+      "id": "question",
+      "title": "The first question",
+      "narrator": "Your cousin’s sangeet. The dhol is loud. The buffet is louder. Bunty Uncle has located you between the paneer and the pulao. He is holding three puris and one agenda.",
+      "panel": {
+        "art": "w-buffet",
+        "alt": "A sangeet hall strung with fairy lights and marigolds. DJ Bablu bobs at his booth. At the buffet, Bunty Uncle, with a moustache that enters the room first, leans in holding a plate of three puris. A note counts the personal questions he has asked: 1.",
+        "bubble": {
+          "speaker": "Bunty Uncle",
+          "text": "Arre beta! So when is the good news? Age is running, you know!",
+          "at": [
+            10,
+            62
+          ],
+          "tail": "right"
+        }
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Laugh and answer every question, to be polite.",
+          "reaction": "Excellent. He now has follow-up questions. They’re numbered.",
+          "label": "Answered everything politely",
+          "weight": -1,
+          "gag": "wed-1a"
+        },
+        {
+          "id": "b",
+          "text": "Smile and deflect: “When the right paneer comes along, Uncle.” Then turn to the buffet.",
+          "reaction": "Deflected. With dairy. Uncle is confused, which was the goal.",
+          "label": "The cheerful deflect",
+          "move": "The cheerful deflect",
+          "weight": 1,
+          "gag": "wed-1b"
+        },
+        {
+          "id": "c",
+          "text": "“That’s personal, Uncle. How’s your knee?”",
+          "reaction": "Boundary set. Subject changed. Knee discussed for eleven minutes. Worth it.",
+          "label": "Set a boundary and changed the subject",
+          "move": "The boundary-and-pivot",
+          "weight": 1,
+          "gag": "wed-1c"
+        },
+        {
+          "id": "d",
+          "text": "Excuse yourself: “One minute, Mummy’s calling.”",
+          "reaction": "Mummy was not calling. Mummy would approve anyway.",
+          "label": "The Mummy’s-calling exit",
+          "move": "The strategic exit",
+          "weight": 1,
+          "gag": "wed-1d"
+        }
+      ],
+      "another": {
+        "choice": "c",
+        "move": "The boundary-and-pivot",
+        "why": "“That’s personal” is polite and complete. You don’t owe anyone details about your life."
+      }
+    },
+    {
+      "id": "escalation",
+      "title": "Escalation",
+      "narrator": "Bunty Uncle has followed you to your table. His plate now has seven puris. His chair is so close that the chair is uncomfortable.",
+      "panel": {
+        "art": "w-chair",
+        "alt": "At your table, Bunty Uncle drags his chair right up against yours and rests his arm along the back of your chair. His plate now holds seven puris. The question counter reads 4: Salary? Weight? Marriage?",
+        "sfx": "SCRAPE",
+        "sfxAt": [
+          150,
+          140
+        ],
+        "bubble": {
+          "speaker": "Bunty Uncle",
+          "text": "Beta, I’m like your chacha only. So… salary?",
+          "at": [
+            10,
+            62
+          ],
+          "tail": "right"
+        }
+      },
+      "variants": {
+        "from": "question",
+        "by": {
+          "d": {
+            "narrator": "You said Mummy was calling. Bunty Uncle has followed you to look for Mummy. Mummy is not here. He sits down anyway, with seven puris."
+          }
+        }
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Lean away, keep smiling and hope he takes the hint.",
+          "reaction": "Uncle does not take hints. Uncle takes second helpings.",
+          "label": "Hoped he’d take the hint",
+          "weight": 0,
+          "gag": "wed-2a"
+        },
+        {
+          "id": "b",
+          "text": "Stand up: “I’m going to get some air,” and move to where people are.",
+          "reaction": "Standing up. The original block button.",
+          "label": "Stood up and moved",
+          "move": "Stand up and move",
+          "weight": 1,
+          "gag": "wed-2b"
+        },
+        {
+          "id": "c",
+          "text": "Say clearly: “Uncle, please move your chair back. I’m not comfortable.”",
+          "reaction": "Clear. Calm. Audible to three tables. The chair retreats. Two aunties’ eyebrows go up, in support.",
+          "label": "Said it plainly",
+          "move": "Say it plainly",
+          "weight": 1,
+          "gag": "wed-2c"
+        },
+        {
+          "id": "d",
+          "text": "Tell him your salary and diet plan so he’ll stop.",
+          "reaction": "He did not stop. He now has a spreadsheet. It’s called “beta.xls”.",
+          "label": "Gave him the details",
+          "weight": -1,
+          "gag": "wed-2d"
+        }
+      ],
+      "another": {
+        "choice": "c",
+        "move": "Say it plainly",
+        "why": "Naming the discomfort calmly, even to an elder, is allowed. Respect goes both ways."
+      }
+    },
+    {
+      "id": "ally",
+      "title": "Asking an ally",
+      "narrator": "Bunty Uncle is explaining land rates. Across the hall, cousin Pinky makes eye contact over a mehendi cone. She knows. Every cousin knows.",
+      "panel": {
+        "art": "w-cousin",
+        "alt": "Bunty Uncle talks at you about land rates, plate in hand. Across the hall, your cousin Pinky, holding a mehendi cone, locks eyes with you. A dotted line connects your eyes. An exclamation mark pops above her."
+      },
+      "variants": {
+        "from": "escalation",
+        "by": {
+          "b": {
+            "narrator": "You’re by the dance floor now. Bunty Uncle has arrived too, plate first. Twelve puris. Across the floor, cousin Pinky makes eye contact. She knows.",
+            "panel": {
+              "art": "w-cousin-floor",
+              "alt": "By the dance floor. Bunty Uncle arrives carrying a plate of twelve puris. Across the dance floor, cousin Pinky locks eyes with you."
+            }
+          },
+          "c": {
+            "narrator": "The chair retreated two inches. Bunty Uncle did not. Across the hall, cousin Pinky makes eye contact over a mehendi cone. She knows. Every cousin knows."
+          }
+        }
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Give Pinky the “rescue me” look.",
+          "reaction": "Signal received. Pinky arrives with “urgent mehendi business”. There is no mehendi business. There never was.",
+          "label": "Sent the cousin signal",
+          "move": "The cousin signal",
+          "weight": 1,
+          "gag": "wed-3a"
+        },
+        {
+          "id": "b",
+          "text": "Quietly tell your mum or an aunt what he’s doing.",
+          "reaction": "Mummy’s eyes narrow. Bunty Uncle is about to receive a very public reminder about manners.",
+          "label": "Told a trusted elder",
+          "move": "Tell a trusted elder",
+          "weight": 1,
+          "gag": "wed-3b"
+        },
+        {
+          "id": "c",
+          "text": "Handle it alone. You don’t want to spoil the function.",
+          "reaction": "Noble. The function will survive. Your evening, less so.",
+          "label": "Handled it alone",
+          "weight": -1,
+          "gag": "wed-3c"
+        },
+        {
+          "id": "d",
+          "text": "Join the cousins dancing near the stage.",
+          "reaction": "Safety in numbers. And in synchronised choreography nobody rehearsed.",
+          "label": "Joined the dance crew",
+          "move": "Safety in a dance crew",
+          "weight": 1,
+          "gag": "wed-3d"
+        }
+      ],
+      "another": {
+        "choice": "a",
+        "move": "The cousin signal",
+        "why": "Allies at family events are often one look away. Agreeing a rescue signal in advance helps too."
+      }
+    },
+    {
+      "id": "photo",
+      "title": "Reclaiming the room",
+      "narrator": "Bunty Uncle is back. Phone in one hand. The plate balanced on the other, somehow. His arm is already out.",
+      "panel": {
+        "art": "w-photo",
+        "alt": "Bunty Uncle holds his phone out for a selfie, arm stretched towards you, a plate of twelve puris balanced in his other hand.",
+        "sfx": "FLASH",
+        "sfxAt": [
+          300,
+          30
+        ],
+        "bubble": {
+          "speaker": "Bunty Uncle",
+          "text": "One nice photo, come close, beta!",
+          "at": [
+            10,
+            62
+          ],
+          "tail": "right"
+        }
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Go along with it. It’s just one photo.",
+          "reaction": "It was not one photo. It was eleven. And a video. With a filter.",
+          "label": "Went along with the photo",
+          "weight": -1,
+          "gag": "wed-4a"
+        },
+        {
+          "id": "b",
+          "text": "“Group photo! Everyone in!” and pull the cousins in.",
+          "reaction": "Twelve cousins. One uncle. Zero personal space, for him. Masterpiece.",
+          "label": "Called a group photo",
+          "move": "The group-photo shield",
+          "weight": 1,
+          "gag": "wed-4b"
+        },
+        {
+          "id": "c",
+          "text": "“No photos for me, Uncle. Enjoy the party!” and walk to the dance floor.",
+          "reaction": "Exit stage left. Straight into the bhangra. Iconic.",
+          "label": "Said no and walked away",
+          "move": "No, and walk away",
+          "weight": 1,
+          "gag": "wed-4c"
+        },
+        {
+          "id": "d",
+          "text": "Ask your mum to stand with you.",
+          "reaction": "Mummy takes the phone. Mummy will be taking this photo.",
+          "label": "Brought Mummy in",
+          "move": "Bring backup",
+          "weight": 1,
+          "gag": "wed-4d"
+        }
+      ],
+      "variants": {
+        "from": "ally",
+        "by": {
+          "a": {
+            "narrator": "You and Pinky are deep in “mehendi business”. Bunty Uncle appears anyway, phone first, plate second.",
+            "panel": {
+              "art": "w-photo-pinky",
+              "alt": "You stand with Pinky and her mehendi cone. Bunty Uncle holds his phone out for a selfie, a plate of twelve puris in his other hand."
+            }
+          },
+          "b": {
+            "narrator": "Mummy is watching from across the room. Bunty Uncle hasn’t noticed. Yet. His phone is out, his arm is out, the plate is somehow still balanced.",
+            "panel": {
+              "art": "w-photo-mummy",
+              "alt": "Bunty Uncle holds his phone out for a selfie with you. In the background, Mummy watches with narrowed eyes."
+            }
+          },
+          "d": {
+            "narrator": "DJ Bablu pauses the song. Bunty Uncle steps onto the dance floor, phone first, plate second.",
+            "panel": {
+              "art": "w-photo-floor",
+              "alt": "On the dance floor, the music has stopped. Bunty Uncle steps in holding his phone out for a selfie, a plate of twelve puris in his other hand."
+            },
+            "choices": [
+              {
+                "id": "a",
+                "text": "Go along with it. It’s just one photo.",
+                "reaction": "It was not one photo. It was eleven. And a video. With a filter.",
+                "label": "Went along with the photo",
+                "weight": -1,
+                "gag": "wed-4a"
+              },
+              {
+                "id": "b",
+                "text": "“Group photo! Everyone in!” and pull the cousins in.",
+                "reaction": "Twelve cousins. One uncle. Zero personal space, for him. Masterpiece.",
+                "label": "Called a group photo",
+                "move": "The group-photo shield",
+                "weight": 1,
+                "gag": "wed-4b"
+              },
+              {
+                "id": "c",
+                "text": "“No photos for me, Uncle!” and dance straight back into the bhangra circle.",
+                "reaction": "Exit, via bhangra. The circle closes behind you. Iconic.",
+                "label": "Said no and danced away",
+                "move": "No, and walk away",
+                "weight": 1,
+                "gag": "wed-4c"
+              },
+              {
+                "id": "d",
+                "text": "Wave Mummy over to stand with you.",
+                "reaction": "Mummy takes the phone. Mummy will be taking this photo.",
+                "label": "Brought Mummy in",
+                "move": "Bring backup",
+                "weight": 1,
+                "gag": "wed-4d"
+              }
+            ]
+          }
+        }
+      },
+      "another": {
+        "choice": "c",
+        "move": "No, and walk away",
+        "why": "You can say no to photos, hugs or being touched, at any event, by anyone, relatives included."
+      }
+    }
+  ],
+  "endings": {
+    "good": {
+      "hint": "Want the other ending? Be the polite one this time: answer everything, give him the details, handle it alone, smile for the photo.",
+      "moves": [
+        "The boundary-and-pivot",
+        "Say it plainly",
+        "The cousin signal"
+      ],
+      "variants": [
+        {
+          "id": "cropped",
+          "when": {
+            "stage": "photo",
+            "choices": [
+              "b"
+            ]
+          },
+          "title": "Uncle, Cropped",
+          "art": "w-end-cropped",
+          "alt": "The family group photo: you in the middle of a pyramid of cousins. At the very edge of the frame, only Bunty Uncle’s elbow is visible. Beside it, his WhatsApp replies: “Nice pic!” and then “Where am I?”, and a 47-hearts count.",
+          "narration": "The group photo goes up on the family WhatsApp at midnight: you in the middle, twelve cousins in a pyramid, and Bunty Uncle’s elbow just visible at the edge of the frame. It gets 47 hearts. Bunty Uncle replies “Nice pic!” and then, a minute later, “Where am I?” Nobody answers. DJ Bablu plays the song again."
+        },
+        {
+          "id": "dance",
+          "when": {
+            "stage": "photo",
+            "choices": [
+              "c"
+            ]
+          },
+          "title": "Dance-Off Champion",
+          "art": "w-end-dance",
+          "alt": "On the dance floor you are mid-bhangra at the centre of a cheering circle of cousins. Off to the side, Bunty Uncle stands alone, phone raised to an empty frame, while his tower of puris collapses.",
+          "narration": "The cousins absorb you into a bhangra circle at speed. Ten minutes later you’ve won an unofficial dance-off and a box of kaju katli. Bunty Uncle is still where you left him, phone raised, framing an empty space. Behind him, the puri tower finally collapses."
+        },
+        {
+          "id": "mummy",
+          "when": {
+            "stage": "photo",
+            "choices": [
+              "d"
+            ]
+          },
+          "title": "Mummy Took the Photo",
+          "art": "w-end-mummy",
+          "alt": "Mummy holds Bunty Uncle’s phone and takes the photo herself: you and Pinky, beaming. Bunty Uncle stands to the side holding his plate, then leaves, saying “I’m like your chacha only” to a kulfi.",
+          "narration": "Mummy takes the phone with a smile that could freeze ghee. She takes the photo herself: you and Pinky, beaming, with Bunty Uncle kindly invited to hold the plate. Then she has a short, quiet word with him by the dessert counter. He leaves early. “I’m like your chacha only,” he tells the kulfi. The kulfi stays."
+        }
+      ]
+    },
+    "funnyBad": {
+      "title": "Two Hours of Property Rates",
+      "art": "w-end-property",
+      "alt": "You are stuck at a table with Bunty Uncle, who holds up a hand-drawn chart labelled “Land Rates” with no axes. The clock reads 11:58 pm. His plate holds twenty-two puris. The dance floor behind is empty.",
+      "lead": {
+        "from": "photo",
+        "default": "It was eleven photos and a video. Then Bunty Uncle steers you back to his table, “for one minute only”.",
+        "by": {
+          "b": "The group photo happens, with Bunty Uncle wedged in the middle. Then he steers you back to his table, “for one minute only”.",
+          "c": "You make it halfway to the dance floor before Bunty Uncle catches up: “Beta, one minute only, sit sit.”",
+          "d": "Mummy takes the photo, then gets pulled away by the caterer. Bunty Uncle seizes the moment: “Beta, one minute only, sit sit.”"
+        }
+      },
+      "narration": "You spend the rest of the sangeet at his table, learning his views on your marriage, your salary, the stock market and land prices in a town you’ve never visited. You miss the dance, the dessert and the cousins’ group photo. At 11:58 pm he draws you a chart. It’s labelled “Land Rates”. It has no axes. The plate now holds twenty-two puris.",
+      "moves": [
+        "The boundary-and-pivot",
+        "The cousin signal",
+        "Your boundaries apply to relatives too"
+      ],
+      "extraMove": "Your boundaries apply to relatives too",
+      "hint": "For a good ending: deflect, say it plainly, find an ally, then reclaim the room. How you handle the photo leads to a different good ending."
+    }
+  },
+  "realLife": {
+    "disclaimer": "This was satire. Real situations are messier, faster and scarier than a comic. There is no perfect response, and nothing that happens to you is your fault. These are ideas, not rules.",
+    "tips": [
+      "“That’s personal” is a complete answer, even to an elder.",
+      "You can move away, stand up or leave a conversation at any time. That isn’t rude.",
+      "Agree a rescue signal with a cousin or friend before family events.",
+      "Tell a relative you trust if someone’s behaviour crosses a line. You don’t have to keep the peace at your own cost.",
+      "You can say no to hugs, photos or being touched, by anyone.",
+      "If someone threatens or hurts you, call 112."
+    ]
+  }
+}

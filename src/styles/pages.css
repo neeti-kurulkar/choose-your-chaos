@@ -214,7 +214,8 @@ body[data-view='play'] .site-footer { display: none; }
 .scene__sfx .sfx__word { font-size: clamp(1rem, 5.5vw, var(--t-xl)); }
 
 /* ---------- Stage 2: scene extras ---------- */
-.scene svg [id] { transform-box: fill-box; transform-origin: center; }
+/* WAAPI-only scenes: GSAP computes its own origins, so never apply this to them */
+.scene:not(.scene--gsap) svg [id] { transform-box: fill-box; transform-origin: center; }
 .scene__bubble {
   position: absolute;
   right: 4%;
@@ -443,3 +444,112 @@ body[data-view='serious'] { background-image: none; }
 .logo { white-space: nowrap; }
 @media (max-width: 30rem) { .logo { font-size: var(--t-md); } }
 .page--calm .panel h2 { margin-top: 0; }
+
+/* Timed narrator reaction */
+.reaction { gap: var(--s-2); padding: var(--s-3) var(--s-4) var(--s-4); }
+.reaction__timer { position: absolute; left: 18px; right: 18px; bottom: 10px; height: 4px; border-radius: 4px; background: #e6e0d4; overflow: hidden; }
+.reaction__timer i { display: block; height: 100%; background: var(--c-accent); transform-origin: left center; }
+.reaction .btn--quiet { color: #15203b; border-color: #15203b; box-shadow: none; }
+.scard__found { margin: 0 0 var(--s-1); font-weight: 700; }
+
+/* =========================================================
+   Full-canvas player: scene fills the stage, narration on top,
+   choices rise onto the canvas at the bottom.
+   ========================================================= */
+.player { display: flex; flex-direction: column; grid-template-areas: none; grid-template-columns: none; }
+@media (min-width: 56rem) { .player { height: min(calc(100svh - 96px), 40rem); } }
+.player__bar { flex: none; }
+.player__stage { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; background: #120c16; }
+.player__screen,
+.player .player__screen {
+  position: absolute; inset: 0;
+  aspect-ratio: auto; max-height: none; height: auto; width: auto;
+  border: 0; background: transparent;
+}
+.scene > svg { display: block; width: 100%; height: 100%; }
+.scene__caption { top: var(--s-3); left: var(--s-3); right: var(--s-3); max-width: 38rem; margin: 0 auto; z-index: 2; }
+.scene__sfx {
+  right: auto; bottom: auto;
+  left: calc(var(--band-left, 0px) + var(--band-s, 1) * var(--sx, 288) * 1px);
+  top: calc(var(--band-top, 0px) + var(--band-s, 1) * var(--sy, 120) * 1px);
+  width: calc(var(--band-s, 1) * 104px);
+  z-index: 1;
+}
+.scene__bubble {
+  right: auto; bottom: auto;
+  left: calc(var(--band-left, 0px) + var(--band-s, 1) * var(--bx) * 1px);
+  top: calc(var(--band-top, 0px) + var(--band-s, 1) * var(--by) * 1px);
+  max-width: min(18rem, calc(100% - var(--band-left, 0px) - var(--band-s, 1) * var(--bx) * 1px - 12px));
+  z-index: 1;
+}
+.player__tray,
+.player .player__tray {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
+  max-height: 62%; overflow-y: auto;
+  padding: var(--s-3);
+}
+.player__stage.has-choices .player__tray {
+  background: linear-gradient(to top, rgba(12, 8, 16, 0.94) 72%, rgba(12, 8, 16, 0));
+  padding-top: var(--s-6);
+}
+.player .player__hint { margin: 0 auto; max-width: 34rem; font-size: var(--t-sm); }
+.player .choices { max-width: 46rem; margin: 0 auto; }
+@media (min-width: 56rem) { .player .choices { grid-template-columns: 1fr 1fr; } }
+.player .choice { background: rgba(46, 37, 48, 0.94); }
+
+/* Narrator reaction: a tappable bubble at the top that fades by itself */
+.reaction {
+  position: absolute; z-index: 4;
+  top: var(--s-3); left: var(--s-3); right: var(--s-3); bottom: auto;
+  max-width: 34rem; margin: 0 auto;
+  display: grid; gap: var(--s-1); justify-items: start;
+  font: inherit; text-align: left; cursor: pointer;
+}
+.reaction:focus-visible { outline: 3px solid var(--c-focus); outline-offset: 3px; }
+.reaction__next { justify-self: end; font-weight: 700; color: #0e7c66; }
+
+.ending__art { aspect-ratio: 16 / 10; overflow: hidden; }
+.ending__art svg { width: 100%; height: 100%; max-height: none; }
+
+/* The narrator speaks in rectangular captions (characters get bubbles) */
+.player .reaction {
+  background: var(--c-caption); color: #15203b;
+  border: var(--line) solid var(--c-ink); border-radius: 0;
+  box-shadow: 4px 4px 0 var(--c-ink);
+  padding: var(--s-2) var(--s-4) var(--s-3);
+  max-width: 32rem;
+}
+.player .reaction__who { font-size: var(--t-sm); }
+.player .reaction__text { font-size: var(--t-md); line-height: 1.35; }
+.beat { display: inline; }
+/* Cinematic fade along the bottom so figures never look sliced off */
+.player__stage::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 28%;
+  background: linear-gradient(to top, #120c16 15%, rgba(18, 12, 22, 0));
+  pointer-events: none; z-index: 2;
+}
+
+/* Sentences are revealed one at a time by the player (WAAPI fill keeps them on) */
+.scene__caption .beat, .reaction .beat { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .scene__caption .beat, .reaction .beat { opacity: 1; } }
+
+/* Per-choice gag: a small tilted comic inset under the narrator */
+.gag {
+  position: absolute; z-index: 3;
+  left: 0; right: 0; margin: 0 auto;
+  bottom: 9%;
+  width: min(62%, 300px);
+  aspect-ratio: 16 / 10;
+  background: #f5f1e8;
+  border: var(--line) solid var(--art-line);
+  box-shadow: 5px 5px 0 var(--art-line);
+  overflow: hidden;
+  pointer-events: none;
+}
+.gag svg { display: block; width: 100%; height: 100%; }
+
+.scene__bubble { opacity: 0; }
+.player .scene__bubble { max-width: min(12rem, calc(100% - var(--band-left, 0px) - var(--band-s, 1) * var(--bx) * 1px - 12px)); }
+
+/* Bubble tail on the right, pointing at a speaker to the bubble's right */
+.bubble--right::after { left: auto; right: 28px; border-right: 0; border-left: var(--line) solid var(--c-ink); transform: skewX(35deg); }

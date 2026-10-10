@@ -1,0 +1,462 @@
+{
+  "id": "commute",
+  "version": 2,
+  "title": "Rush Hour, Personal Space Not Included",
+  "threshold": 3,
+  "stages": [
+    {
+      "id": "noticing",
+      "title": "Noticing",
+      "narrator": "6:10 pm, Line 4. The coach is at 300% capacity. The announcer is an optimist. There is no “inside”. There is only him.",
+      "panel": {
+        "art": "c-crowd",
+        "alt": "A packed train coach at rush hour, straps swinging. The LED board says: Please move inside the coach. Right behind you, a man wearing sunglasses at 6 pm and a backpack on his front squeezes in with a phone to his ear.",
+        "bubble": {
+          "speaker": "Backpack Man, on the phone",
+          "text": "Haan haan, I’m just standing.",
+          "at": [
+            250,
+            62
+          ],
+          "tail": "right"
+        }
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Assume it’s just the crowd and look at your phone.",
+          "reaction": "Benefit of the doubt: granted. He didn’t apply for it. He’ll take it anyway.",
+          "label": "Gave him the benefit of the doubt",
+          "weight": -1,
+          "gag": "com-1a"
+        },
+        {
+          "id": "b",
+          "text": "Shift your position and put your bag between you and him.",
+          "reaction": "Bag deployed. It holds twelve items, and all twelve are now on duty.",
+          "label": "Put your bag between you",
+          "move": "The bag barrier",
+          "weight": 1,
+          "gag": "com-1b"
+        },
+        {
+          "id": "c",
+          "text": "Turn around and look at him, steadily.",
+          "reaction": "The Look. He is suddenly very interested in an ad for hair oil.",
+          "label": "Gave him The Look",
+          "move": "The Look",
+          "weight": 1,
+          "gag": "com-1c"
+        },
+        {
+          "id": "d",
+          "text": "Edge towards the door, where a group of women is standing.",
+          "reaction": "You’re now next to three women and a bag of oranges. A better neighbourhood. Juicier, too.",
+          "label": "Moved towards other women",
+          "move": "Move towards people",
+          "weight": 1,
+          "gag": "com-1d"
+        }
+      ],
+      "another": {
+        "choice": "b",
+        "move": "The bag barrier",
+        "why": "Changing position or putting a bag between you makes space without needing to say anything."
+      }
+    },
+    {
+      "id": "responding",
+      "title": "Responding",
+      "narrator": "The train lurches. His elbow “accidentally” finds you. Physics has never been this targeted.",
+      "panel": {
+        "art": "c-lurch",
+        "alt": "The coach jolts and everyone sways. The man with the front backpack has leaned in again. A woman beside you, holding a bag of oranges, has noticed.",
+        "sfx": "JOLT",
+        "sfxAt": [
+          40,
+          30
+        ]
+      },
+      "variants": {
+        "from": "noticing",
+        "by": {
+          "d": {
+            "narrator": "You moved. He moved. Past four people and a bicycle. Commitment. Then the train lurches, and his elbow “accidentally” finds you."
+          }
+        }
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Freeze and wait it out. Four more stations.",
+          "reaction": "Freezing is a completely normal reaction. The train, sadly, is in no hurry.",
+          "label": "Froze and waited",
+          "weight": 0,
+          "gag": "com-2a"
+        },
+        {
+          "id": "b",
+          "text": "Say clearly, so people hear: “Step back. Don’t touch me.”",
+          "reaction": "Five words. The whole coach turns around. Even the man selling hair clips stops selling hair clips.",
+          "label": "Said it out loud",
+          "move": "Name it out loud",
+          "weight": 1,
+          "gag": "com-2b"
+        },
+        {
+          "id": "c",
+          "text": "Apologise for being in his way.",
+          "reaction": "Ah, the national reflex: saying sorry for being touched. His elbow does not deserve it.",
+          "label": "Apologised to him",
+          "weight": -1,
+          "gag": "com-2c"
+        },
+        {
+          "id": "d",
+          "text": "Ask the woman with the oranges, quietly: “Can I stand by you?”",
+          "reaction": "Instant alliance. She shifts her oranges and glares. He is now outnumbered by citrus.",
+          "label": "Asked a woman nearby to stand with you",
+          "move": "Recruit a neighbour",
+          "weight": 1,
+          "gag": "com-2d"
+        }
+      ],
+      "another": {
+        "choice": "b",
+        "move": "Name it out loud",
+        "why": "Saying it loudly and plainly turns a “did that just happen?” moment into one everyone noticed."
+      }
+    },
+    {
+      "id": "crowd",
+      "title": "Getting help",
+      "narrator": "Two aunties have noticed. They have the energy of women who have seen this before, and have opinions about it.",
+      "panel": {
+        "art": "c-aunties",
+        "alt": "The LED board says: Next station, Kamal Nagar. Two older women turn around, arms crossed, deeply unimpressed. The man suddenly finds the ceiling very interesting."
+      },
+      "variants": {
+        "from": "responding",
+        "by": {
+          "b": {
+            "narrator": "Two aunties turned around at “Don’t touch me”. They have not turned back. They have opinions."
+          }
+        }
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Tell the aunties: “This man keeps pushing into me.”",
+          "reaction": "The aunties mobilise. He is now facing a committee. The committee has peanuts.",
+          "label": "Told the aunties",
+          "move": "Activate the aunty network",
+          "weight": 1,
+          "gag": "com-3a"
+        },
+        {
+          "id": "b",
+          "text": "Get off at Kamal Nagar and tell the platform staff.",
+          "reaction": "You step off. He stays on. The staff member reaches for a radio like it’s a sword.",
+          "label": "Told the station staff",
+          "move": "Tell the staff",
+          "weight": 1,
+          "gag": "com-3b"
+        },
+        {
+          "id": "c",
+          "text": "Say nothing. You don’t want a scene.",
+          "reaction": "No scene. No fuss. He’ll be thrilled, which is exactly the problem.",
+          "label": "Avoided a scene",
+          "weight": -1,
+          "gag": "com-3c"
+        },
+        {
+          "id": "d",
+          "text": "Call 112 and give the train, the coach and the next station.",
+          "reaction": "Calm. Factual. Coach number included. Dispatchers love a detail-oriented caller.",
+          "label": "Called 112 with details",
+          "move": "Call 112 with details",
+          "weight": 1,
+          "gag": "com-3d"
+        }
+      ],
+      "another": {
+        "choice": "a",
+        "move": "Activate the aunty network",
+        "why": "Telling the people around you often gets instant backup, and it makes him the one who has to explain himself."
+      }
+    },
+    {
+      "id": "aftermath",
+      "title": "The aftermath",
+      "narrator": "He’s still there. Now he’s humming. Your stop is approaching. So is a headache.",
+      "panel": {
+        "art": "c-after-train",
+        "alt": "Still on the crowded train. The man with the front backpack is humming, very pleased with himself. The LED board counts down to your stop."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Replay it all, wondering what you did wrong.",
+          "reaction": "Spoiler: you did nothing wrong. Please return this thought to the man who caused it.",
+          "label": "Blamed yourself",
+          "weight": -1,
+          "gag": "com-4a"
+        },
+        {
+          "id": "b",
+          "text": "Message a friend what’s happening.",
+          "reaction": "Your friend replies “???!!!” and then “WHICH COACH”. Backup, but make it typing.",
+          "label": "Told a friend",
+          "move": "Tell a friend",
+          "weight": 1,
+          "gag": "com-4b2"
+        },
+        {
+          "id": "c",
+          "text": "Note the time, train and coach while it’s fresh.",
+          "reaction": "6:12 pm, Line 4, coach 3. Your notes app has never been this useful.",
+          "label": "Noted the details",
+          "move": "Note the details",
+          "weight": 1,
+          "gag": "com-4c"
+        },
+        {
+          "id": "d",
+          "text": "Tell the staff at your stop, even if you’re not sure what happens next.",
+          "reaction": "Asking doesn’t commit you to anything. It just means you know the way.",
+          "label": "Told the staff at your stop",
+          "move": "Ask how to report",
+          "weight": 1,
+          "gag": "com-4d"
+        }
+      ],
+      "variants": {
+        "from": "crowd",
+        "by": {
+          "a": {
+            "narrator": "At Kamal Nagar, the aunties escort him out mid-lecture. His sunglasses don’t make it. They lie on the floor of coach 3, abandoned. Your hands are still shaking a little.",
+            "panel": {
+              "art": "c-after-aunties",
+              "alt": "Kamal Nagar station. The two aunties march the man out of the train door, mid-lecture. His sunglasses lie on the coach floor. An aunty has cleared a seat for you."
+            },
+            "choices": [
+              {
+                "id": "a",
+                "text": "Replay it all, wondering what you did wrong.",
+                "reaction": "Spoiler: you did nothing wrong. Please return this thought to the man who caused it.",
+                "label": "Blamed yourself",
+                "weight": -1,
+                "gag": "com-4a"
+              },
+              {
+                "id": "b",
+                "text": "Sit in the seat the aunties made for you and text a friend.",
+                "reaction": "A seat. In rush hour. Your friend replies “???!!!” and then “ARE THE AUNTIES SINGLE”.",
+                "label": "Sat down and texted a friend",
+                "move": "Tell a friend",
+                "weight": 1,
+                "gag": "com-4b2"
+              },
+              {
+                "id": "c",
+                "text": "Note the time, train and coach while it’s fresh.",
+                "reaction": "6:12 pm, Line 4, coach 3. Your notes app has never been this useful.",
+                "label": "Noted the details",
+                "move": "Note the details",
+                "weight": 1,
+                "gag": "com-4c"
+              },
+              {
+                "id": "d",
+                "text": "Ask the aunties where the help desk is at your stop.",
+                "reaction": "Both aunties point. In different directions. Both are correct.",
+                "label": "Asked where to report",
+                "move": "Ask how to report",
+                "weight": 1,
+                "gag": "com-4d-aunties"
+              }
+            ]
+          },
+          "b": {
+            "narrator": "Platform 2, Kamal Nagar. The staff member is filling in a form with the handwriting of a doctor. The chai stall is open. Your heart is doing a drum solo.",
+            "panel": {
+              "art": "c-platform",
+              "alt": "Platform 2 at Kamal Nagar. The train pulls away with the man still on it. At the Station Help Desk, a staff member writes on a form. A chai stall glows nearby."
+            },
+            "choices": [
+              {
+                "id": "a",
+                "text": "Replay it all, wondering what you did wrong.",
+                "reaction": "Spoiler: you did nothing wrong. Please return this thought to the man who caused it.",
+                "label": "Blamed yourself",
+                "weight": -1,
+                "gag": "com-4a"
+              },
+              {
+                "id": "b",
+                "text": "Get a chai and message a friend what happened.",
+                "reaction": "Chai. A bench. A friend typing “???!!!”. Recovery protocol initiated.",
+                "label": "Chai and a friend",
+                "move": "Chai and a friend",
+                "weight": 1,
+                "gag": "com-4b"
+              },
+              {
+                "id": "c",
+                "text": "Give the time, train and coach for the form.",
+                "reaction": "6:12 pm, Line 4, coach 3. The staff member looks impressed. The form looks relieved.",
+                "label": "Gave the details",
+                "move": "Note the details",
+                "weight": 1,
+                "gag": "com-4c"
+              },
+              {
+                "id": "d",
+                "text": "Ask the staff what happens next.",
+                "reaction": "Asking doesn’t commit you to anything. It just means you know the way.",
+                "label": "Asked what happens next",
+                "move": "Ask how to report",
+                "weight": 1,
+                "gag": "com-4d"
+              }
+            ]
+          },
+          "d": {
+            "narrator": "At Kamal Nagar, two officers are waiting exactly at coach 3. He takes his sunglasses off for the first time all evening. It does not help.",
+            "panel": {
+              "art": "c-after-112",
+              "alt": "Kamal Nagar station. The train doors open at coach 3, where two police officers are waiting. The man freezes in the doorway, sunglasses in hand."
+            },
+            "choices": [
+              {
+                "id": "a",
+                "text": "Replay it all, wondering what you did wrong.",
+                "reaction": "Spoiler: you did nothing wrong. Please return this thought to the man who caused it.",
+                "label": "Blamed yourself",
+                "weight": -1,
+                "gag": "com-4a"
+              },
+              {
+                "id": "b",
+                "text": "Message a friend what’s happening.",
+                "reaction": "Your friend replies “???!!!” and then “IS THAT THE POLICE”. Yes. Yes it is.",
+                "label": "Told a friend",
+                "move": "Tell a friend",
+                "weight": 1,
+                "gag": "com-4b2"
+              },
+              {
+                "id": "c",
+                "text": "Give the officers the time and what happened.",
+                "reaction": "6:12 pm, Line 4, coach 3. The officer writes it down. Then underlines it.",
+                "label": "Gave the officers the details",
+                "move": "Note the details",
+                "weight": 1,
+                "gag": "com-4c-police"
+              },
+              {
+                "id": "d",
+                "text": "Ask for a complaint reference number.",
+                "reaction": "A reference number. The receipt of the justice system. Screenshot it.",
+                "label": "Asked for a reference number",
+                "move": "Ask how to report",
+                "weight": 1,
+                "gag": "com-4d-ref"
+              }
+            ]
+          }
+        }
+      },
+      "another": {
+        "choice": "b",
+        "move": "Tell a friend",
+        "why": "After something like this, it helps to slow down and tell someone. What you do next can wait until you’re ready."
+      }
+    }
+  ],
+  "endings": {
+    "good": {
+      "hint": "Want the other ending? Keep your head down this time: give him the benefit of the doubt, say sorry, avoid a scene.",
+      "moves": [
+        "The bag barrier",
+        "Name it out loud",
+        "Activate the aunty network"
+      ],
+      "variants": [
+        {
+          "id": "committee",
+          "when": {
+            "stage": "crowd",
+            "choices": [
+              "a"
+            ]
+          },
+          "title": "The Committee Has Ruled",
+          "art": "c-end-committee",
+          "alt": "Back on the train, you sit between the two aunties. One offers you peanuts. Your phone shows a WhatsApp group: Line 4 Ladies (Est. 1998), 214 members. His sunglasses lie on the floor like a monument.",
+          "narration": "The aunties return to their seats like they’ve just closed a merger. One shares her peanuts. The other adds you to “Line 4 Ladies (Est. 1998)”: 214 members, 3,000 unread messages, all about peanuts and justice. You get off at your stop, on time. The sunglasses stay on the floor of coach 3, like a monument."
+        },
+        {
+          "id": "staff",
+          "when": {
+            "stage": "crowd",
+            "choices": [
+              "b"
+            ]
+          },
+          "title": "Platform Justice",
+          "art": "c-end-staff",
+          "alt": "At an exit gate two stations away, the man’s front backpack is wedged in the turnstile while a guard talks to him. On your platform, the next train arrives with an empty seat.",
+          "narration": "The staff radio ahead. Two stations later, Backpack Man tries to leave through the exit gate. His front-mounted backpack wedges itself firmly in the turnstile. He is still explaining himself to a guard when your next train pulls in. You board. It has a seat. You didn’t know trains came with those."
+        },
+        {
+          "id": "dispatch",
+          "when": {
+            "stage": "crowd",
+            "choices": [
+              "d"
+            ]
+          },
+          "title": "Coach 3, Over",
+          "art": "c-end-112",
+          "alt": "Your phone shows a screenshot of a complaint reference number. The LED board in the coach reads: Next station, your stop.",
+          "narration": "The officers take his details, and you get a reference number. You screenshot it with the pride of a woman who has finally used 112 for something other than worrying about it. The announcer speaks: “Next station: your stop.” For once, the train is right."
+        }
+      ]
+    },
+    "funnyBad": {
+      "title": "Three Stations Too Far",
+      "art": "c-end-missed",
+      "alt": "Station signs show your stop, then one more, then three more. You stand on the far platform while an auto-rickshaw waits for the long, expensive ride back.",
+      "lead": {
+        "from": "crowd",
+        "default": "Somewhere between guarding your bag and breathing deeply, your stop came and went. And the next. And one more. He got off early, looking pleased with himself, which is the most annoying part.",
+        "by": {
+          "a": "The aunties handled him. Your stop, however, handled itself: it came and went while your hands were still shaking. And the next. And one more.",
+          "b": "By the time the form was done, your fast train had gone. The slow one stops everywhere, including places that aren’t stations.",
+          "d": "Your statement took long enough that your fast train left without you. The slow one stops everywhere, including places that aren’t stations."
+        }
+      },
+      "narration": "The auto ride home costs ₹240 and comes with one sad song, played four times. You tell your sister everything over a very large chai. She is furious on your behalf, which helps.",
+      "moves": [
+        "Name it out loud",
+        "Activate the aunty network",
+        "None of it was on you"
+      ],
+      "extraMove": "None of it was on you",
+      "hint": "For a good ending: make space, say it out loud, then get help. Who you get help from leads to a different good ending."
+    }
+  },
+  "realLife": {
+    "disclaimer": "This was satire. Real situations are messier, faster and scarier than a comic. There is no perfect response, and nothing that happens to you is your fault. These are ideas, not rules.",
+    "tips": [
+      "You don’t have to be sure it was deliberate before you move away. Trust the feeling.",
+      "Changing your position, using your bag as a barrier, or moving towards other women are all good first moves.",
+      "Saying “Step back” or “Don’t touch me” loudly is enough. Other passengers often back you up.",
+      "Tell railway, metro or bus staff, or the police booth at the station. In an emergency, call 112.",
+      "Note the time, the route, the coach or bus number and anything you remember about him.",
+      "Freezing is a normal reaction. Whatever you did in the moment, it wasn’t your fault."
+    ]
+  }
+}

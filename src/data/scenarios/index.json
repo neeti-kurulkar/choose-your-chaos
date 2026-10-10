@@ -16,7 +16,8 @@
       "tagline": "11:47 pm. Your senior would like to discuss your growth. Over dinner. Just you two.",
       "minutes": 4,
       "setting": "workplace",
-      "status": "coming-soon"
+      "status": "ready",
+      "file": "dinner.json"
     },
     {
       "id": "commute",
@@ -24,7 +25,8 @@
       "tagline": "The coach is full. One man is treating that as a personal invitation.",
       "minutes": 4,
       "setting": "public-transport",
-      "status": "coming-soon"
+      "status": "ready",
+      "file": "commute.json"
     },
     {
       "id": "wedding",
@@ -32,7 +34,8 @@
       "tagline": "He has questions about your marriage, your salary and your weight. The buffet is still open.",
       "minutes": 4,
       "setting": "family-function",
-      "status": "coming-soon"
+      "status": "ready",
+      "file": "wedding.json"
     }
   ]
 }

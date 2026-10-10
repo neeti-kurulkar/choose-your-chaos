@@ -2,25 +2,29 @@ import index from '../../data/scenarios/index.json';
 import { getSeen } from '../progress.js';
 import { getProfile } from '../profile.js';
 import { esc } from '../player.js';
+import { allEndings } from '../endings.js';
 
-const ENDINGS = [
-  ['good', 'Good ending'],
-  ['funnyBad', 'Funny-bad ending'],
-];
+// Ending titles are shown only once found; unfound ones stay "???".
+const files = import.meta.glob('../../data/scenarios/*.json', { eager: true, import: 'default' });
+const endingsOf = (s) => {
+  const data = files[`../../data/scenarios/${s.file}`];
+  return data ? allEndings(data) : [];
+};
 
 function card(s) {
   const playable = s.status !== 'coming-soon';
   const seen = getSeen(s.id);
-  const ticks = ENDINGS.map(([key, label]) => {
-    const got = seen.includes(key);
-    return `<li class="${got ? 'is-seen' : ''}"><span class="tick" aria-hidden="true">${got ? '✓' : ''}</span>${label}<span class="visually-hidden">: ${got ? 'seen' : 'not seen yet'}</span></li>`;
+  const every = endingsOf(s);
+  const ticks = every.map(({ id, title }) => {
+    const got = seen.includes(id);
+    return `<li class="${got ? 'is-seen' : ''}"><span class="tick" aria-hidden="true">${got ? '✓' : ''}</span>${got ? esc(title) : '<span aria-hidden="true">???</span><span class="visually-hidden">Ending not found yet</span>'}</li>`;
   }).join('');
   return `
   <li class="scard scard--${esc(s.id)} ${playable ? '' : 'is-soon'}">
     <h2 class="scard__title">${esc(s.title)}</h2>
     <p class="scard__tag">${esc(s.tagline)}</p>
     <p class="scard__meta">About ${s.minutes} minutes</p>
-    ${playable ? `<ul class="scard__seen" aria-label="Endings seen">${ticks}</ul>` : ''}
+    ${playable ? `<p class="scard__found">Endings found: ${every.filter((e) => seen.includes(e.id)).length} of ${every.length}</p><ul class="scard__seen" aria-label="Endings found">${ticks}</ul>` : ''}
     ${playable
       ? `<a class="btn btn--primary scard__play" href="#/play/${esc(s.id)}" aria-label="Play ${esc(s.title)}${s.status === 'preview' ? ' (preview)' : ''}">${s.status === 'preview' ? 'Play preview' : 'Play'}</a>`
       : '<p class="scard__soon">Coming soon</p>'}
