@@ -1,0 +1,72 @@
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background-color: var(--c-paper);
+  /* halftone dots, printed-comic feel; purely decorative */
+  background-image: radial-gradient(var(--c-dot) 1px, transparent 1.4px);
+  background-size: 12px 12px;
+  color: var(--c-ink);
+  font-family: var(--f-body);
+  font-size: var(--t-base);
+  line-height: var(--lh-body);
+}
+
+h1, h2, h3 {
+  font-family: var(--f-display);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: var(--lh-tight);
+  margin: 0 0 var(--s-3);
+}
+h1 { font-size: var(--t-3xl); }
+h2 { font-size: var(--t-2xl); }
+h3 { font-size: var(--t-lg); }
+/* Small headings stay in the body face: Bangers gets hard to read when small */
+h4 { font-size: var(--t-md); font-weight: 700; margin: 0 0 var(--s-2); }
+
+p { margin: 0 0 var(--s-4); max-width: var(--measure); }
+
+a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 3px; }
+
+:focus-visible {
+  outline: 3px solid var(--c-focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+img, svg { max-width: 100%; display: block; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--s-2);
+  top: -100px;
+  z-index: 100;
+  background: var(--c-brand);
+  color: var(--c-on-brand);
+  padding: var(--s-2) var(--s-4);
+  border: var(--line) solid var(--c-ink);
+}
+.skip-link:focus { top: var(--s-2); }
+
+.wrap {
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0 var(--s-4);
+}
+
+[hidden] { display: none !important; }

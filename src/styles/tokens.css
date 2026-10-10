@@ -1,0 +1,137 @@
+/* =========================================================
+   DESIGN TOKENS — edit colours here.
+   Three candidate palettes; <html data-palette="..."> picks one.
+   CHOSEN: marigold (palette C) — the app always uses it. Turmeric and
+   Auto Stand remain only so the style tile can show the comparison.
+   Every colour in the app must come from a token below.
+   Contrast notes are WCAG ratios for the pairing named.
+   ========================================================= */
+
+@import '@fontsource/bangers/400.css';
+@import '@fontsource/atkinson-hyperlegible/400.css';
+@import '@fontsource/atkinson-hyperlegible/700.css';
+
+:root,
+[data-palette='turmeric'] {
+  /* A — "Turmeric & Ink" */
+  --c-paper: #efede6;        /* page background, chalk newsprint */
+  --c-panel: #fbfaf6;        /* inside comic panels and form cards */
+  --c-ink: #15203b;          /* text + outlines. On paper: 13.8:1 */
+  --c-ink-soft: #46506b;     /* secondary text. On paper: 6.8:1 */
+  --c-brand: #e3a21a;        /* turmeric. Ink on it: 7.3:1 */
+  --c-on-brand: #15203b;
+  --c-accent: #0e7c66;       /* jade. White on it: 5.1:1 */
+  --c-on-accent: #ffffff;
+  --c-night: #15203b;        /* night-scene sky in illustrations */
+  --c-caption: #f3d27a;      /* narrator caption box. Ink on it: 11.0:1 */
+  --c-notice: #dbeee8;       /* calm notice background. Ink on it: 13.4:1 */
+  --c-warn: #f6dcc4;         /* gentle warning (not red). Ink on it: 12.3:1 */
+  --c-focus: #0e7c66;
+  --c-dot: rgba(21, 32, 59, 0.13); /* halftone dots */
+}
+
+[data-palette='autostand'] {
+  /* B — "Auto Stand": the green-and-yellow of an auto-rickshaw */
+  --c-paper: #eceee6;
+  --c-panel: #fafbf6;
+  --c-ink: #1b2420;          /* On paper: 13.6:1 */
+  --c-ink-soft: #4a554f;     /* On paper: 6.6:1 */
+  --c-brand: #f5c518;        /* auto yellow. Ink on it: 9.8:1 */
+  --c-on-brand: #1b2420;
+  --c-accent: #1e6b45;       /* auto green. White on it: 6.5:1 */
+  --c-on-accent: #ffffff;
+  --c-night: #1b2420;
+  --c-caption: #f8de6b;
+  --c-notice: #d9eadf;
+  --c-warn: #f4e0c2;
+  --c-focus: #1e6b45;
+  --c-dot: rgba(27, 36, 32, 0.13);
+}
+
+[data-palette='marigold'] {
+  /* C — "Marigold Night": dark page, chalk text, marigold + tomato */
+  --c-paper: #221a24;        /* aubergine-black (near-neutral, not purple) */
+  --c-panel: #2e2530;
+  --c-ink: #f5f1e8;          /* On paper: 15.0:1 */
+  --c-ink-soft: #cfc6cf;     /* On paper: 10.2:1 */
+  --c-brand: #f59e0b;        /* marigold. Paper on it: 7.9:1 */
+  --c-on-brand: #221a24;
+  --c-accent: #f0664a;       /* tomato. Paper on it: 5.4:1 */
+  --c-on-accent: #221a24;
+  --c-night: #120d14;
+  --c-caption: #f5c55a;
+  --c-notice: #2f3d3a;
+  --c-warn: #46322a;
+  --c-focus: #f5c55a;
+  --c-dot: rgba(245, 241, 232, 0.08);
+}
+
+:root {
+  /* Illustration colours (shared by all palettes; art sits on night scenes) */
+  --art-line: #0b0710;
+  --art-bldg: #3a2f40;
+  --art-dark: #1d1622;
+  --art-glass: #9fb4d8;
+  --art-hair: #3b2a22;
+}
+
+:root {
+  /* Type. Bangers = comic display (headings, SFX only, never body).
+     Atkinson Hyperlegible = body, designed for low-vision legibility.
+     Devanagari falls back to system fonts present on Android/Windows. */
+  --f-display: 'Bangers', 'Impact', 'Arial Black', sans-serif;
+  --f-narrator: var(--f-body-stack);
+  --f-sfx: 'Bangers', 'Impact', 'Arial Black', sans-serif;
+  --f-body-stack: 'Atkinson Hyperlegible', 'Noto Sans', 'Noto Sans Devanagari',
+    'Nirmala UI', 'Mangal', system-ui, sans-serif;
+  --f-body: var(--f-body-stack);
+
+  /* Type scale: ratio 1.25 on a 1rem base. Text-size control
+     changes the root size, so everything scales together. */
+  --t-sm: 0.875rem;  /* only for meta like counters; never below 14px */
+  --t-base: 1rem;
+  --t-md: 1.25rem;
+  --t-lg: 1.563rem;
+  --t-xl: 1.953rem;
+  --t-2xl: 2.441rem;
+  --t-3xl: 3.052rem;
+  --lh-body: 1.55;
+  --lh-tight: 1.1;
+
+  /* Spacing (4px grid) */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+
+  /* Comic linework */
+  --line: 3px;
+  --line-thin: 2px;
+  --shadow-hard: 4px 4px 0 var(--c-ink);   /* offset print shadow, no blur */
+  --shadow-press: 1px 1px 0 var(--c-ink);
+  --radius-panel: 4px;   /* panels are nearly square */
+  --radius-ctl: 10px;    /* controls are softer, so they read as tappable */
+  --radius-bubble: 22px;
+
+  --measure: 38rem;      /* max line length for reading */
+  --tap: 48px;           /* minimum touch target */
+
+  --dur-fast: 120ms;
+  --dur-med: 280ms;
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Text size control (S/M/L). S is the 16px minimum. */
+:root[data-text='m'] { font-size: 112.5%; }
+:root[data-text='l'] { font-size: 125%; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-med: 0ms;
+  }
+}
