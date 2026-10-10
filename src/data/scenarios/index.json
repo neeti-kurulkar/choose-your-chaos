@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "cab",
+      "title": "ZoomZoom Rated You 4.9",
+      "tagline": "A stranger, a car and a very confident rating. What could go wrong?",
+      "minutes": 4,
+      "setting": "cab",
+      "status": "ready",
+      "file": "cab.json"
+    },
+    {
+      "id": "dinner",
+      "title": "The “Simple Dinner” Invite",
+      "tagline": "11:47 pm. Your senior would like to discuss your growth. Over dinner. Just you two.",
+      "minutes": 4,
+      "setting": "workplace",
+      "status": "coming-soon"
+    },
+    {
+      "id": "commute",
+      "title": "Rush Hour, Personal Space Not Included",
+      "tagline": "The coach is full. One man is treating that as a personal invitation.",
+      "minutes": 4,
+      "setting": "public-transport",
+      "status": "coming-soon"
+    },
+    {
+      "id": "wedding",
+      "title": "The Wedding Uncle Special",
+      "tagline": "He has questions about your marriage, your salary and your weight. The buffet is still open.",
+      "minutes": 4,
+      "setting": "family-function",
+      "status": "coming-soon"
+    }
+  ]
+}
