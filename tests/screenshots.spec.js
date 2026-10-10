@@ -1,7 +1,7 @@
 // Per-stage screenshots: npm run screenshots
 import { test } from '@playwright/test';
 
-const dir = 'docs/screenshots/stage-4';
+const dir = 'docs/screenshots/stage-5';
 const SHOTS = [
   ['serious', '/#/serious'],
   ['tell-us', '/#/tell-us'],
@@ -12,6 +12,8 @@ const SHOTS = [
   ['about', '/#/about'],
   ['login', '/#/login'],
   ['not-found', '/#/nope'],
+  ['feedback', '/#/feedback/wedding'],
+  ['test-mode', '/#/test-mode'],
 ];
 
 for (const [name, path] of SHOTS) {

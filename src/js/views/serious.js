@@ -3,7 +3,7 @@
 // No tracking of which numbers are tapped or copied.
 
 import data from '../../data/helplines.json';
-import { esc } from '../player.js';
+import { esc } from '../esc.js';
 
 const LONG_DATE = (iso) =>
   new Date(`${iso}T00:00:00`).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });

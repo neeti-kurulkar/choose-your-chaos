@@ -88,7 +88,7 @@
 
   /* Type scale: ratio 1.25 on a 1rem base. Text-size control
      changes the root size, so everything scales together. */
-  --t-sm: 0.875rem;  /* only for meta like counters; never below 14px */
+  --t-sm: max(0.875rem, 16px);  /* meta like counters; never below the 16px minimum */
   --t-base: 1rem;
   --t-md: 1.25rem;
   --t-lg: 1.563rem;

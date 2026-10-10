@@ -1,0 +1,145 @@
+[
+  {
+    "page": "home",
+    "formFactor": "mobile",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 63,
+    "failed": [
+      "render-blocking-resources",
+      "is-crawlable",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ]
+  },
+  {
+    "page": "scenarios",
+    "formFactor": "mobile",
+    "performance": 99,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 63,
+    "failed": [
+      "render-blocking-resources",
+      "is-crawlable",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ]
+  },
+  {
+    "page": "serious",
+    "formFactor": "mobile",
+    "performance": 99,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 63,
+    "failed": [
+      "render-blocking-resources",
+      "is-crawlable",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ]
+  },
+  {
+    "page": "play",
+    "formFactor": "mobile",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 63,
+    "failed": [
+      "render-blocking-resources",
+      "unused-javascript",
+      "is-crawlable",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ]
+  },
+  {
+    "page": "feedback",
+    "formFactor": "mobile",
+    "performance": 99,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 63,
+    "failed": [
+      "render-blocking-resources",
+      "is-crawlable",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ]
+  },
+  {
+    "page": "home",
+    "formFactor": "desktop",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 63,
+    "failed": [
+      "render-blocking-resources",
+      "is-crawlable",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ]
+  },
+  {
+    "page": "scenarios",
+    "formFactor": "desktop",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 63,
+    "failed": [
+      "render-blocking-resources",
+      "is-crawlable",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ]
+  },
+  {
+    "page": "serious",
+    "formFactor": "desktop",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 63,
+    "failed": [
+      "render-blocking-resources",
+      "is-crawlable",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ]
+  },
+  {
+    "page": "play",
+    "formFactor": "desktop",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 63,
+    "failed": [
+      "render-blocking-resources",
+      "unused-javascript",
+      "is-crawlable",
+      "forced-reflow-insight",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ]
+  },
+  {
+    "page": "feedback",
+    "formFactor": "desktop",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 63,
+    "failed": [
+      "render-blocking-resources",
+      "is-crawlable",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ]
+  }
+]

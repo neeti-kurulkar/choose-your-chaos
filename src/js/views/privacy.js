@@ -18,10 +18,12 @@ export function privacy(main) {
     <table class="data-table">
       <thead><tr><th scope="col">What</th><th scope="col">Why</th><th scope="col">How to remove it</th></tr></thead>
       <tbody>
-        <tr><td>Text size (S/M/L)</td><td>So pages stay readable for you</td><td>Button below</td></tr>
+        <tr><td>Text size (S/M/L), sound on or off, and auto-advance on or off</td><td>So the game stays the way you set it</td><td>Button below</td></tr>
         <tr><td>Which endings you’ve seen</td><td>For the ticks on scenario cards</td><td>Button below</td></tr>
         <tr><td>Your demo profile, if you made one</td><td>For the header chip and future scenario filtering</td><td><a href="#/login">Delete my profile</a>, or the button below</td></tr>
         <tr><td>Your “Tell us” submissions and draft, if any</td><td>So you can export them; nothing is sent</td><td><a href="#/tell-us">Delete all my submissions</a>, or the button below</td></tr>
+        <tr><td>Your answers to the three game questions, if you saved any</td><td>So you can download or email them; nothing is sent</td><td>Button below</td></tr>
+        <tr><td>During a user-test session only: your choices and how long each took, under a code like “P3”</td><td>So the facilitator can see where the game is unclear. Only when a “Test mode” tag shows in the header.</td><td>Button below</td></tr>
       </tbody>
     </table>
 
@@ -30,7 +32,8 @@ export function privacy(main) {
       <li>Passwords. The demo log-in checks and stores nothing.</li>
       <li>Phone numbers, email addresses or exact locations.</li>
       <li>Anything at all from people who choose “Under 18”.</li>
-      <li>Which choices you made in a scenario, or which helpline numbers you tap.</li>
+      <li>Which choices you made in a scenario, outside a user-test session.</li>
+      <li>Which helpline numbers you tap.</li>
     </ul>
     <p>No cookies, no analytics, no tracking.</p>
 

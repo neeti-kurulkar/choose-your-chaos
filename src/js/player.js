@@ -12,14 +12,16 @@ import { resolveStage } from './endings.js';
 export { resolveStage };
 import { gsap, life } from '../art/motion.js';
 import { load, save } from './storage.js';
+import { sound, wireSound, SOUND_BUTTON } from './sound.js';
+import { testLog } from './testmode.js';
 
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const KEYS = 'ABCD';
 const BURST =
   '<svg viewBox="0 0 200 160" aria-hidden="true"><polygon points="100,4 118,40 160,14 150,56 196,60 160,88 190,124 144,116 136,156 106,124 74,154 66,114 18,126 42,88 4,62 50,54 38,14 82,40" fill="var(--c-brand)" stroke="#15203b" stroke-width="6" stroke-linejoin="round"/></svg>';
 
-export const esc = (t = '') =>
-  String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+import { esc } from './esc.js';
+export { esc };
 
 /** Sum of hidden weights; skipped stages (choice null) count as 0. */
 export function scoreOf(scenario, history) {
@@ -72,14 +74,16 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
 
   const anim = (el, frames, o) =>
     el.animate(frames, { fill: 'both', easing: 'ease-out', ...o, ...(reduced() || fast ? { duration: 1, delay: 0 } : {}) });
-  const pop = (el) =>
-    el
+  const pop = (el) => {
+    if (el?.classList.contains('scene__sfx')) sound.play(el.textContent);
+    return el
       ? anim(el, [
           { opacity: 0, transform: 'scale(.2) rotate(-20deg)' },
           { opacity: 1, transform: 'scale(1.12) rotate(4deg)', offset: 0.6 },
           { opacity: 1, transform: 'none' },
         ], { duration: 450, easing: 'cubic-bezier(.34,1.56,.64,1)' }).finished
       : Promise.resolve();
+  };
 
   // GSAP timelines from scene art are tracked so Fast-forward, Pause,
   // reduced motion and scene changes control them.
@@ -161,12 +165,14 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
         <button type="button" class="btn" data-back hidden>Back one choice</button>
         <button type="button" class="btn" data-skipscene>Skip this scene</button>
         <button type="button" class="btn" data-auto aria-pressed="true">Auto-advance: on</button>
+        ${SOUND_BUTTON('btn')}
         <button type="button" class="btn" data-restart>Restart scenario</button>
         <a class="btn" href="${exitHref}">Exit to scenarios</a>
         <a class="btn btn--quiet" href="#/serious">On a serious note</a>
       </div>
     </dialog>`;
     wireShell();
+    wireSound(root);
   }
 
   const ownAnims = () => document.getAnimations().filter((a) => player.contains(a.effect?.target));
@@ -190,6 +196,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
     const art = ART[st.panel.art];
     const hadFocus = player.contains(document.activeElement) || dialog.open;
     setPaused(false);
+    testLog.event('stage', { stage: st.id });
     progress.textContent = `Stage ${i + 1} of ${scenario.stages.length}. ${st.title}`;
     tray.innerHTML = hint ? `<p class="player__hint"><strong>Hint:</strong> ${esc(hint)}</p>` : '';
 
@@ -200,7 +207,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
     const b = st.panel.bubble;
     const [bx, by] = b?.at || [250, 70];
     const [sx, sy] = st.panel.sfxAt || [288, 120];
-    next.innerHTML = `${art ? art.svg : ''}
+    next.innerHTML = `${art ? art.svg : `<p class="scene__fallback">${esc(st.panel.alt)}</p>`}
       ${st.panel.sfx ? `<div class="scene__sfx sfx" aria-hidden="true" style="--sx:${sx};--sy:${sy}">${BURST}<span class="sfx__word">${esc(st.panel.sfx)}!</span></div>` : ''}
       ${b ? `<p class="bubble scene__bubble${b.tail === 'right' ? ' bubble--right' : ''}" style="--bx:${bx};--by:${by}"><span class="visually-hidden">${esc(b.speaker)} says: </span>${esc(b.text)}</p>` : ''}`;
     const caption = document.createElement('p');
@@ -241,6 +248,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
 
   function showChoices(st, moveFocus) {
     setPaused(true);
+    testLog.event('choices', { stage: st.id });
     stage.classList.add('has-choices');
     tray.innerHTML = `<h3 class="visually-hidden" tabindex="-1">Your move</h3><ol class="choices">${st.choices
       .map((c, n) => `<li><button type="button" class="choice" data-n="${n}"><span class="choice__key" aria-hidden="true">${KEYS[n]}</span><span>${esc(c.text)}</span></button></li>`)
@@ -266,6 +274,8 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
 
   function choose(st, n) {
     history.push({ stage: index, choice: n });
+    sound.play('choose');
+    testLog.event('choice', { stage: st.id, choice: st.choices[n].id });
     syncBack();
     stage.classList.remove('has-choices');
     tray.innerHTML = '';
@@ -322,6 +332,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
   function backOne() {
     const last = history.pop();
     if (!last) return;
+    testLog.event('back');
     syncBack();
     stopTimer();
     const box = stage.querySelector('.reaction');
@@ -336,6 +347,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
   }
 
   function skipScene() {
+    testLog.event('skip', { stage: resolveStage(scenario, index, history).id });
     history = history.filter((h) => h.stage !== index);
     history.push({ stage: index, choice: null });
     syncBack();
@@ -359,6 +371,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
 
   function restart(newHint = '') {
     hint = newHint;
+    testLog.start(scenario.id, { hint: Boolean(newHint) });
     history = [];
     shell();
     playStage(0);
@@ -380,6 +393,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
 
     skipBtn.addEventListener('click', () => {
       fast = true;
+      testLog.event('fast-forward');
       tracked.forEach((t) => { if (t.repeat() !== -1 && t.progress() < 1) t.progress(1); });
       ownAnims().forEach((a) => {
         if (a.playState === 'running' && a.effect.getComputedTiming().endTime !== Infinity) a.finish();
@@ -395,6 +409,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
       frozenG = [...tracked].filter((t) => t.isActive());
       frozenG.forEach((t) => t.pause());
       pauseTimer();
+      testLog.event('pause');
       player.classList.add('is-frozen');
       dialog.showModal();
     });
@@ -421,6 +436,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
     syncAuto();
     autoBtn.addEventListener('click', () => {
       autoAdvance = !autoAdvance;
+      testLog.event('auto-advance', { on: autoAdvance });
       save('autoAdvance', autoAdvance);
       syncAuto();
       const box = stage.querySelector('.reaction');
@@ -432,7 +448,8 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
     });
   }
 
+  testLog.start(scenario.id, { hint: Boolean(hint) });
   shell();
   playStage(0);
-  return () => { alive = false; token++; stopTimer(); killTracked(); resizeObs?.disconnect(); if (dialog?.open) dialog.close(); };
+  return () => { testLog.leave(); alive = false; token++; stopTimer(); killTracked(); resizeObs?.disconnect(); if (dialog?.open) dialog.close(); };
 }

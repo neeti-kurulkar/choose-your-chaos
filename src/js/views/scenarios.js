@@ -1,7 +1,7 @@
 import index from '../../data/scenarios/index.json';
 import { getSeen } from '../progress.js';
 import { getProfile } from '../profile.js';
-import { esc } from '../player.js';
+import { esc } from '../esc.js';
 import { allEndings } from '../endings.js';
 
 // Ending titles are shown only once found; unfound ones stay "???".
@@ -36,7 +36,7 @@ export function scenarios(main) {
   main.innerHTML = `
   <div class="wrap page">
     <h1>Pick your chaos</h1>
-    <p class="page__lede">Four everyday situations. Each one takes about four minutes and has two endings.</p>
+    <p class="page__lede">Four everyday situations. Each one takes about four minutes and has four endings, depending on what you choose.</p>
     <p class="filter-line">Showing scenarios for: ${profile ? 'your profile' : 'any profile'} (filtering coming soon)</p>
     <ul class="scards">${index.scenarios.map(card).join('')}</ul>
   </div>`;

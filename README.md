@@ -4,7 +4,7 @@ A short, sarcastic, comic-panel choose-your-path game about everyday safety
 situations for adult women in India. A university HCI course prototype.
 Static front end only: no backend, nothing leaves the browser.
 
-**Status:** Stage 4 (all four scenarios playable, each with three good endings and one funny-bad ending).
+**Status:** Stage 5 (all four scenarios playable; polish, accessibility pass, game feedback form, test mode and user-test plan done; ready to deploy).
 
 ## Run it
 
@@ -23,10 +23,47 @@ Open http://localhost:5173 (the style tile is at /style-tile.html). On your phon
 | `npm run dev` | Dev server with live reload |
 | `npm run build` | Production build into `dist/` |
 | `npm run preview` | Serves the built `dist/` |
-| `npm test` | Playwright smoke tests (mobile 360px + desktop) |
+| `npm test` | Playwright tests (mobile 360px + desktop), including axe accessibility scans |
+| `node scripts/lighthouse.mjs` | Lighthouse reports into `docs/lighthouse/` (serve `dist/` on port 4174 first) |
 | `npm run screenshots` | Regenerates `docs/screenshots/` |
 
 First test run only: `npx playwright install chromium`.
+
+## Deploy
+
+The game is a static site: build it once, then upload the `dist/` folder anywhere that serves files. There's no server code, no environment variables and no database. Routing uses `#/…` URLs and asset paths are relative, so it works from a sub-folder with no rewrite rules.
+
+```bash
+npm ci
+npm run build
+```
+
+`dist/` is the whole deployable site. Check it locally with `npm run preview` (http://localhost:4173).
+
+**Netlify (drag and drop):** open https://app.netlify.com/drop and drop the `dist/` folder onto the page. Netlify gives you a public URL. You need a free Netlify account to keep the site up.
+
+**GitHub Pages:**
+1. Push the repo to GitHub.
+2. Run `npm run build`.
+3. Publish `dist/` to a `gh-pages` branch with `npx gh-pages -d dist`, or upload it with the "Deploy static content" Actions workflow.
+4. In the repo, go to Settings → Pages and choose the `gh-pages` branch.
+
+The site then works at `https://<user>.github.io/<repo>/`.
+
+**Any other host (Vercel, Cloudflare Pages, a university web space, an S3 bucket):** upload the contents of `dist/`. No configuration is needed.
+
+**Offline, for a test session without Wi-Fi:** run `npm run preview -- --host` on a laptop and open the "Network" URL on a phone on the same hotspot.
+
+**After deploying:**
+1. Open the URL on a phone and play one scenario to an ending.
+2. Check that `#/serious` loads.
+3. Open `#/test-mode` and confirm it's off.
+
+**Before sharing the link widely:** the "Tell us your experience" form must still not collect real stories until your instructor approves. Also re-check the helplines on `#/serious` against their sources (the "last verified" dates are in `src/data/helplines.json`).
+
+## User testing
+
+The plan is in `docs/test-plan.md`: consent script, 7 tasks, SUS, observation sheet and aftercare. The facilitator turns on logging at the hidden `#/test-mode` page and exports JSON or CSV from there after each session. The participant answers the three game questions at `#/feedback`, which is also linked from every ending page and the footer.
 
 ## Where to edit things
 
@@ -43,6 +80,9 @@ First test run only: `npx playwright install chromium`.
 | How every scene follows from earlier choices | `docs/flow-audit.md` (regenerate: `node scripts/flow-audit.mjs`) |
 | Scenes that change with an earlier choice | `"variants"` on a stage in the scenario JSON (see `docs/data-schema.md`) |
 | Helplines (with sources and verified dates) | `src/data/helplines.json`; see `docs/verification-report.md` |
+| Sound effects (synthesised, off by default) | `src/js/sound.js` |
+| The three game-feedback questions | `src/js/views/feedback.js` |
+| What test mode records | `src/js/testmode.js` (+ the `testLog.event(...)` calls in `player.js`) |
 | Profile and "Tell us" options (age bands, settings…) | `src/js/options.js` |
 | Fake entries on the hidden triage page | `src/data/sample-submissions.json` |
 | Data formats | `docs/data-schema.md` |
@@ -57,7 +97,8 @@ public/favicon.svg
 src/
   main.js             router: #/, #/scenarios, #/play/<id>, #/serious,
                       #/login, #/tell-us, #/privacy, #/about,
-                      #/admin-demo (hidden, not linked), anything else = 404
+                      #/feedback[/<id>], #/admin-demo and #/test-mode
+                      (hidden, not linked), anything else = 404
   styles/
     tokens.css        design tokens: colours, type, spacing
     base.css          resets, body, headings, focus
@@ -75,11 +116,14 @@ src/
     submissions.js    "Tell us" storage, drafts, JSON export
     pii.js            simple personal-details check for free text
     forms.js          shared form builders
+    sound.js          optional Web Audio sound effects + toggles
+    testmode.js       local-only session logging for user tests
     views/            one module per page
   art/                SVG scenes animated with GSAP (cab, dinner, commute,
                       wedding), gags.js, gkit.js shared drawing kit
   data/               scenario and helpline content (JSON)
-docs/                 schema, illustration list, screenshots per stage
+docs/                 schema, test plan, accessibility report, Lighthouse
+                      reports, content review, flow audit, screenshots
 tests/                Playwright tests
 ```
 
@@ -96,7 +140,9 @@ host without server configuration.
 ## Privacy in this prototype
 
 Everything is stored in `localStorage` under keys prefixed `cyc:`: `textSize`,
-`progress`, `profile` (+ `profileDraft`), `submissions` (+ `submissionDraft`).
+`progress`, `profile` (+ `profileDraft`), `submissions` (+ `submissionDraft`),
+`autoAdvance`, `sound`, `feedback`, and (only while a facilitator has test
+mode on) `testMode` and `testLog`.
 No cookies, no analytics, no network requests other than loading the app.
 Nothing is saved for anyone who picks "Under 18". The in-app page
 `#/privacy` explains this and has a delete-everything button.

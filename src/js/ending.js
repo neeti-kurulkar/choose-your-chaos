@@ -3,10 +3,12 @@
 // "Off the page" (real-life ideas + disclaimer + link to support).
 
 import { ART } from '../art/index.js';
-import { esc } from './player.js';
+import { esc } from './esc.js';
 import { markSeen, getSeen } from './progress.js';
 import { allEndings, pickEnding, resolveStage } from './endings.js';
 import { gsap } from '../art/motion.js';
+import { sound } from './sound.js';
+import { testLog } from './testmode.js';
 
 // Good ending: the moves the player actually used (choices with a "move").
 // Funny-bad: the "another" moves for stages that didn't go well, plus the
@@ -31,6 +33,8 @@ const KEYS = 'ABCD';
 export function renderEnding(root, scenario, history, key, { exitHref, onReplay }) {
   const ending = pickEnding(scenario, history, key);
   markSeen(scenario.id, ending.id);
+  testLog.end(ending.id);
+  sound.play('ending');
   const seen = getSeen(scenario.id);
   const every = allEndings(scenario);
   const art = ART[ending.art];
@@ -69,6 +73,7 @@ export function renderEnding(root, scenario, history, key, { exitHref, onReplay 
       <button type="button" class="btn" data-again>Play again</button>
       <a class="btn btn--quiet" href="${exitHref}">Back to scenarios</a>
     </div>
+    <p class="ending__feedback"><a href="#/feedback/${esc(scenario.id)}">How was it? Three quick questions about the game</a></p>
 
     <section class="route" aria-labelledby="route-title">
       <h3 id="route-title">Your route</h3>

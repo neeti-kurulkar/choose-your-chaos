@@ -1,5 +1,5 @@
 // Tiny form builders so every form shares the same markup and a11y.
-import { esc } from './player.js';
+import { esc } from './esc.js';
 
 export const why = (text) =>
   `<details class="why"><summary>Why we ask</summary><p>${esc(text)}</p></details>`;

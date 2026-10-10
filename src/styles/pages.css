@@ -553,3 +553,52 @@ body[data-view='serious'] { background-image: none; }
 
 /* Bubble tail on the right, pointing at a speaker to the bubble's right */
 .bubble--right::after { left: auto; right: 28px; border-right: 0; border-left: var(--line) solid var(--c-ink); transform: skewX(35deg); }
+
+/* ---------- Stage 5: sound toggle, test-mode tag, fallbacks ---------- */
+.sound-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  min-height: 40px;
+  padding: 0 var(--s-2);
+  font: inherit;
+  font-weight: 700;
+  color: var(--c-ink);
+  background: var(--c-panel);
+  border: var(--line-thin) solid var(--c-ink);
+  border-radius: var(--radius-ctl);
+  cursor: pointer;
+}
+.sound-toggle[aria-pressed='true'] { background: var(--c-ink); color: var(--c-paper); }
+.sound-toggle[aria-pressed='true'] .sound-mute,
+.sound-toggle[aria-pressed='false'] .sound-waves { display: none; }
+.pause-menu .sound-toggle { justify-content: center; min-height: 48px; }
+.sound--header { display: none; }
+@media (min-width: 52rem) { .sound--header { display: inline-flex; } }
+.test-tag {
+  display: none;
+  font-weight: 700;
+  font-size: var(--t-sm);
+  padding: 0 var(--s-2);
+  border: var(--line-thin) dashed var(--c-brand);
+  color: var(--c-brand);
+  border-radius: var(--radius-ctl);
+}
+body.is-testing .test-tag { display: inline-block; }
+.scene__fallback {
+  position: absolute;
+  inset: 25% 8% auto;
+  padding: var(--s-4);
+  background: var(--c-panel);
+  border: var(--line) solid var(--c-ink);
+}
+.ending__feedback { margin-top: var(--s-4); }
+.feedback-done { margin-top: var(--s-6); }
+.sound-toggle { white-space: nowrap; }
+/* Header: icon only until there's room; the name stays "Sound" for screen readers */
+@media (max-width: 80rem) {
+  .sound--header .sound-toggle > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+}
+/* Until the first page renders, keep the footer below the fold so it
+   doesn't jump down (layout shift) when the content arrives. */
+body:not(.is-ready) #main { min-height: 100vh; }

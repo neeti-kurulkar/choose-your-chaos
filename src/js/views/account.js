@@ -2,7 +2,7 @@
 // is ever stored, every profile question is optional, and choosing
 // "Under 18" saves nothing at all.
 
-import { esc } from '../player.js';
+import { esc } from '../esc.js';
 import { getProfile, saveProfile, deleteProfile } from '../profile.js';
 import { load, save, remove, storageAvailable } from '../storage.js';
 import { radios, checks, select, readForm, fillForm, STORAGE_NOTE } from '../forms.js';

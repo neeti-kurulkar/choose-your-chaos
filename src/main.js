@@ -4,7 +4,7 @@ import './styles/components.css';
 import './styles/pages.css';
 import { applyPrefs, wireTextSize } from './js/prefs.js';
 import { getProfile } from './js/profile.js';
-import { esc } from './js/player.js';
+import { esc } from './js/esc.js';
 import { landing } from './js/views/landing.js';
 import { scenarios } from './js/views/scenarios.js';
 import { play } from './js/views/play.js';
@@ -14,9 +14,15 @@ import { tellUs } from './js/views/tellus.js';
 import { privacy } from './js/views/privacy.js';
 import { adminDemo } from './js/views/admin.js';
 import { serious } from './js/views/serious.js';
+import { feedback } from './js/views/feedback.js';
+import { testMode } from './js/views/testmode.js';
+import { wireSound } from './js/sound.js';
+import { testSettings } from './js/testmode.js';
 
 applyPrefs();
 wireTextSize();
+wireSound();
+document.body.classList.toggle('is-testing', testSettings().on);
 
 // Routes: hash-based so the static build works on any host with no config.
 // Each view: (main, params) => { title, nav?, cleanup? }
@@ -29,7 +35,9 @@ const ROUTES = [
   [/^\/tell-us$/, tellUs],
   [/^\/about$/, about],
   [/^\/privacy$/, privacy],
+  [/^\/feedback(?:\/([\w-]+))?$/, feedback],
   [/^\/admin-demo$/, adminDemo], // hidden: not linked anywhere
+  [/^\/test-mode$/, testMode], // hidden: for user-testing facilitators
 ];
 
 const main = document.getElementById('main');
@@ -59,6 +67,22 @@ function renderAccount() {
     <span class="chip-name">${esc(name)}</span></a>`;
 }
 
+// If a page breaks, say so plainly and offer a way out; never a blank screen.
+function errorPage(el) {
+  el.innerHTML = `
+  <div class="wrap page page--calm">
+    <h1>Something went wrong on our side</h1>
+    <div class="panel calm"><div class="panel__body">
+      <p>This page didn’t load properly. It isn’t anything you did. Reloading usually fixes it.</p>
+      <div class="btn-row"><button type="button" class="btn btn--primary" data-reload>Reload the page</button>
+      <a class="btn" href="#/">Go to the home page</a></div>
+      <p>Need support right now? <a href="#/serious">On a serious note</a> has helplines. In danger, call <a href="tel:112">112</a>.</p>
+    </div></div>
+  </div>`;
+  el.querySelector('[data-reload]').addEventListener('click', () => location.reload());
+  return { title: 'Something went wrong' };
+}
+
 let firstRender = true;
 function route() {
   const raw = location.hash.replace(/^#/, '') || '/';
@@ -73,8 +97,15 @@ function route() {
   renderAccount();
   setMenu(false);
   main.innerHTML = '';
-  const res = view(main, ...params) || {};
+  let res;
+  try {
+    res = view(main, ...params) || {};
+  } catch (err) {
+    console.error(err);
+    res = errorPage(main);
+  }
   cleanup = res.cleanup || null;
+  document.body.classList.add('is-ready');
   document.title = res.title ? `${res.title} · Choose Your Chaos` : 'Choose Your Chaos';
   document.body.dataset.view = res.nav || 'none';
   document.querySelectorAll('[data-nav]').forEach((a) => {

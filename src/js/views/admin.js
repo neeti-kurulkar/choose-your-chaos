@@ -4,7 +4,7 @@
 
 import samples from '../../data/sample-submissions.json';
 import { getSubmissions } from '../submissions.js';
-import { esc } from '../player.js';
+import { esc } from '../esc.js';
 import { SETTING, TONE, SUB_TYPE, AGE, CITY, labelOf } from '../options.js';
 
 export function adminDemo(main) {

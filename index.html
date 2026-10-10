@@ -27,6 +27,8 @@
         <button type="button" data-textsize="m" aria-pressed="true">M</button>
         <button type="button" data-textsize="l" aria-pressed="false">L</button>
       </div>
+      <span class="test-tag" title="Play-throughs are being recorded on this device for a test session">Test mode</span>
+      <span class="sound--header"><button type="button" class="sound-toggle" title="Sound effects" data-sound aria-pressed="false"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path class="sound-waves" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="sound-mute" d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Sound<span aria-hidden="true">: <span data-sound-state>off</span></span></span></button></span>
       <span id="account-slot"><a class="btn btn--small" href="#/login" data-nav="login">Log in / Sign up</a></span>
       <button class="btn btn--quiet btn--small menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav">Menu</button>
     </div>
@@ -47,6 +49,10 @@
           <button type="button" data-textsize="l" aria-pressed="false">L</button>
         </div>
       </div>
+      <div class="mobile-nav__textsize">
+        <span>Sound effects</span>
+        <button type="button" class="sound-toggle" data-sound aria-pressed="false"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path class="sound-waves" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="sound-mute" d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Sound<span aria-hidden="true">: <span data-sound-state>off</span></span></span></button>
+      </div>
     </div>
   </header>
 
@@ -57,8 +63,15 @@
         <p>This game needs JavaScript to run. If you need support right now, call 112 (emergency) from any phone.</p>
       </div>
     </noscript>
-    <p class="wrap page loading" id="boot-msg">Loading the chaos…</p>
+    <p class="wrap page loading" id="boot-msg" role="status">Loading the chaos…</p>
   </main>
+  <script>
+    // If the app hasn't started after 8 seconds, say so instead of spinning forever.
+    setTimeout(function () {
+      var m = document.getElementById('boot-msg');
+      if (m) m.textContent = 'Still loading. If nothing appears, refresh the page. This game needs a recent version of Chrome, Firefox, Safari or Edge. In danger right now? Call 112.';
+    }, 8000);
+  </script>
 
   <footer class="site-footer">
     <div class="wrap">
@@ -66,6 +79,7 @@
         <li><a href="#/about">About</a></li>
         <li><a href="#/serious">On a serious note</a></li>
         <li><a href="#/privacy">What this prototype stores</a></li>
+        <li><a href="#/feedback">Feedback on the game</a></li>
       </ul>
       <small>A university HCI prototype. All characters, apps and brands are fictional. Nothing you enter leaves your device. In danger right now? Call 112.</small>
     </div>

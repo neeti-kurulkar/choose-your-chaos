@@ -1,0 +1,4 @@
+# A university prototype with placeholder data: keep it out of search results
+# until it is ready for the public. Change to "Allow: /" when it is.
+User-agent: *
+Disallow: /
