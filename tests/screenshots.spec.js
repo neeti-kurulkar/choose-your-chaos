@@ -1,13 +1,16 @@
 // Per-stage screenshots: npm run screenshots
 import { test } from '@playwright/test';
 
-const dir = 'docs/screenshots/stage-3';
+const dir = 'docs/screenshots/stage-3b';
 const SHOTS = [
   ['serious', '/#/serious'],
+  ['tell-us', '/#/tell-us'],
+  ['privacy', '/#/privacy'],
+  ['admin-demo', '/#/admin-demo'],
   ['landing', '/#/'],
   ['scenarios', '/#/scenarios'],
   ['about', '/#/about'],
-  ['login-placeholder', '/#/login'],
+  ['login', '/#/login'],
   ['not-found', '/#/nope'],
 ];
 
@@ -52,10 +55,29 @@ test('shot scenes and endings', async ({ page }, info) => {
   await page.waitForTimeout(300);
   await shot('hint');
   for (const n of [0, 2, 0, 0]) {
-    await page.locator('.player [data-skip]').click().catch(() => {});
+    await page.locator('.player [data-skip]').click({ timeout: 500 }).catch(() => {});
     await page.locator('.player .choice').nth(n).click();
     await page.locator('.reaction [data-next]').click();
   }
   await page.waitForTimeout(900);
   await page.screenshot({ path: `${dir}/ending-funnybad-${info.project.name}.png`, fullPage: true });
+});
+
+test('shot sign-up form, profile and tell-us warning', async ({ page }, info) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/#/login');
+  await page.screenshot({ path: `${dir}/signup-form-${info.project.name}.png`, fullPage: true });
+  await page.getByLabel('Display name').fill('Chai Lover');
+  await page.getByRole('radio', { name: '25–34' }).check();
+  await page.getByRole('button', { name: 'Save my demo profile' }).click();
+  await page.waitForTimeout(200);
+  await page.screenshot({ path: `${dir}/profile-saved-${info.project.name}.png` });
+  await page.goto('/#/tell-us');
+  await page.locator('#tellus-form').getByRole('button', { name: 'Skip this step' }).click();
+  await page.locator('#tellus-form').getByRole('button', { name: 'Skip this step' }).click();
+  await page.getByLabel('Tell us what happened').fill('Made-up example. My number is 98765 43210.');
+  for (let i = 0; i < 4; i++) await page.locator('#tellus-form').getByRole('button', { name: 'Skip this step' }).click();
+  await page.locator('#tellus-form').getByRole('button', { name: 'Send' }).click();
+  await page.locator('.pii-warning').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `${dir}/pii-warning-${info.project.name}.png` });
 });

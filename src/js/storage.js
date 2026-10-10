@@ -44,3 +44,15 @@ export function remove(key) {
   try { if (storageAvailable()) window.localStorage.removeItem(PREFIX + key); } catch { /* ignore */ }
   memoryFallback.delete(key);
 }
+
+/** Remove every key this app stored ("cyc:" prefix). */
+export function clearAll() {
+  try {
+    if (storageAvailable()) {
+      Object.keys(window.localStorage)
+        .filter((k) => k.startsWith(PREFIX))
+        .forEach((k) => window.localStorage.removeItem(k));
+    }
+  } catch { /* ignore */ }
+  memoryFallback.clear();
+}

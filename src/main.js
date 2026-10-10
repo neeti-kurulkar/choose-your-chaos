@@ -8,7 +8,11 @@ import { esc } from './js/player.js';
 import { landing } from './js/views/landing.js';
 import { scenarios } from './js/views/scenarios.js';
 import { play } from './js/views/play.js';
-import { about, login, tellUs, notFound } from './js/views/pages.js';
+import { about, notFound } from './js/views/pages.js';
+import { account } from './js/views/account.js';
+import { tellUs } from './js/views/tellus.js';
+import { privacy } from './js/views/privacy.js';
+import { adminDemo } from './js/views/admin.js';
 import { serious } from './js/views/serious.js';
 
 applyPrefs();
@@ -21,9 +25,11 @@ const ROUTES = [
   [/^\/scenarios$/, scenarios],
   [/^\/play\/([\w-]+)$/, play],
   [/^\/serious$/, serious],
-  [/^\/login$/, login],
+  [/^\/login$/, account],
   [/^\/tell-us$/, tellUs],
   [/^\/about$/, about],
+  [/^\/privacy$/, privacy],
+  [/^\/admin-demo$/, adminDemo], // hidden: not linked anywhere
 ];
 
 const main = document.getElementById('main');
@@ -43,9 +49,12 @@ document.addEventListener('keydown', (e) => {
 function renderAccount() {
   const p = getProfile();
   const slot = document.getElementById('account-slot');
-  if (!p) return;
+  if (!p) {
+    slot.innerHTML = '<a class="btn btn--small" href="#/login" data-nav="login">Log in / Sign up</a>';
+    return;
+  }
   const name = p.displayName || 'You';
-  slot.innerHTML = `<a class="profile-chip" href="#/login" aria-label="Your profile: ${esc(name)}">
+  slot.innerHTML = `<a class="profile-chip" href="#/login" aria-label="Your profile: ${esc(name)}. Edit or delete">
     <span class="profile-chip__avatar" aria-hidden="true">${esc(name[0].toUpperCase())}</span>
     <span class="chip-name">${esc(name)}</span></a>`;
 }
@@ -61,6 +70,7 @@ function route() {
     if (m) { view = v; params = m.slice(1); break; }
   }
   cleanup?.();
+  renderAccount();
   setMenu(false);
   main.innerHTML = '';
   const res = view(main, ...params) || {};
@@ -83,6 +93,7 @@ function route() {
   }
 }
 
+window.addEventListener('cyc:profile', renderAccount);
 window.addEventListener('hashchange', () => { firstRender = false; route(); });
 renderAccount();
 route();

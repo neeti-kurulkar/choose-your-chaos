@@ -11,9 +11,15 @@ export function getProfile() {
 
 export function saveProfile(fields) {
   if (fields.ageBand === 'under-18') return false; // never store under-18 answers
-  return save('profile', { ...fields, version: PROFILE_VERSION });
+  const prev = getProfile();
+  save('profile', { ...fields, version: PROFILE_VERSION, createdAt: prev?.createdAt || new Date().toISOString() });
+  remove('profileDraft');
+  window.dispatchEvent(new Event('cyc:profile'));
+  return true;
 }
 
 export function deleteProfile() {
   remove('profile');
+  remove('profileDraft');
+  window.dispatchEvent(new Event('cyc:profile'));
 }

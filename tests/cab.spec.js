@@ -11,8 +11,8 @@ function watchErrors(page) {
 
 async function pick(page, n) {
   const player = page.locator('.player');
-  const ff = player.locator('[data-skip]');
-  if (await ff.isVisible()) await ff.click();
+  // Fast-forward may vanish by itself (reduced motion); don't wait on it.
+  await player.locator('[data-skip]').click({ timeout: 500 }).catch(() => {});
   await player.locator('.choice').nth(n).click();
 }
 

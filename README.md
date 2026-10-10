@@ -4,7 +4,7 @@ A short, sarcastic, comic-panel choose-your-path game about everyday safety
 situations for adult women in India. A university HCI course prototype.
 Static front end only: no backend, nothing leaves the browser.
 
-**Status:** Stage 2 (scenario engine + the full cab scenario with both endings and the debrief).
+**Status:** Stage 3B (account placeholder, "Tell us your experience", privacy page, admin demo).
 
 ## Run it
 
@@ -37,7 +37,9 @@ First test run only: `npx playwright install chromium`.
 | Scenario list, card titles and taglines | `src/data/scenarios/index.json` |
 | Scenario text, choices, endings, threshold | `src/data/scenarios/<id>.json` |
 | Illustrations and their entrance animations | `src/art/index.js` |
-| Helplines | `src/data/helplines.json` (Stage 3) |
+| Helplines (with sources and verified dates) | `src/data/helplines.json`; see `docs/verification-report.md` |
+| Profile and "Tell us" options (age bands, settings…) | `src/js/options.js` |
+| Fake entries on the hidden triage page | `src/data/sample-submissions.json` |
 | Data formats | `docs/data-schema.md` |
 | Illustration plan | `docs/illustrations.md` |
 
@@ -49,7 +51,8 @@ style-tile.html       Stage 0 design reference (every component)
 public/favicon.svg
 src/
   main.js             router: #/, #/scenarios, #/play/<id>, #/serious,
-                      #/login, #/tell-us, #/about, anything else = 404
+                      #/login, #/tell-us, #/privacy, #/about,
+                      #/admin-demo (hidden, not linked), anything else = 404
   styles/
     tokens.css        design tokens: colours, type, spacing
     base.css          resets, body, headings, focus
@@ -63,6 +66,9 @@ src/
     prefs.js          text size
     profile.js        getProfile() for future filtering (placeholder)
     progress.js       which endings have been seen
+    submissions.js    "Tell us" storage, drafts, JSON export
+    pii.js            simple personal-details check for free text
+    forms.js          shared form builders
     views/            one module per page
   art/index.js        SVG illustrations + entrance animations
   data/               scenario and helpline content (JSON)
@@ -82,5 +88,38 @@ host without server configuration.
 
 ## Privacy in this prototype
 
-Everything is stored in `localStorage` under keys prefixed `cyc:`. No cookies,
-no analytics, no network requests other than loading the app itself.
+Everything is stored in `localStorage` under keys prefixed `cyc:`: `textSize`,
+`progress`, `profile` (+ `profileDraft`), `submissions` (+ `submissionDraft`).
+No cookies, no analytics, no network requests other than loading the app.
+Nothing is saved for anyone who picks "Under 18". The in-app page
+`#/privacy` explains this and has a delete-everything button.
+
+**Do not collect real submissions** until the course instructor has approved
+it. Test with made-up text only; the "Tell us" page says so on screen.
+
+## Content moderation plan (not built)
+
+How "Tell us" submissions would be handled if this went beyond a prototype:
+
+1. **Collection.** Only after ethics approval. Submissions would go to an
+   access-controlled store; the consent text would say exactly who reads them
+   and for how long they are kept (proposal: deleted after 12 months).
+2. **Reading.** Two named reviewers from the project team, trained in
+   trauma-informed reading, with a support contact for themselves. Nobody
+   replies to submitters (the page never promises a reply).
+3. **Safety check first.** Any entry suggesting someone is in current danger
+   is not used for content; the team cannot respond, so the page always points
+   to 112 and "On a serious note" before the form.
+4. **Removing identifying details.** Before anything leaves the review stage,
+   reviewers remove or change names, places, employers, dates, phone numbers,
+   emails, links and unusual details that could identify a person. The
+   in-browser check (`pii.js`) is only a first nudge, not a guarantee.
+5. **Only with permission.** Only entries with the permission box ticked are
+   used as inspiration. Entries without it are counted for themes only.
+6. **Composites, never retellings.** A scenario is written from patterns
+   across several submissions plus published research, never from one person's
+   story, and never quoting a submission.
+7. **Approval.** Each new scenario is checked against the tone rules (jokes at
+   situations and myths, never the player or the harm; no victim-blaming; no
+   graphic content) by the project lead and the course instructor, then tested
+   with participants before release.

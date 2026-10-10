@@ -9,6 +9,8 @@ const ROUTES = [
   ['/#/login', 'Log in / Sign up'],
   ['/#/tell-us', 'Tell us your experience'],
   ['/#/about', 'About'],
+  ['/#/privacy', 'What this prototype stores'],
+  ['/#/admin-demo', 'Triage demo'],
   ['/#/nowhere', 'Wrong turn'],
   ['/#/play/wedding', 'The Wedding Uncle Special'],
   ['/style-tile.html', 'Style tile'],

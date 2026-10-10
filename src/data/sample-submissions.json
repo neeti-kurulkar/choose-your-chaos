@@ -1,0 +1,30 @@
+[
+  {
+    "id": "sample_1", "createdAt": "2026-09-02T09:14:00Z", "type": "share", "setting": "public-transport",
+    "text": "SAMPLE: A man kept leaning on me in a crowded bus. I moved my bag between us and the conductor noticed and told him to step back.",
+    "wish": "A choice where other passengers back you up.", "tone": "funny", "permission": true,
+    "profile": { "ageBand": "25-34", "cityType": "metro" }, "sample": true
+  },
+  {
+    "id": "sample_2", "createdAt": "2026-09-05T18:40:00Z", "type": "suggest", "setting": "online",
+    "text": "SAMPLE: A scenario about a stranger who keeps sending DMs after being ignored, and how to block and report.",
+    "wish": "", "tone": "funny", "permission": true, "sample": true
+  },
+  {
+    "id": "sample_3", "createdAt": "2026-09-11T21:05:00Z", "type": "both", "setting": "workplace",
+    "text": "SAMPLE: A senior kept messaging late at night about a 'quick call'. I didn't know if I could say no.",
+    "wish": "Knowing what the Internal Committee actually does.", "tone": "serious", "permission": false,
+    "profile": { "ageBand": "18-24", "cityType": "tier-2" }, "sample": true
+  },
+  {
+    "id": "sample_4", "createdAt": "2026-09-19T12:30:00Z", "type": "suggest", "setting": "family-function",
+    "text": "SAMPLE: An aunty who comments on your weight at every function, in front of everyone.",
+    "wish": "A comeback that doesn't start a family war.", "tone": "funny", "permission": true, "sample": true
+  },
+  {
+    "id": "sample_5", "createdAt": "2026-09-27T07:50:00Z", "type": "share", "setting": "street",
+    "text": "SAMPLE: Someone followed me from the market. I walked into a busy shop and waited until he left.",
+    "wish": "", "tone": "not-sure", "permission": true,
+    "profile": { "ageBand": "35-44", "cityType": "town" }, "sample": true
+  }
+]
