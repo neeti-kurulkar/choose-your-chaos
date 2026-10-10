@@ -1,0 +1,240 @@
+{
+  "id": "cab",
+  "version": 1,
+  "title": "ZoomZoom Rated You 4.9",
+  "threshold": 3,
+  "stages": [
+    {
+      "id": "boarding",
+      "title": "Getting in",
+      "narrator": "Congratulations. A stranger has volunteered to drive you through the night. The app says he’s lovely. The app also says the Wi-Fi is free.",
+      "panel": {
+        "art": "cab-arrives",
+        "alt": "10:40 pm. A yellow ZoomZoom cab pulls up under a streetlight. The app says: Ramesh, 4.9 stars. You stand on the kerb, seen from behind, phone in hand.",
+        "sfx": "SCREECH"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Hop in quickly, it’s late and cold.",
+          "reaction": "Efficient. The plate number is a surprise for later.",
+          "label": "Hopped straight in",
+          "weight": -1
+        },
+        {
+          "id": "b",
+          "text": "Check the plate and driver photo against the app, then get in.",
+          "reaction": "Look at you, running a background check at 10:40 pm.",
+          "label": "Checked the plate and photo",
+          "weight": 1,
+          "move": "The plate check"
+        },
+        {
+          "id": "c",
+          "text": "Photograph the plate and send it to a friend with “Leaving now”.",
+          "reaction": "A paper trail, delivered in three seconds. Bureaucracy, but make it useful.",
+          "label": "Sent the plate to a friend",
+          "weight": 1,
+          "move": "The paper trail"
+        },
+        {
+          "id": "d",
+          "text": "Ask the driver “Which name did you get for the booking?” before opening the door.",
+          "reaction": "Direct, polite, devastatingly efficient. The driver is briefly impressed.",
+          "label": "Asked him to confirm the booking name",
+          "weight": 1,
+          "move": "The booking-name test"
+        }
+      ],
+      "another": {
+        "choice": "b",
+        "why": "Matching the plate and photo to the app takes about ten seconds, and it’s the moment you’re most in control.",
+        "move": "The plate check"
+      }
+    },
+    {
+      "id": "ride",
+      "title": "The ride begins",
+      "narrator": "The trip has begun. So has the small talk.",
+      "panel": {
+        "art": "cab-interior",
+        "alt": "Inside the cab, from the back seat. The driver’s huge night-time sunglasses fill the rear-view mirror. Your phone shows 20 minutes to Lakeview Colony.",
+        "bubble": {
+          "speaker": "Driver",
+          "text": "Madam, music? Old songs, new songs?"
+        }
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Share the live trip with a friend from the app.",
+          "reaction": "A friend now has your live location. Your friend is asleep, but still.",
+          "label": "Shared the live trip",
+          "weight": 1,
+          "move": "Trip sharing"
+        },
+        {
+          "id": "b",
+          "text": "Put on headphones and stare out of the window.",
+          "reaction": "The universal signal for “no thanks”. Unfortunately it also means nobody’s watching the road.",
+          "label": "Headphones on, eyes on the window",
+          "weight": 0
+        },
+        {
+          "id": "c",
+          "text": "Make light conversation to keep things friendly.",
+          "reaction": "Charming. He now knows your office, your sister’s name and your lunch order.",
+          "label": "Kept the small talk going",
+          "weight": -1
+        },
+        {
+          "id": "d",
+          "text": "Keep the map open on your lap and glance at it now and then.",
+          "reaction": "Quietly supervising a GPS. A hobby with surprising benefits.",
+          "label": "Kept the map open",
+          "weight": 1,
+          "move": "Keep the map open"
+        }
+      ],
+      "another": {
+        "choice": "a",
+        "why": "Trip sharing sends your live route to someone you trust. Being friendly is fine; you just don’t owe anyone your details.",
+        "move": "Trip sharing"
+      }
+    },
+    {
+      "id": "turn",
+      "title": "The turn that isn’t on the map",
+      "narrator": "Ten minutes in, the cab turns onto a road your map doesn’t show. The GPS is making a face. You can’t see it, but you can feel it.",
+      "panel": {
+        "art": "map-mismatch",
+        "alt": "Your phone’s map. The planned route runs straight up the main road, but the cab icon turns off onto a side road the map doesn’t show. The GPS looks unimpressed.",
+        "sfx": "BEEP"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Say nothing, he probably knows a shortcut.",
+          "reaction": "Bold strategy. Let’s see how the shortcut feels about you.",
+          "label": "Let the shortcut slide",
+          "weight": -1
+        },
+        {
+          "id": "b",
+          "text": "Ask calmly, “Is this the usual route? My map shows the main road.”",
+          "reaction": "A polite question. Also the most inconvenient thing you could do to a bad plan.",
+          "label": "Asked about the route",
+          "weight": 1,
+          "move": "The polite question"
+        },
+        {
+          "id": "c",
+          "text": "Call a friend: “Yes, I’m in a cab, tracking it, I’ll reach in ten minutes.”",
+          "reaction": "Acting skills: unlocked. Everyone in the car is now aware of your friend’s existence.",
+          "label": "Called a friend, out loud",
+          "weight": 1,
+          "move": "The very audible phone call"
+        },
+        {
+          "id": "d",
+          "text": "Ask him to stop at the next lit shop because you need water.",
+          "reaction": "Hydration, the most convincing excuse in history.",
+          "label": "Asked for a water stop",
+          "weight": 1,
+          "move": "The strategic water break"
+        }
+      ],
+      "another": {
+        "choice": "b",
+        "why": "A calm question about the route is often enough to bring a driver back to the main road. You’re allowed to ask.",
+        "move": "Speak up early"
+      }
+    },
+    {
+      "id": "truth",
+      "title": "The moment of truth",
+      "narrator": "A lit tea stall ahead. Your phone is at 12%. Plot twist: your battery has joined the story.",
+      "panel": {
+        "art": "tea-stall",
+        "alt": "Through the cab window, a brightly lit chai stall with a steaming kettle and a few people around it. Your phone battery reads 12%.",
+        "sfx": "BZZT"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": "Keep sitting, the ride will end eventually.",
+          "reaction": "Patience is a virtue. So is arriving.",
+          "label": "Waited it out",
+          "weight": -1
+        },
+        {
+          "id": "b",
+          "text": "Ask to be dropped at the tea stall and book another cab from there.",
+          "reaction": "Exiting a bad deal with grace. Economists would be proud.",
+          "label": "Got out at the tea stall",
+          "weight": 1,
+          "move": "The graceful exit"
+        },
+        {
+          "id": "c",
+          "text": "Call the emergency number and stay on the line.",
+          "reaction": "Not panic. A plan, with backup on speaker.",
+          "label": "Called the emergency number",
+          "weight": 1,
+          "move": "Calling 112"
+        },
+        {
+          "id": "d",
+          "text": "Message ZoomZoom support through the app while the trip is being shared.",
+          "reaction": "Customer service: the unlikely hero of the story. Please hold.",
+          "label": "Messaged the app’s support",
+          "weight": 1,
+          "move": "The support ticket"
+        }
+      ],
+      "another": {
+        "choice": "b",
+        "why": "A busy, well-lit place is a good spot to end a ride that doesn’t feel right. You can always book another.",
+        "move": "The graceful exit"
+      }
+    }
+  ],
+  "endings": {
+    "good": {
+      "title": "Five Stars, One Footnote",
+      "art": "home-door",
+      "alt": "You at your front door under a porch light. Your phone shows a five-star review with a small asterisk.",
+      "narration": "Ramesh found the main road with remarkable speed. It turns out routes are easier to follow when someone is watching them. You arrive home at 11:20 pm. The review you write begins: “Short cut, long story.”",
+      "moves": [
+        "Trip sharing",
+        "The polite question",
+        "The strategic water break"
+      ],
+      "hint": "Want the scenic route? Go with the flow this time: hop in, chat, trust the shortcut, sit tight."
+    },
+    "funnyBad": {
+      "title": "The Scenic Route Tour",
+      "art": "scenic-route",
+      "alt": "A montage: a looping flyover, a fuel pump with a CLOSED board, wedding lights and a band. Your phone battery reads 1%.",
+      "narration": "You arrive 50 minutes late, having seen three flyovers, a closed fuel pump and a wedding. The driver says, “Madam, short cut.” Your battery is at 1%. Your dignity has been rated “pending”.",
+      "moves": [
+        "Speak up early",
+        "Keep the map open",
+        "Charge your phone, always"
+      ],
+      "hint": "For the good ending: check the car, share the trip, ask about the route, and get out somewhere well lit.",
+      "extraMove": "Charge your phone, always"
+    }
+  },
+  "realLife": {
+    "disclaimer": "This was satire. Real situations are messier, faster and scarier than a comic. There is no perfect response, and nothing that happens to you is your fault. These are ideas, not rules.",
+    "tips": [
+      "Before you get in, match the number plate, car and driver photo with the app.",
+      "Share your live trip with someone you trust. Most ride apps have a share option and an in-app safety or emergency button; find yours before you need it.",
+      "Keep your map open. If the route changes, you’re allowed to ask why.",
+      "You can end a ride early at a busy, well-lit place and book another.",
+      "Keep some charge for the ride home: a power bank, or a top-up before you leave.",
+      "If you feel in danger, call 112, India’s national emergency number."
+    ]
+  }
+}
