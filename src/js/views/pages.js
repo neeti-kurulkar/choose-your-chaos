@@ -7,24 +7,6 @@ const later = (stage, what) => `
     <p>You don’t need an account to play. <a href="#/scenarios">Go to scenarios</a>.</p>
   </div></div>`;
 
-const INFO_ICON =
-  '<svg class="notice__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 10v7M12 6.5v.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>';
-
-export function serious(main) {
-  main.innerHTML = `
-  <div class="wrap page page--calm">
-    <h1>On a serious note</h1>
-    <p class="page__lede">Real support for women in India, with no jokes.</p>
-    <div class="notice" role="note">
-      ${INFO_ICON}
-      <div><p>If you are in danger right now, call <strong>112</strong>, India’s national emergency number, from any phone.</p>
-      <p><a class="btn btn--accent" href="tel:112">Call 112</a></p></div>
-    </div>
-    ${later('Stage 3', 'Helplines, reporting routes, mental health support and women-led organisations. Every number and link is checked against an official source before it is added.')}
-  </div>`;
-  return { title: 'On a serious note', nav: 'serious' };
-}
-
 export function login(main) {
   main.innerHTML = `
   <div class="wrap page page--calm">

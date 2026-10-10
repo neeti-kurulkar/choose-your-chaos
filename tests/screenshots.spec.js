@@ -1,8 +1,9 @@
 // Per-stage screenshots: npm run screenshots
 import { test } from '@playwright/test';
 
-const dir = 'docs/screenshots/stage-2';
+const dir = 'docs/screenshots/stage-3';
 const SHOTS = [
+  ['serious', '/#/serious'],
   ['landing', '/#/'],
   ['scenarios', '/#/scenarios'],
   ['about', '/#/about'],

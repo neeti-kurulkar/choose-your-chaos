@@ -1,0 +1,265 @@
+{
+  "version": 1,
+  "lastReviewed": "2026-10-10",
+  "reportWrongNumber": "mailto:support@chooseyourchaos.example?subject=Wrong%20number%20on%20Choose%20Your%20Chaos",
+  "urgent": [
+    { "label": "Emergency", "phone": "112" },
+    { "label": "Women Helpline", "phone": "181" }
+  ],
+  "sections": [
+    {
+      "id": "emergency",
+      "title": "Emergency now",
+      "intro": "If you are in danger or something is happening right now.",
+      "items": [
+        {
+          "name": "112: Emergency Response Support System",
+          "what": "India’s single emergency number for police, fire and ambulance. Free, 24 hours, from any phone.",
+          "howItWorks": "Your call reaches your state’s emergency response centre, which sends police, fire or an ambulance to where you are. If you can, say where you are first.",
+          "phones": ["112"],
+          "url": null,
+          "regions": "All states and union territories",
+          "languages": null,
+          "sources": [
+            "https://www.pib.gov.in/newsite/PrintRelease.aspx?relid=188727",
+            "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2116557"
+          ],
+          "verified": "2026-10-10"
+        },
+        {
+          "name": "181: Women Helpline",
+          "what": "A 24-hour helpline for women facing violence, in emergencies and non-emergencies. Run under the Ministry of Women and Child Development.",
+          "howItWorks": "The helpline listens, then connects you to the police, a One Stop Centre, a hospital or legal services as needed. It can also tell you about government schemes for women.",
+          "phones": ["181"],
+          "url": null,
+          "regions": "Most states and union territories",
+          "languages": null,
+          "sources": [
+            "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1910101"
+          ],
+          "verified": "2026-10-10"
+        },
+        {
+          "name": "National Commission for Women (NCW) Helpline",
+          "what": "A 24-hour helpline for women and girls aged 18 and over affected by violence. It can register a complaint, offer counselling and refer you to the police, hospitals or legal services.",
+          "howItWorks": "14490 is a short, toll-free number that connects to the same NCW helpline as 7827170170.",
+          "phones": ["14490", "7827170170"],
+          "url": "https://www.ncw.gov.in/",
+          "regions": "All India",
+          "languages": null,
+          "sources": [
+            "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2280625&reg=3&lang=1",
+            "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1739451"
+          ],
+          "verified": "2026-10-10"
+        },
+        {
+          "name": "1091: Police women helpline (some states)",
+          "what": "Delhi Police and several other state police forces run 1091 as a women’s helpline. It is not the same everywhere.",
+          "howItWorks": "If 1091 doesn’t connect where you are, call 112.",
+          "phones": ["1091"],
+          "url": null,
+          "regions": "Delhi and some other states",
+          "languages": null,
+          "sources": [
+            "https://traffic.delhipolice.gov.in/en/helpline-number",
+            "http://www.ncw.nic.in/helplines"
+          ],
+          "verified": "2026-10-10"
+        }
+      ]
+    },
+    {
+      "id": "reporting",
+      "title": "Reporting and legal routes",
+      "intro": "Ways to make a formal complaint. You can choose which route, and when.",
+      "items": [
+        {
+          "name": "Any police station: Women Help Desk",
+          "what": "Many police stations have a Women Help Desk, usually headed by a woman officer, as the first point of contact for women.",
+          "howItWorks": "You can ask for the Women Help Desk when you arrive.",
+          "phones": [],
+          "url": "https://www.mha.gov.in/en/commoncontent/women-help-desks-scheme",
+          "regions": "Police stations across India",
+          "languages": null,
+          "sources": ["https://www.mha.gov.in/en/commoncontent/women-help-desks-scheme"],
+          "verified": "2026-10-10"
+        },
+        {
+          "name": "Zero FIR",
+          "what": "You can report a serious (cognizable) offence at any police station, even if it happened somewhere else. The police register it and transfer it to the right station.",
+          "howItWorks": "Under the new criminal law (BNSS, Section 173), you can also report it electronically, and you are entitled to a free copy of the FIR.",
+          "phones": [],
+          "url": null,
+          "regions": "All India",
+          "languages": null,
+          "sources": [
+            "https://www.mha.gov.in/MHA1/Par2017/pdfs/par2025-pdfs/RS11122025/1182.pdf",
+            "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2024/may/doc2024522337501.pdf"
+          ],
+          "verified": "2026-10-10"
+        },
+        {
+          "name": "NCW online complaint",
+          "what": "File a complaint with the National Commission for Women online. You get a complaint number to track it.",
+          "howItWorks": "The NCW does not usually take up anonymous complaints, civil disputes or cases already in court.",
+          "phones": [],
+          "url": "https://ncwapps.nic.in/onlinecomplaintsv2/",
+          "regions": "All India",
+          "languages": null,
+          "sources": [
+            "https://www.ncw.gov.in/frequently-asked-questions-faqs-for-complaint-registration/",
+            "https://ncwapps.nic.in/onlinecomplaintsv2/frmFAQs.aspx"
+          ],
+          "verified": "2026-10-10"
+        },
+        {
+          "name": "National Cyber Crime Reporting Portal",
+          "what": "Report online harassment and other cybercrime against women. There is an option to report anonymously.",
+          "howItWorks": "Complaints go to the police in your state. For online money fraud, call 1930 as soon as possible.",
+          "phones": ["1930"],
+          "url": "https://cybercrime.gov.in/",
+          "regions": "All India",
+          "languages": null,
+          "sources": [
+            "https://cybercrime.gov.in/",
+            "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2085609&reg=3&lang=2"
+          ],
+          "verified": "2026-10-10"
+        },
+        {
+          "name": "SHe-Box: workplace sexual harassment",
+          "what": "A Government of India portal for complaints of sexual harassment at work, for women in any job, including domestic workers.",
+          "howItWorks": "Your complaint is sent to the right Internal or Local Committee, and you can track its status. Your details are masked.",
+          "phones": [],
+          "url": "https://shebox.wcd.gov.in/",
+          "regions": "All India",
+          "languages": "Hindi and English resources",
+          "sources": ["https://www.pib.gov.in/PressReleasePage.aspx?PRID=2049765&reg=48&lang=2"],
+          "verified": "2026-10-10"
+        },
+        {
+          "name": "Internal Committee at work (POSH Act)",
+          "what": "Under the Sexual Harassment of Women at Workplace Act, 2013, workplaces with 10 or more employees must have an Internal Committee. For smaller workplaces, or if the complaint is against the employer, each district has a Local Committee.",
+          "howItWorks": "The Act sets 90 days for the inquiry.",
+          "phones": [],
+          "url": null,
+          "regions": "All India",
+          "languages": null,
+          "sources": ["https://www.pib.gov.in/PressReleasePage.aspx?PRID=2227013&reg=3&lang=1"],
+          "verified": "2026-10-10"
+        },
+        {
+          "name": "Sakhi One Stop Centres",
+          "what": "Government centres where women affected by violence can get police help, medical aid, legal aid, counselling and short-term shelter in one place.",
+          "howItWorks": "Call 181 to be connected to your nearest centre.",
+          "phones": ["181"],
+          "url": "https://missionshakti.wcd.gov.in/",
+          "regions": "Most districts",
+          "languages": null,
+          "sources": ["https://www.pib.gov.in/PressReleasePage.aspx?PRID=1814091"],
+          "verified": "2026-10-10"
+        }
+      ]
+    },
+    {
+      "id": "mental-health",
+      "title": "Someone to talk to",
+      "intro": "For when you need to talk something through, now or later.",
+      "items": [
+        {
+          "name": "Tele-MANAS",
+          "what": "The Government of India’s free mental health helpline. Trained counsellors, with referral to specialists if needed.",
+          "howItWorks": "Free and 24 hours. You choose your language when you call.",
+          "phones": ["14416", "18008914416"],
+          "url": "https://telemanas.mohfw.gov.in/",
+          "regions": "All states and union territories",
+          "languages": "About 20 Indian languages",
+          "sources": [
+            "https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2063830&reg=48&lang=2",
+            "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2022057&reg=48&lang=2"
+          ],
+          "verified": "2026-10-10"
+        },
+        {
+          "name": "iCall (TISS)",
+          "what": "Free counselling by phone and email, run by the Tata Institute of Social Sciences.",
+          "howItWorks": "Monday to Saturday, 8:00 am to 9:00 pm. Email: icall@tiss.ac.in",
+          "phones": ["9152987821"],
+          "url": "https://icallhelpline.org/",
+          "regions": "All India",
+          "languages": null,
+          "sources": ["https://icallhelpline.org/"],
+          "verified": "2026-10-10"
+        }
+      ]
+    },
+    {
+      "id": "organisations",
+      "title": "Women-led organisations and platforms",
+      "intro": "Independent groups that support women. Services and hours vary, so check their sites.",
+      "items": [
+        {
+          "name": "Jagori",
+          "what": "Counselling and support for women facing gender-based violence, plus work on making cities safer for women.",
+          "howItWorks": "Email: helpline@jagori.org. Landline: +91 11 2669 2700, extension 34 or 35.",
+          "phones": ["+918800996640"],
+          "url": "https://www.jagori.org/",
+          "regions": "Based in New Delhi",
+          "languages": null,
+          "sources": ["https://www.jagori.org/"],
+          "verified": "2026-10-10"
+        },
+        {
+          "name": "SNEHA",
+          "what": "Crisis support, counselling and legal help for women and children facing violence, especially in Mumbai’s informal settlements.",
+          "howItWorks": "Crisis helpline for women and children facing violence. Email: crisis@snehamumbai.org",
+          "phones": ["+919892278287"],
+          "url": "https://www.snehamumbai.org/",
+          "regions": "Mumbai",
+          "languages": null,
+          "sources": ["https://www.snehamumbai.org/"],
+          "verified": "2026-10-10"
+        },
+        {
+          "name": "Safecity",
+          "what": "A platform where you can anonymously share an experience of harassment, see where it happens on a map, and find nearby police stations and hospitals.",
+          "howItWorks": "Reporting is anonymous. The data is used to push for safer public spaces.",
+          "phones": [],
+          "url": "https://webapp.safecity.in/",
+          "regions": "India and other countries",
+          "languages": "English, Hindi, Marathi, Tamil, Kannada and more",
+          "sources": ["https://webapp.safecity.in/"],
+          "verified": "2026-10-10"
+        },
+        {
+          "name": "Breakthrough India",
+          "what": "Runs programmes with young people, families and schools to change the norms behind violence against women. Awareness work, not a helpline.",
+          "howItWorks": "Contact through their website.",
+          "phones": [],
+          "url": "https://inbreakthrough.org/",
+          "regions": "Nine states",
+          "languages": null,
+          "sources": ["https://inbreakthrough.org/"],
+          "verified": "2026-10-10"
+        }
+      ]
+    }
+  ],
+  "phoneSafety": [
+    "Turn on location sharing with one or two people you trust, and know how to turn it off.",
+    "Find your phone’s emergency SOS feature in settings and try it once, so you know how it works.",
+    "Use a screen lock, and don’t share your PIN or passwords, even with people close to you.",
+    "Check which apps can see your location, photos and contacts. Remove what you don’t need.",
+    "Turn on two-step verification for your email, WhatsApp and social media.",
+    "If someone harasses you online, take screenshots with the date and username before you block or report them."
+  ],
+  "friend": [
+    "Listen first. You don’t need the perfect words; “I believe you” and “I’m glad you told me” go a long way.",
+    "Don’t ask why she didn’t do something differently. Nothing she did made it her fault.",
+    "Let her decide what happens next. Offer options, like the numbers on this page, without pushing.",
+    "Offer practical help: going with her to the police or a doctor, sitting with her while she makes a call, or just checking in later.",
+    "Keep what she tells you private unless she is in immediate danger.",
+    "Look after yourself too. Supporting someone can be heavy; Tele-MANAS (14416) is there for you as well."
+  ]
+}

@@ -8,7 +8,8 @@ import { esc } from './js/player.js';
 import { landing } from './js/views/landing.js';
 import { scenarios } from './js/views/scenarios.js';
 import { play } from './js/views/play.js';
-import { about, serious, login, tellUs, notFound } from './js/views/pages.js';
+import { about, login, tellUs, notFound } from './js/views/pages.js';
+import { serious } from './js/views/serious.js';
 
 applyPrefs();
 wireTextSize();
