@@ -40,7 +40,16 @@ export function allEndings(scenario) {
 export function pickEnding(scenario, history, key) {
   const base = withLead(scenario.endings[key], scenario, history);
   if (!base.variants) return { ...base, id: key };
-  const v = base.variants.find((x) => x.when && x.when.choices.includes(choiceIdAt(scenario, x.when.stage, history))) || base.variants[base.variants.length - 1];
+  const decides = base.variants.find((x) => x.when)?.when.stage;
+  const made = choiceIdAt(scenario, decides, history);
+  let v = base.variants.find((x) => x.when && x.when.choices.includes(made));
+  if (!v && made === null && decides) {
+    // The deciding scene was skipped: tell the recommended version, and say so.
+    const tip = scenario.stages.find((s) => s.id === decides)?.another?.choice;
+    v = base.variants.find((x) => x.when?.choices.includes(tip));
+    if (v) return { ...base, ...v, id: `${key}-${v.id}`, narration: `You skipped that scene, so the narrator filled it in with the sensible option. ${v.narration}` };
+  }
+  v = v || base.variants[base.variants.length - 1];
   return { ...base, ...v, id: `${key}-${v.id}` };
 }
 
@@ -51,4 +60,16 @@ function withLead(ending, scenario, history) {
   const id = choiceIdAt(scenario, l.from, history);
   const first = (id && l.by?.[id]) || l.default;
   return { ...ending, narration: `${first} ${ending.narration}` };
+}
+
+/** One ending by id ("funnyBad", "good-chai"), as it reads with no particular route: base merged with its variant, default lead. */
+export function endingById(scenario, id) {
+  const cut = id.indexOf('-');
+  const key = cut < 0 ? id : id.slice(0, cut);
+  const variantId = cut < 0 ? null : id.slice(cut + 1);
+  const base = scenario.endings?.[key];
+  if (!base) return null;
+  const v = variantId ? base.variants?.find((x) => x.id === variantId) : null;
+  if (variantId && !v) return null;
+  return { ...withLead(base, scenario, []), ...(v || {}), id, key };
 }

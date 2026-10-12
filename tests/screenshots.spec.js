@@ -54,8 +54,8 @@ test('shot scenes and endings', async ({ page }, info) => {
   }
   await page.waitForTimeout(900);
   await page.screenshot({ path: `${dir}/ending-good-${info.project.name}.png`, fullPage: true });
-  await page.getByRole('button', { name: 'See the other ending' }).click();
-  await page.waitForTimeout(300);
+  await page.locator('.ecard:not(.is-found)').first().click();
+  await page.waitForTimeout(1000);
   await shot('hint');
   for (const n of [0, 2, 0, 0]) {
     await page.locator('.player [data-skip]').click({ timeout: 500 }).catch(() => {});

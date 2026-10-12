@@ -1,5 +1,5 @@
 // Stage 2: the cab scenario plays through both endings, with the debrief,
-// tally, "See the other ending", back one choice and skip this scene.
+// tally, the flip-card "other ending" route, back one choice and skip this scene.
 import { test, expect } from '@playwright/test';
 
 function watchErrors(page) {
@@ -31,7 +31,7 @@ async function playThrough(page, picks) {
 const GOOD = [1, 0, 1, 1]; // all +1
 const BAD = [0, 2, 0, 0]; // all -1
 
-test('good ending, then "See the other ending" reaches funny-bad', async ({ page }) => {
+test('good ending, then an ending card reaches funny-bad', async ({ page }) => {
   const errors = watchErrors(page);
   await page.goto('/#/play/cab');
   await playThrough(page, GOOD);
@@ -41,6 +41,9 @@ test('good ending, then "See the other ending" reaches funny-bad', async ({ page
   await expect(page.locator('.ending')).not.toContainText(/good ending|bad ending/i);
   await expect(page.getByRole('heading', { name: 'Moves unlocked' })).toBeVisible();
   await expect(page.locator('.tally')).toContainText('Endings found: 1 of 4');
+  await expect(page.locator('.ecard')).toHaveCount(4);
+  await expect(page.locator('.ecard.is-found')).toHaveCount(1);
+  await expect(page.getByRole('button', { name: /^See the other ending$/ })).toHaveCount(0);
   await expect(page.locator('.route__step')).toHaveCount(4);
   await expect(page.locator('.route__alt')).toHaveCount(0);
   // Moves unlocked reflect the actual choices (B, A, B, B)
@@ -48,7 +51,8 @@ test('good ending, then "See the other ending" reaches funny-bad', async ({ page
   await expect(page.locator('.offpage')).toContainText('nothing that happens to you is your fault');
   await expect(page.locator('.offpage a[href="#/serious"]')).toBeVisible();
 
-  await page.getByRole('button', { name: 'See the other ending' }).click();
+  // Tapping an ending card flips it, then starts the run towards the other ending
+  await page.locator('.ecard:not(.is-found)').first().click();
   await expect(page.locator('.player__hint')).toContainText('Go with the flow');
   await playThrough(page, BAD);
 
@@ -59,8 +63,18 @@ test('good ending, then "See the other ending" reaches funny-bad', async ({ page
   // Never "you should" in the debrief
   expect(await page.locator('.ending').innerText()).not.toMatch(/you should/i);
 
+  await expect(page.locator('.ecard.is-found')).toHaveCount(2);
   await page.getByRole('link', { name: 'Back to scenarios' }).click();
-  await expect(page.locator('.scard--cab .is-seen')).toHaveCount(2);
+  await expect(page).toHaveURL(/#\/scenarios$/);
+
+  // Both endings can be looked back on without replaying
+  await page.getByRole('link', { name: /Your endings/ }).click();
+  await expect(page).toHaveURL(/#\/endings$/);
+  await expect(page.locator('.hcard__title')).toHaveText(['Chai, Upgraded', 'Mummy Has Entered the Chat']);
+  // The narration sits in a dropdown until asked for
+  await expect(page.locator('.hcard__narration').first()).toBeHidden();
+  await page.getByText('Read it').first().click();
+  await expect(page.locator('.hcard__narration').first()).toBeVisible();
   expect(errors).toEqual([]);
 });
 

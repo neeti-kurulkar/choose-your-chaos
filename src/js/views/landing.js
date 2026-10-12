@@ -63,28 +63,15 @@ export function landing(main) {
         <p class="cover__lede">A pushy cab route. A senior’s late-night “dinner” invite. A crowded train. An uncle with questions. You make the calls; a very dry narrator judges the situation, never you.</p>
         <div class="btn-row">
           <a class="btn btn--primary btn--big" href="#/scenarios">Play</a>
-          <a class="cover__serious" href="#/serious">On a serious note</a>
+          <p class="cover__meta">No sign-up needed.<br>About 4 minutes per scenario.</p>
         </div>
-        <p class="cover__meta">No sign-up needed. About 4 minutes per scenario.</p>
       </div>
     </section>
 
     <aside class="notice content-note" aria-label="Content note">
       <svg class="notice__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 10v7M12 6.5v.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-      <div>
-        <p><strong>Content note.</strong> These scenes are about everyday harassment: a cab going off route, unwanted messages from a senior, being touched in a crowd, invasive questions at a family function. Nothing graphic is shown and nobody gets hurt.</p>
-        <p>You can pause, skip a scene or exit at any time. If any of this is close to home, <a href="#/serious">real support is one tap away</a>.</p>
-      </div>
+      <p><strong>Content note.</strong> These scenes are about everyday harassment: a cab going off route, unwanted messages, being touched in a crowd, invasive questions. Nothing graphic is shown. Pause, skip or exit any time, and if any of this is close to home, <a href="#/serious">real support is one tap away</a>.</p>
     </aside>
-
-    <section class="how" aria-labelledby="how-title">
-      <h2 id="how-title">How it plays</h2>
-      <ol class="how__steps">
-        <li><strong>Pick a situation.</strong> Four everyday ones, set in India, four stages each.</li>
-        <li><strong>Make the calls.</strong> Every stage pauses for your move. The narrator reacts straight away.</li>
-        <li><strong>See where it lands.</strong> A smug good ending, or a harmless, very inconvenient one. Then try the other.</li>
-      </ol>
-    </section>
   </div>`;
 
   if (!reduced) {

@@ -65,12 +65,26 @@ export function renderEnding(root, scenario, history, key, { exitHref, onReplay 
       <ul>${moves.map((m) => `<li>${esc(m)}</li>`).join('')}</ul>
     </section>
 
-    <p class="tally">Endings found: ${every.filter((e) => seen.includes(e.id)).length} of ${every.length}
-      <span class="tally__list">${every.map((e) => (seen.includes(e.id) ? `“${esc(e.title)}”` : '???')).join(' · ')}</span></p>
+    <section class="tally" aria-labelledby="tally-title">
+      <h3 id="tally-title" class="tally__title">Endings found: ${every.filter((e) => seen.includes(e.id)).length} of ${every.length}</h3>
+      <p class="tally__hint">Tap a card to go after another ending.</p>
+      <ul class="ecards">${every.map((e, i) => {
+        const got = seen.includes(e.id);
+        const now = e.id === ending.id;
+        return `<li><button type="button" class="ecard ${got ? 'is-found' : ''} ${now ? 'is-now' : ''}" data-other
+          aria-label="Ending ${i + 1}: ${got ? esc(e.title) : 'not found yet'}. See the other ending">
+          <span class="ecard__inner" aria-hidden="true">
+            <span class="ecard__face ecard__face--front">${got
+              ? `<span class="ecard__num">${i + 1}</span><span class="ecard__title">${esc(e.title)}</span>${now ? '<span class="ecard__tag">Just now</span>' : '<span class="ecard__tick">✓</span>'}`
+              : `<span class="ecard__num">${i + 1}</span><span class="ecard__q">?</span>`}</span>
+            <span class="ecard__face ecard__face--back"><span class="ecard__go">Go!</span><span class="ecard__sub">Other ending</span></span>
+          </span>
+        </button></li>`;
+      }).join('')}</ul>
+    </section>
 
     <div class="btn-row ending__actions">
-      <button type="button" class="btn btn--primary" data-other>See the other ending</button>
-      <button type="button" class="btn" data-again>Play again</button>
+      <button type="button" class="btn btn--primary" data-again>Play again</button>
       <a class="btn btn--quiet" href="${exitHref}">Back to scenarios</a>
     </div>
     <p class="ending__feedback"><a href="#/feedback/${esc(scenario.id)}">How was it? Three quick questions about the game</a></p>
@@ -92,7 +106,17 @@ export function renderEnding(root, scenario, history, key, { exitHref, onReplay 
     </section>
   </article>`;
 
-  root.querySelector('[data-other]').addEventListener('click', () => onReplay(true));
+  // Ending cards: flip the tapped one, then start the run towards the other ending.
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let going = false;
+  root.querySelectorAll('[data-other]').forEach((b) => b.addEventListener('click', () => {
+    if (going) return;
+    going = true;
+    if (reducedMotion) { onReplay(true); return; }
+    sound.play('choose');
+    b.classList.add('is-flipped');
+    setTimeout(() => onReplay(true), 650);
+  }));
   root.querySelector('[data-again]').addEventListener('click', () => onReplay(false));
   window.scrollTo(0, 0);
   root.querySelector('.ending__title').focus({ preventScroll: true });

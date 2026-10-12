@@ -1,30 +1,14 @@
 import index from '../../data/scenarios/index.json';
-import { getSeen } from '../progress.js';
-import { getProfile } from '../profile.js';
 import { esc } from '../esc.js';
-import { allEndings } from '../endings.js';
-
-// Ending titles are shown only once found; unfound ones stay "???".
-const files = import.meta.glob('../../data/scenarios/*.json', { eager: true, import: 'default' });
-const endingsOf = (s) => {
-  const data = files[`../../data/scenarios/${s.file}`];
-  return data ? allEndings(data) : [];
-};
+import { getSeen } from '../progress.js';
 
 function card(s) {
   const playable = s.status !== 'coming-soon';
-  const seen = getSeen(s.id);
-  const every = endingsOf(s);
-  const ticks = every.map(({ id, title }) => {
-    const got = seen.includes(id);
-    return `<li class="${got ? 'is-seen' : ''}"><span class="tick" aria-hidden="true">${got ? '✓' : ''}</span>${got ? esc(title) : '<span aria-hidden="true">???</span><span class="visually-hidden">Ending not found yet</span>'}</li>`;
-  }).join('');
   return `
   <li class="scard scard--${esc(s.id)} ${playable ? '' : 'is-soon'}">
     <h2 class="scard__title">${esc(s.title)}</h2>
     <p class="scard__tag">${esc(s.tagline)}</p>
     <p class="scard__meta">About ${s.minutes} minutes</p>
-    ${playable ? `<p class="scard__found">Endings found: ${every.filter((e) => seen.includes(e.id)).length} of ${every.length}</p><ul class="scard__seen" aria-label="Endings found">${ticks}</ul>` : ''}
     ${playable
       ? `<a class="btn btn--primary scard__play" href="#/play/${esc(s.id)}" aria-label="Play ${esc(s.title)}${s.status === 'preview' ? ' (preview)' : ''}">${s.status === 'preview' ? 'Play preview' : 'Play'}</a>`
       : '<p class="scard__soon">Coming soon</p>'}
@@ -32,12 +16,21 @@ function card(s) {
 }
 
 export function scenarios(main) {
-  const profile = getProfile();
+  const found = index.scenarios.reduce((n, s) => n + getSeen(s.id).length, 0);
   main.innerHTML = `
-  <div class="wrap page">
-    <h1>Pick your chaos</h1>
-    <p class="page__lede">Four everyday situations. Each one takes about four minutes and has four endings, depending on what you choose.</p>
-    <p class="filter-line">Showing scenarios for: ${profile ? 'your profile' : 'any profile'} (filtering coming soon)</p>
+  <div class="wrap page scenarios-page">
+    <div class="scenarios-page__head">
+      <h1>Pick your chaos</h1>
+      <a class="btn endings-link" href="#/endings">Your endings${found ? ` <span class="endings-link__count">${found}</span>` : ''}</a>
+    </div>
+    <section class="how" aria-labelledby="how-title">
+      <h2 id="how-title">How it plays</h2>
+      <ol class="how__steps">
+        <li><strong>Pick a situation.</strong> Four everyday ones, set in India, four stages each.</li>
+        <li><strong>Make the calls.</strong> Every stage pauses for your move. The narrator reacts straight away.</li>
+        <li><strong>See where it lands.</strong> A smug good ending, or a harmless, very inconvenient one. Then try the other.</li>
+      </ol>
+    </section>
     <ul class="scards">${index.scenarios.map(card).join('')}</ul>
   </div>`;
   return { title: 'Scenarios', nav: 'scenarios' };

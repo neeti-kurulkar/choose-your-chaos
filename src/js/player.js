@@ -31,27 +31,16 @@ export const endingFor = (scenario, history) =>
   scoreOf(scenario, history) >= scenario.threshold ? 'good' : 'funnyBad';
 
 /**
- * Place the 400x250 art "band" inside the canvas: narration needs room at
- * the top, choices at the bottom. Art extends beyond the band, so the extra
- * space shows more sky and road instead of empty bars.
+ * Place the 400x250 art "band" inside the art box. Narration and choices
+ * live outside the art now, so the band is simply centred and as large as
+ * fits; the art extends beyond it, so spare space shows more sky and road.
  */
 export function fitBand(screen) {
   const W = screen.clientWidth;
   const H = screen.clientHeight;
   if (!W || !H) return;
-  const portrait = W / H < 1;
-  let s;
-  let top;
-  if (portrait) {
-    // tall phones: narration above, choices below, scene in between
-    top = H * 0.19;
-    s = Math.max(80, Math.min(W / 1.6, H - top - H * 0.45)) / 250;
-  } else {
-    // wide screens: a thin strip for narration on top, the bottom quarter
-    // for choices; the art carries on sideways to fill the width
-    top = H * 0.06;
-    s = Math.min(W / 400, (H * 0.7) / 250);
-  }
+  const s = Math.min(W / 400, H / 250);
+  const top = (H - 250 * s) / 2;
   const left = (W - 400 * s) / 2;
   const vb = `${-left / s} ${-top / s} ${W / s} ${H / s}`;
   screen.querySelectorAll('.scene > svg').forEach((el) => el.setAttribute('viewBox', vb));
@@ -124,7 +113,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
   }
   const stopTimer = () => { clearTimeout(timer); timer = null; timerLeft = 0; };
 
-  let player, stage, screen, tray, progress, stateLabel, skipBtn, dialog, resizeObs;
+  let player, stage, artBox, screen, narration, tray, progress, stateLabel, skipBtn, dialog, resizeObs;
 
   // Deadpan needs timing: lines appear sentence by sentence, with a beat
   // before each one (longer before the last). Screen readers get the
@@ -153,8 +142,11 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
         <button type="button" class="btn btn--small" data-pause>Pause / Exit</button>
       </div>
       <div class="player__stage">
-        <div class="player__screen"></div>
-        <div class="player__tray"></div>
+        <div class="player__art"><div class="player__screen"></div></div>
+        <div class="player__side">
+          <div class="player__narration"></div>
+          <div class="player__tray"></div>
+        </div>
       </div>
     </div>
     <dialog class="pause-menu" aria-labelledby="pause-title">
@@ -192,6 +184,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
     stage.querySelector('.reaction')?.remove();
     stage.querySelector('.gag')?.remove();
     stage.classList.remove('has-choices');
+    narration.innerHTML = '';
     const st = resolveStage(scenario, i, history);
     const art = ART[st.panel.art];
     const hadFocus = player.contains(document.activeElement) || dialog.open;
@@ -216,7 +209,8 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
     caption.innerHTML = `<span class="visually-hidden">Narrator: </span>${beatsHtml(st.narrator)}`;
 
     const old = [...screen.children];
-    screen.append(next, caption);
+    screen.append(next);
+    narration.append(caption);
     fitBand(screen);
     old.forEach((el) => {
       if (el.classList.contains('scene')) {
@@ -264,7 +258,10 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
   }
 
   function fadeOverlays(out) {
-    ['.scene__caption', '.scene__bubble'].forEach((sel) => {
+    // The caption steps aside for the narrator's reaction (same spot, outside the art)
+    const caption = narration.querySelector('.scene__caption');
+    if (caption) caption.hidden = out;
+    ['.scene__bubble'].forEach((sel) => {
       const el = screen.querySelector(sel);
       if (!el) return;
       if (out) el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' });
@@ -291,7 +288,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
       ${autoAdvance
         ? `<span class="visually-hidden reaction__hint">. Continues automatically, or press to ${last ? 'see how it ends' : 'go to the next scene'}.</span>`
         : `<span class="reaction__next">${last ? 'See how it ends' : 'Next scene'} ›</span>`}`;
-    stage.append(box);
+    narration.append(box);
     anim(box, [{ opacity: 0, transform: 'translateY(-10px) scale(.92)' }, { opacity: 1, transform: 'none' }], { duration: 280, easing: 'cubic-bezier(.34,1.56,.64,1)' });
     box.focus();
     box.addEventListener('click', advance);
@@ -302,7 +299,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
       inset.className = 'gag';
       inset.setAttribute('aria-hidden', 'true'); // the reaction text carries the meaning
       inset.innerHTML = gag.svg;
-      stage.append(inset);
+      artBox.append(inset);
       anim(inset, [{ opacity: 0, transform: 'scale(.6) rotate(-6deg)' }, { opacity: 1, transform: 'rotate(-2deg)' }], { duration: 320, delay: 150, easing: 'cubic-bezier(.34,1.56,.64,1)' });
       gag.play?.(inset, kit);
     }
@@ -380,7 +377,9 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
   function wireShell() {
     player = root.querySelector('.player');
     stage = root.querySelector('.player__stage');
+    artBox = root.querySelector('.player__art');
     screen = root.querySelector('.player__screen');
+    narration = root.querySelector('.player__narration');
     tray = root.querySelector('.player__tray');
     progress = root.querySelector('[data-progress]');
     stateLabel = root.querySelector('[data-state]');

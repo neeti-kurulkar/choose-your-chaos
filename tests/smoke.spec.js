@@ -39,7 +39,7 @@ test('landing to playing in two taps, then back', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('link', { name: 'Play', exact: true }).click();
   await expect(page).toHaveURL(/#\/scenarios$/);
-  await expect(page.getByText('Showing scenarios for: any profile')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'How it plays' })).toBeVisible();
   await page.getByRole('link', { name: /Play ZoomZoom/ }).click();
   await expect(page).toHaveURL(/#\/play\/cab$/);
   await expect(page.locator('.player')).toBeVisible();
@@ -86,10 +86,10 @@ test('keyboard: skip link, then Play with Enter', async ({ page }) => {
 });
 
 test('text size persists across pages', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'the text size control only lives in the mobile menu');
   await page.goto('/');
-  if (isMobile) await page.getByRole('button', { name: 'Menu' }).click();
-  const scope = isMobile ? page.locator('#mobile-nav') : page.locator('.site-header__bar');
-  await scope.getByRole('button', { name: 'L', exact: true }).click();
+  await page.getByRole('button', { name: 'Menu' }).click();
+  await page.locator('#mobile-nav').getByRole('button', { name: 'L', exact: true }).click();
   await page.goto('/#/about');
   expect(await page.evaluate(() => getComputedStyle(document.documentElement).fontSize)).toBe('20px');
 });

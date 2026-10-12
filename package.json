@@ -14,7 +14,8 @@
   "dependencies": {
     "@fontsource/atkinson-hyperlegible": "^5.0.0",
     "@fontsource/bangers": "^5.0.0",
-    "gsap": "^3.15.0"
+    "gsap": "^3.15.0",
+    "html-to-image": "^1.11.11"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

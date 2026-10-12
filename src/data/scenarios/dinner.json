@@ -415,6 +415,15 @@
       "title": "The Calendar Hostage Situation",
       "art": "d-end-calendar",
       "alt": "A calendar covered in excuse sticky notes, and a recurring invite: “Dinner (Growth), every Friday, no end date”, declined 11 times. A pop-up asks: Are you okay?",
+      "lead": {
+        "from": "tell",
+        "default": "The chat stays between you and your phone.",
+        "by": {
+          "b": "Meera says she’ll ask around, then disappears into a deadline. Without the chat to show anyone, the group chat never quite forms.",
+          "c": "The Internal Committee explains the process and asks for anything in writing. You have very little in writing.",
+          "d": "Your manager says “Leave it with me”, then leaves for a two-week offsite."
+        }
+      },
       "narration": "You spend three weeks dodging dinners with increasingly creative excuses: a cousin’s wedding, two dentists, a mysterious fever and a cat you do not own. Then he sends a recurring invite: “Dinner (Growth)”, every Friday, no end date. You have declined it eleven times. Your calendar app has started asking if you’re okay.",
       "moves": [
         "The polite broken record",

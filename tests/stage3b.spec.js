@@ -40,9 +40,6 @@ test('sign up with partial info shows the chip; delete removes it', async ({ pag
   const p = JSON.parse(await stored(page, 'cyc:profile'));
   expect(p).toMatchObject({ version: 1, displayName: 'Chai Lover', ageBand: '25-34', cityType: '' });
 
-  await page.goto('/#/scenarios');
-  await expect(page.getByText('Showing scenarios for: your profile')).toBeVisible();
-
   await page.goto('/#/login');
   await page.getByRole('button', { name: 'Delete my profile' }).click();
   await page.getByRole('button', { name: 'Yes, delete it' }).click();
@@ -116,14 +113,8 @@ test('tell us: personal-data warning, send, export, delete all', async ({ page }
   expect(list[0]).toMatchObject({ type: 'share', setting: 'public-transport', permission: false, sample: false });
   expect(await stored(page, 'cyc:submissionDraft')).toBeNull();
 
-  const download = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Export my submissions (JSON)' }).click();
-  expect((await download).suggestedFilename()).toMatch(/^choose-your-chaos-submissions-.*\.json$/);
-
-  await page.getByRole('button', { name: 'Delete all my submissions' }).click();
-  await page.getByRole('button', { name: 'Yes, delete all' }).click();
-  expect(await stored(page, 'cyc:submissions')).toBeNull();
-  await expect(page.getByText('Nothing saved yet.')).toBeVisible();
+  // The "your submissions" section is gone; the privacy page still deletes them
+  await expect(page.getByRole('heading', { name: 'Your submissions on this device' })).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 
@@ -194,5 +185,5 @@ test('privacy page: delete everything clears all keys', async ({ page }) => {
   await page.getByRole('button', { name: 'Delete everything this prototype stored' }).click();
   await page.getByRole('button', { name: 'Yes, delete everything' }).click();
   expect(await keys(page)).toEqual([]);
-  await expect(page.getByRole('link', { name: 'What this prototype stores' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'What this prototype stores and where' })).toBeVisible();
 });

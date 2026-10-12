@@ -55,16 +55,13 @@ export function serious(main) {
   ];
 
   main.innerHTML = `
-  <div class="help-strip" role="region" aria-label="Need help right now?">
-    <div class="wrap help-strip__inner">
+  <div class="wrap page page--calm serious">
+    <div class="help-strip" role="region" aria-label="Need help right now?">
       <p class="help-strip__label">Need help right now?</p>
       ${data.urgent.map((u) => `<a class="btn btn--small help-strip__call" href="tel:${esc(u.phone)}">Call ${esc(u.phone)}<span class="help-strip__what">${esc(u.label)}</span></a>`).join('')}
     </div>
-  </div>
-
-  <div class="wrap page page--calm serious">
     <h1>On a serious note</h1>
-    <p class="page__lede">Real support for women in India. No jokes on this page.</p>
+    <p class="page__lede">Real support for women in India.</p>
     <div class="notice" role="note">
       <svg class="notice__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 10v7M12 6.5v.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
       <div>
@@ -95,7 +92,6 @@ export function serious(main) {
       <ul class="tips">${data.friend.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
     </section>
 
-    <p class="report-wrong">Spotted a number that’s wrong or doesn’t connect? <a href="${esc(data.reportWrongNumber)}">Report a wrong number</a>.</p>
     <p class="visually-hidden" aria-live="polite" id="copy-status"></p>
   </div>`;
 

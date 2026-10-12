@@ -21,8 +21,9 @@ export function privacy(main) {
         <tr><td>Text size (S/M/L), sound on or off, and auto-advance on or off</td><td>So the game stays the way you set it</td><td>Button below</td></tr>
         <tr><td>Which endings you’ve seen</td><td>For the ticks on scenario cards</td><td>Button below</td></tr>
         <tr><td>Your demo profile, if you made one</td><td>For the header chip and future scenario filtering</td><td><a href="#/login">Delete my profile</a>, or the button below</td></tr>
-        <tr><td>Your “Tell us” submissions and draft, if any</td><td>So you can export them; nothing is sent</td><td><a href="#/tell-us">Delete all my submissions</a>, or the button below</td></tr>
+        <tr><td>Your “Tell us” submissions and draft, if any</td><td>So they can be looked at during testing; nothing is sent</td><td>Button below</td></tr>
         <tr><td>Your answers to the three game questions, if you saved any</td><td>So you can download or email them; nothing is sent</td><td>Button below</td></tr>
+        <tr><td>Bug reports you submit: what you typed, which page you were on, and a screenshot of that page if you left it ticked (the latest five)</td><td>So problems with the prototype can be looked at; nothing is sent</td><td>Button below</td></tr>
         <tr><td>During a user-test session only: your choices and how long each took, under a code like “P3”</td><td>So the facilitator can see where the game is unclear. Only when a “Test mode” tag shows in the header.</td><td>Button below</td></tr>
       </tbody>
     </table>

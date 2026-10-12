@@ -6,7 +6,7 @@ import { storageAvailable } from '../storage.js';
 import { findPersonalDetails } from '../pii.js';
 import { radios, select, readForm, fillForm, counter, STORAGE_NOTE } from '../forms.js';
 import {
-  getSubmissions, addSubmission, deleteAllSubmissions, exportSubmissions, getDraft, saveDraft, clearDraft,
+  addSubmission, getDraft, saveDraft, clearDraft,
 } from '../submissions.js';
 import { SUB_TYPE, SETTING, TONE, AGE, CITY } from '../options.js';
 
@@ -72,14 +72,11 @@ export function tellUs(main) {
   <div class="wrap page page--calm tellus">
     <h1>Tell us your experience</h1>
     <p class="page__lede">Your story can shape the next scenario.</p>
-    <div class="notice" role="note">
+    <div class="notice tellus__note" role="note">
       <svg class="notice__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 10v7M12 6.5v.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-      <div>
-        <p><strong>This is not a reporting channel</strong>, and nobody here can respond in an emergency. If you are in danger, call <a href="tel:112">112</a>. For support, see <a href="#/serious">On a serious note</a>.</p>
-        <p>You can write as much or as little as you like. Please don’t include real names, phone numbers, addresses or workplace names.</p>
-      </div>
+      <p><strong>Not a reporting channel</strong>, and nobody here can respond in an emergency. In danger? Call <a href="tel:112">112</a>. For support, see <a href="#/serious">On a serious note</a>. Write as much or as little as you like, but leave out real names, phone numbers, addresses and workplaces.</p>
     </div>
-    <div class="notice notice--warn" role="note"><div><p><strong>Prototype:</strong> in this version, please use made-up examples only. What you write stays on your device and is not sent anywhere. <a href="#/privacy">What this prototype stores</a></p></div></div>
+    <div class="notice notice--warn tellus__note" role="note"><p><strong>Prototype:</strong> please use made-up examples only. What you write stays on this device. <a href="#/privacy">What this prototype stores</a></p></div>
     ${storageAvailable() ? '' : STORAGE_NOTE}
 
     <div id="tellus-body">
@@ -111,42 +108,11 @@ export function tellUs(main) {
       </form>
     </div>
 
-    <section class="mine" aria-labelledby="mine-title">
-      <h2 id="mine-title">Your submissions on this device</h2>
-      <p data-count></p>
-      <div class="btn-row">
-        <button type="button" class="btn" data-export>Export my submissions (JSON)</button>
-        <button type="button" class="btn btn--quiet" data-deleteall>Delete all my submissions</button>
-      </div>
-      <p class="delete-confirm" hidden>Delete every submission saved in this browser? This can’t be undone. <button type="button" class="btn btn--small" data-delete-yes>Yes, delete all</button> <button type="button" class="btn btn--quiet btn--small" data-delete-no>Cancel</button></p>
-      <p class="form-status" role="status" data-mine-status></p>
-    </section>
   </div>`;
 
   let form = main.querySelector('#tellus-form');
   let step = 0;
   let piiConfirmed = false;
-
-  // ---------- your submissions ----------
-  const countEl = main.querySelector('[data-count]');
-  const mineStatus = main.querySelector('[data-mine-status]');
-  const renderCount = () => {
-    const n = getSubmissions().length;
-    countEl.textContent = n ? `${n} saved in this browser.` : 'Nothing saved yet.';
-    main.querySelector('[data-export]').disabled = !n;
-    main.querySelector('[data-deleteall]').disabled = !n;
-  };
-  renderCount();
-  main.querySelector('[data-export]').addEventListener('click', () => { exportSubmissions(); mineStatus.textContent = 'Exported as a JSON file.'; });
-  const confirmBox = main.querySelector('.mine .delete-confirm');
-  main.querySelector('[data-deleteall]').addEventListener('click', () => { confirmBox.hidden = false; confirmBox.querySelector('button').focus(); });
-  main.querySelector('[data-delete-no]').addEventListener('click', () => { confirmBox.hidden = true; });
-  main.querySelector('[data-delete-yes]').addEventListener('click', () => {
-    deleteAllSubmissions();
-    confirmBox.hidden = true;
-    renderCount();
-    mineStatus.textContent = 'All your submissions have been deleted from this browser.';
-  });
 
   // ---------- the step form ----------
   function wireForm() {
@@ -220,7 +186,6 @@ export function tellUs(main) {
         permission: Boolean(data.permission),
         ...(profile ? { profile } : {}),
       });
-      renderCount();
       confirm();
     }
 

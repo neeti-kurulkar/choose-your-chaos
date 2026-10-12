@@ -35,12 +35,10 @@ test('page: every tel: link is a number from the data file', async ({ page }) =>
   expect(errors).toEqual([]);
 });
 
-test('sticky help strip stays visible while scrolling', async ({ page }) => {
+test('help strip with the urgent numbers is first on the page', async ({ page }) => {
   await page.goto('/#/serious');
   const strip = page.getByRole('region', { name: 'Need help right now?' });
   await expect(strip.locator('a[href="tel:112"]')).toBeVisible();
-  await page.mouse.wheel(0, 3000);
-  await page.waitForTimeout(200);
   await expect(strip).toBeInViewport();
 });
 

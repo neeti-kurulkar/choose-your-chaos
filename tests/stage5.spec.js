@@ -3,7 +3,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-const PAGES = ['/', '/scenarios', '/serious', '/tell-us', '/login', '/about', '/privacy', '/feedback/cab', '/test-mode', '/admin-demo', '/nope'];
+const PAGES = ['/', '/scenarios', '/endings', '/serious', '/tell-us', '/login', '/about', '/privacy', '/feedback/cab', '/test-mode', '/admin-demo', '/nope'];
 
 async function axe(page) {
   const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();

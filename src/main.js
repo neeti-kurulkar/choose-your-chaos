@@ -7,6 +7,7 @@ import { getProfile } from './js/profile.js';
 import { esc } from './js/esc.js';
 import { landing } from './js/views/landing.js';
 import { scenarios } from './js/views/scenarios.js';
+import { history } from './js/views/history.js';
 import { play } from './js/views/play.js';
 import { about, notFound } from './js/views/pages.js';
 import { account } from './js/views/account.js';
@@ -18,10 +19,12 @@ import { feedback } from './js/views/feedback.js';
 import { testMode } from './js/views/testmode.js';
 import { wireSound } from './js/sound.js';
 import { testSettings } from './js/testmode.js';
+import { initBugReport } from './js/bugreport.js';
 
 applyPrefs();
 wireTextSize();
 wireSound();
+initBugReport();
 document.body.classList.toggle('is-testing', testSettings().on);
 
 // Routes: hash-based so the static build works on any host with no config.
@@ -29,6 +32,7 @@ document.body.classList.toggle('is-testing', testSettings().on);
 const ROUTES = [
   [/^\/?$/, landing],
   [/^\/scenarios$/, scenarios],
+  [/^\/endings$/, history],
   [/^\/play\/([\w-]+)$/, play],
   [/^\/serious$/, serious],
   [/^\/login$/, account],
