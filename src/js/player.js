@@ -39,7 +39,7 @@ export function fitBand(screen) {
   const W = screen.clientWidth;
   const H = screen.clientHeight;
   if (!W || !H) return;
-  const s = Math.min(W / 400, H / 250);
+  const s = Math.min(W / 440, H / 265); // a little margin so edge props stay in frame
   const top = (H - 250 * s) / 2;
   const left = (W - 400 * s) / 2;
   const vb = `${-left / s} ${-top / s} ${W / s} ${H / s}`;

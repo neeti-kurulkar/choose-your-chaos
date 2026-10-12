@@ -146,7 +146,7 @@ test('the good ending depends on how you get out', async ({ page }) => {
   await expect(page.locator('.tally')).toContainText('Endings found: 3 of 4');
 });
 
-test('choices sit on the canvas, over the scene', async ({ page }) => {
+test('choices and narration sit inside the player, outside the scene', async ({ page }) => {
   await page.goto('/#/play/cab');
   await page.locator('.player [data-skip]').click();
   await page.locator('.player .choice').last().waitFor();
@@ -155,4 +155,9 @@ test('choices sit on the canvas, over the scene', async ({ page }) => {
   const choice = await page.locator('.player .choice').last().boundingBox();
   expect(choice.y + choice.height).toBeLessThanOrEqual(stage.y + stage.height + 1);
   expect(choice.y).toBeGreaterThan(stage.y);
+  // Nothing from the narrator overlaps the animation box
+  const art = await page.locator('.player__art').boundingBox();
+  const caption = await page.locator('.scene__caption').boundingBox();
+  const apart = caption.y + caption.height <= art.y + 1 || caption.x >= art.x + art.width - 1;
+  expect(apart).toBe(true);
 });

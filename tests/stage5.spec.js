@@ -151,6 +151,7 @@ test('text size L: no sideways scrolling on any page, choices fit in the player'
     const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(over, path).toBeLessThanOrEqual(0);
   }
+  await page.waitForTimeout(700); // the choices rise into place; measure once they've settled
   const last = await page.locator('.player .choice').last().boundingBox();
   const vh = page.viewportSize().height;
   expect(last.y + last.height, 'last choice on screen').toBeLessThanOrEqual(vh);

@@ -867,7 +867,7 @@ body:not(.is-ready) #main { min-height: 100vh; }
    ========================================================= */
 .player__stage { display: flex; flex-direction: column; background: var(--c-panel); overflow: hidden; }
 .player__art {
-  position: relative; flex: 1 1 auto; min-height: 9rem; background: #120c16; overflow: hidden;
+  position: relative; flex: 1 1 auto; min-height: 6.5rem; background: #120c16; overflow: hidden;
   border-top: var(--line) solid var(--c-ink); border-bottom: var(--line) solid var(--c-ink);
 }
 .player__narration { padding-bottom: var(--s-2) !important; }
