@@ -42,13 +42,7 @@ npm run build
 
 **Netlify (drag and drop):** open https://app.netlify.com/drop and drop the `dist/` folder onto the page. Netlify gives you a public URL. You need a free Netlify account to keep the site up.
 
-**GitHub Pages:**
-1. Push the repo to GitHub.
-2. Run `npm run build`.
-3. Publish `dist/` to a `gh-pages` branch with `npx gh-pages -d dist`, or upload it with the "Deploy static content" Actions workflow.
-4. In the repo, go to Settings → Pages and choose the `gh-pages` branch.
-
-The site then works at `https://<user>.github.io/<repo>/`.
+**GitHub Pages (set up):** the live site is https://neeti-kurulkar.github.io/choose-your-chaos/. `.github/workflows/deploy.yml` rebuilds and republishes it on every push to `main`; the Actions tab shows progress. To redeploy without a code change, go to Actions → "Deploy to GitHub Pages" → Run workflow.
 
 **Any other host (Vercel, Cloudflare Pages, a university web space, an S3 bucket):** upload the contents of `dist/`. No configuration is needed.
 
