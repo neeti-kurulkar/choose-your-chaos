@@ -33,6 +33,7 @@
 .btn--big { min-height: 56px; padding: var(--s-2) var(--s-7); font-size: var(--t-md); }
 
 /* Play view: the player fills the screen, so the footer steps aside */
+body[data-view='play'] .site-footer { display: none; }
 .play { padding-top: var(--s-3); padding-bottom: var(--s-3); }
 
 /* ---------- Landing cover ---------- */
@@ -858,72 +859,4 @@ body:not(.is-ready) #main { min-height: 100vh; }
   .hcard__art { width: clamp(4.5rem, 10vh, 7rem); }
   .hcard__body { padding: var(--s-1) var(--s-3); gap: 2px; }
   .hcard__title { font-size: var(--t-sm); letter-spacing: 0.03em; }
-}
-
-/* =========================================================
-   Player layout: the animation has its own box and nothing sits on it.
-   The narrator (scene caption, then the reaction) and the choices live
-   beside it on laptops and stacked around it on phones.
-   ========================================================= */
-.player__stage { display: flex; flex-direction: column; background: var(--c-panel); overflow: hidden; }
-.player__art {
-  position: relative; flex: 1 1 auto; min-height: 6.5rem; background: #120c16; overflow: hidden;
-  border-top: var(--line) solid var(--c-ink); border-bottom: var(--line) solid var(--c-ink);
-}
-.player__narration { padding-bottom: var(--s-2) !important; }
-.player__art::after {
-  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 18%;
-  background: linear-gradient(to top, #120c16 10%, rgba(18, 12, 22, 0));
-  pointer-events: none; z-index: 2;
-}
-.player__stage::after { content: none; }
-.player__side { display: contents; }
-.player__narration { order: -1; flex: none; padding: var(--s-2) var(--s-3) 0; }
-.player__narration:empty { display: none; }
-.player__narration .scene__caption,
-.player__narration .player .reaction {
-  position: static;
-  max-width: none;
-  margin: 0;
-}
-.player__narration .scene__caption { box-shadow: 3px 3px 0 var(--c-ink); }
-.player__narration .scene__caption[hidden] { display: none; }
-.player .player__narration .reaction {
-  position: relative;
-  inset: auto;
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  box-shadow: 3px 3px 0 var(--c-ink);
-}
-.player .player__tray,
-.player__stage.has-choices .player__tray {
-  position: static;
-  flex: none;
-  max-height: none;
-  overflow: visible;
-  padding: var(--s-2) var(--s-3) var(--s-3);
-  background: none;
-}
-.player .player__tray:empty { display: none; }
-.player .choice { background: var(--c-panel); }
-.player .choices { max-width: none; grid-template-columns: 1fr; }
-
-@media (min-width: 56rem) {
-  .player__stage { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
-  .player__art { min-height: 0; border: 0; border-right: var(--line) solid var(--c-ink); }
-  .player__narration { padding-bottom: 0 !important; }
-  .player__side {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: var(--s-3);
-    min-height: 0;
-    padding: var(--s-4);
-    overflow-y: auto; /* only if L text is too tall */
-  }
-  .player__narration { order: 0; padding: 0; }
-  .player .player__tray, .player__stage.has-choices .player__tray { padding: 0; }
-  .player .choices { grid-template-columns: 1fr; }
-  .player__narration .scene__caption { font-size: var(--t-md); }
 }
