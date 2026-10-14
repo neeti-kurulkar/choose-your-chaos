@@ -15,10 +15,9 @@
           "speaker": "Bunty Uncle",
           "text": "Arre beta! So when is the good news? Age is running, you know!",
           "at": [
-            10,
-            62
-          ],
-          "tail": "right"
+            310,
+            78
+          ]
         }
       },
       "choices": [
@@ -80,10 +79,9 @@
           "speaker": "Bunty Uncle",
           "text": "Beta, I’m like your chacha only. So… salary?",
           "at": [
-            10,
-            62
-          ],
-          "tail": "right"
+            220,
+            77
+          ]
         }
       },
       "variants": {
@@ -218,10 +216,9 @@
           "speaker": "Bunty Uncle",
           "text": "One nice photo, come close, beta!",
           "at": [
-            10,
-            62
-          ],
-          "tail": "right"
+            270,
+            72
+          ]
         }
       },
       "choices": [

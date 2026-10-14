@@ -31,33 +31,28 @@ export const endingFor = (scenario, history) =>
   scoreOf(scenario, history) >= scenario.threshold ? 'good' : 'funnyBad';
 
 /**
- * Place the 400x250 art "band" inside the canvas: narration needs room at
- * the top, choices at the bottom. Art extends beyond the band, so the extra
- * space shows more sky and road instead of empty bars.
+ * Place the 400x250 art "band" inside the canvas, in the space the text
+ * leaves free: `room.top` px are taken by the narrator caption (and a speech
+ * bubble), `room.bottom` px by the choices or the narrator's reaction. The
+ * art extends beyond the band, so spare space shows more sky and road
+ * instead of empty bars. The choices may overlap the bottom 15% of the
+ * band (the ground, which fades out under them); on very small screens the
+ * band keeps a minimum height and the choices overlap a little more.
  */
-export function fitBand(screen) {
+export function fitBand(screen, room = { top: 0, bottom: 0 }, scenes = screen.querySelectorAll('.scene')) {
   const W = screen.clientWidth;
   const H = screen.clientHeight;
-  if (!W || !H) return;
-  const portrait = W / H < 1;
-  let s;
-  let top;
-  if (portrait) {
-    // tall phones: narration above, choices below, scene in between
-    top = H * 0.19;
-    s = Math.max(80, Math.min(W / 1.6, H - top - H * 0.45)) / 250;
-  } else {
-    // wide screens: a thin strip for narration on top, the bottom quarter
-    // for choices; the art carries on sideways to fill the width
-    top = H * 0.06;
-    s = Math.min(W / 400, (H * 0.7) / 250);
-  }
+  if (!W || !H) return null;
+  const free = H - room.top - room.bottom;
+  const s = Math.max(0.2, Math.min(W / 400, Math.max(free / 0.85, H * 0.32) / 250));
+  const top = room.top + Math.max(0, (free - 250 * s * 0.85) / 2);
   const left = (W - 400 * s) / 2;
   const vb = `${-left / s} ${-top / s} ${W / s} ${H / s}`;
-  screen.querySelectorAll('.scene > svg').forEach((el) => el.setAttribute('viewBox', vb));
+  scenes.forEach((el) => el.querySelector(':scope > svg')?.setAttribute('viewBox', vb));
   screen.style.setProperty('--band-top', `${top}px`);
   screen.style.setProperty('--band-left', `${left}px`);
   screen.style.setProperty('--band-s', String(s));
+  return { W, H, s, top, left };
 }
 
 /**
@@ -125,6 +120,75 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
   const stopTimer = () => { clearTimeout(timer); timer = null; timerLeft = 0; };
 
   let player, stage, screen, tray, progress, stateLabel, skipBtn, dialog, resizeObs;
+
+  // ---- Layout: text never sits on the art ----
+  // The caption (and a speech bubble under it) take the top, the choices
+  // or the reaction take the bottom; the scene fits in between.
+  let current = null; // { st, scene, caption, bottom }
+  const GAP = 8;
+  const TAIL = 20; // speech-bubble tail height
+
+  // Lay out the choices and every possible reaction invisibly to learn how
+  // much room the bottom needs for this stage.
+  function reserveBottom(st) {
+    const probe = document.createElement('div');
+    probe.className = 'player__probe';
+    probe.setAttribute('aria-hidden', 'true');
+    probe.innerHTML = `<div class="player__tray">${choicesHtml(st)}</div>${st.choices
+      .map((c) => `<div class="reaction"><span class="reaction__who">Narrator</span><span class="reaction__text">${esc(c.reaction)}</span>${autoAdvance ? '' : '<span class="reaction__next">Next scene ›</span>'}</div>`).join('')}`;
+    stage.append(probe);
+    const tray = probe.querySelector('.player__tray');
+    const H = stage.clientHeight;
+    const choices = Math.min(tray.scrollHeight, H * 0.62);
+    const reactions = Math.max(0, ...[...probe.querySelectorAll('.reaction')].map((r) => r.offsetHeight));
+    probe.remove();
+    return Math.max(choices, reactions + 24) + GAP;
+  }
+
+  function layout() {
+    if (!current || !current.scene.isConnected) return;
+    const { st, scene, caption } = current;
+    const capBottom = caption.isConnected ? caption.offsetTop + caption.offsetHeight + GAP : GAP;
+    const bubble = scene.querySelector('.scene__bubble');
+    let top = capBottom;
+    let band = fitBand(screen, { top, bottom: current.bottom }, [scene]);
+    if (bubble && band) {
+      // Comic placement: the bubble sits just above the speaker's head (in
+      // the sky over them) and below the caption; if there isn't room, the
+      // scene moves down until there is.
+      const [ax, ay] = st.panel.bubble.at || [200, 80];
+      const bh = bubble.offsetHeight;
+      for (let k = 0; k < 4; k++) {
+        const bubbleTop = band.top + ay * band.s - TAIL - bh;
+        if (bubbleTop >= capBottom - 0.5) break;
+        top += capBottom - bubbleTop;
+        band = fitBand(screen, { top, bottom: current.bottom }, [scene]);
+      }
+      const x = band.left + ax * band.s;
+      const w = bubble.offsetWidth;
+      const left = Math.min(Math.max(12, x - w / 2), band.W - w - 12);
+      bubble.style.top = `${Math.max(capBottom, band.top + ay * band.s - TAIL - bh)}px`;
+      bubble.style.left = `${left}px`;
+      bubble.style.setProperty('--tail-x', `${Math.min(Math.max(14, x - left - 11), w - 36)}px`);
+    }
+    current.band = band;
+  }
+
+  // The per-choice gag goes where it covers nothing: beside the reaction
+  // at the bottom on wide screens, otherwise in the space above the scene
+  // (the caption and bubble have faded by then).
+  function placeGag(inset, box) {
+    const band = current?.band;
+    if (!band) return;
+    const right = band.W - (box.offsetLeft + box.offsetWidth) - 28;
+    if (right >= 160) {
+      const w = Math.min(right, 300);
+      Object.assign(inset.style, { width: `${w}px`, left: 'auto', right: `${12 + (right - w) / 2}px`, top: 'auto', bottom: `${stage.clientHeight - box.offsetTop - box.offsetHeight}px`, margin: 0 });
+    } else {
+      const h = Math.max(80, Math.min(band.top - 16, 190, (band.W * 0.62) / 1.6));
+      Object.assign(inset.style, { width: `${h * 1.6}px`, top: '10px', bottom: 'auto' });
+    }
+  }
 
   // Deadpan needs timing: lines appear sentence by sentence, with a beat
   // before each one (longer before the last). Screen readers get the
@@ -205,11 +269,10 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
     next.setAttribute('role', 'img');
     next.setAttribute('aria-label', st.panel.alt);
     const b = st.panel.bubble;
-    const [bx, by] = b?.at || [250, 70];
     const [sx, sy] = st.panel.sfxAt || [288, 120];
     next.innerHTML = `${art ? art.svg : `<p class="scene__fallback">${esc(st.panel.alt)}</p>`}
       ${st.panel.sfx ? `<div class="scene__sfx sfx" aria-hidden="true" style="--sx:${sx};--sy:${sy}">${BURST}<span class="sfx__word">${esc(st.panel.sfx)}!</span></div>` : ''}
-      ${b ? `<p class="bubble scene__bubble${b.tail === 'right' ? ' bubble--right' : ''}" style="--bx:${bx};--by:${by}"><span class="visually-hidden">${esc(b.speaker)} says: </span>${esc(b.text)}</p>` : ''}`;
+      ${b ? `<p class="bubble scene__bubble"><span class="visually-hidden">${esc(b.speaker)} says: </span>${esc(b.text)}</p>` : ''}`;
     const caption = document.createElement('p');
     caption.className = 'narrator scene__caption';
     caption.setAttribute('aria-live', 'polite');
@@ -217,7 +280,8 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
 
     const old = [...screen.children];
     screen.append(next, caption);
-    fitBand(screen);
+    current = { st, scene: next, caption, bottom: reserveBottom(st) };
+    layout();
     old.forEach((el) => {
       if (el.classList.contains('scene')) {
         anim(el, [{ opacity: 1 }, { opacity: 0 }], { duration: 400, easing: 'ease-in' })
@@ -246,13 +310,15 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
     showChoices(st, hadFocus || player.contains(document.activeElement));
   }
 
+  const choicesHtml = (st) => `<ol class="choices">${st.choices
+    .map((c, n) => `<li><button type="button" class="choice" data-n="${n}"><span class="choice__key" aria-hidden="true">${KEYS[n]}</span><span>${esc(c.text)}</span></button></li>`)
+    .join('')}</ol>`;
+
   function showChoices(st, moveFocus) {
     setPaused(true);
     testLog.event('choices', { stage: st.id });
     stage.classList.add('has-choices');
-    tray.innerHTML = `<h3 class="visually-hidden" tabindex="-1">Your move</h3><ol class="choices">${st.choices
-      .map((c, n) => `<li><button type="button" class="choice" data-n="${n}"><span class="choice__key" aria-hidden="true">${KEYS[n]}</span><span>${esc(c.text)}</span></button></li>`)
-      .join('')}</ol>`;
+    tray.innerHTML = `<h3 class="visually-hidden" tabindex="-1">Your move</h3>${choicesHtml(st)}`;
     tray.querySelectorAll('.choice').forEach((btn, n) =>
       anim(btn, [{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'none' }], { duration: 260, delay: n * 60 }),
     );
@@ -292,7 +358,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
         ? `<span class="visually-hidden reaction__hint">. Continues automatically, or press to ${last ? 'see how it ends' : 'go to the next scene'}.</span>`
         : `<span class="reaction__next">${last ? 'See how it ends' : 'Next scene'} ›</span>`}`;
     stage.append(box);
-    anim(box, [{ opacity: 0, transform: 'translateY(-10px) scale(.92)' }, { opacity: 1, transform: 'none' }], { duration: 280, easing: 'cubic-bezier(.34,1.56,.64,1)' });
+    anim(box, [{ opacity: 0, transform: 'translateY(10px) scale(.92)' }, { opacity: 1, transform: 'none' }], { duration: 280, easing: 'cubic-bezier(.34,1.56,.64,1)' });
     box.focus();
     box.addEventListener('click', advance);
     // A small visual gag that undercuts (or seconds) the narrator's line.
@@ -303,6 +369,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
       inset.setAttribute('aria-hidden', 'true'); // the reaction text carries the meaning
       inset.innerHTML = gag.svg;
       stage.append(inset);
+      placeGag(inset, box);
       anim(inset, [{ opacity: 0, transform: 'scale(.6) rotate(-6deg)' }, { opacity: 1, transform: 'rotate(-2deg)' }], { duration: 320, delay: 150, easing: 'cubic-bezier(.34,1.56,.64,1)' });
       gag.play?.(inset, kit);
     }
@@ -319,7 +386,7 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
       box.disabled = true;
       const inset = stage.querySelector('.gag');
       if (inset) anim(inset, [{ opacity: 1 }, { opacity: 0 }], { duration: 200 });
-      await anim(box, [{ opacity: 1 }, { opacity: 0, transform: 'translateY(-8px)' }], { duration: 220 }).finished.catch(() => {});
+      await anim(box, [{ opacity: 1 }, { opacity: 0, transform: 'translateY(8px)' }], { duration: 220 }).finished.catch(() => {});
       box.remove();
       inset?.remove();
     }
@@ -388,7 +455,11 @@ export function mountPlayer(root, scenario, { exitHref = '#/scenarios', hint = '
     dialog = root.querySelector('dialog');
 
     resizeObs?.disconnect();
-    resizeObs = new ResizeObserver(() => fitBand(screen));
+    resizeObs = new ResizeObserver(() => {
+      if (!current) return;
+      current.bottom = reserveBottom(current.st);
+      layout();
+    });
     resizeObs.observe(screen);
 
     skipBtn.addEventListener('click', () => {

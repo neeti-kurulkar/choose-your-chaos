@@ -16,9 +16,8 @@
           "text": "Haan haan, I’m just standing.",
           "at": [
             250,
-            62
-          ],
-          "tail": "right"
+            69
+          ]
         }
       },
       "choices": [
@@ -73,8 +72,8 @@
         "alt": "The coach jolts and everyone sways. The man with the front backpack has leaned in again. A woman beside you, holding a bag of oranges, has noticed.",
         "sfx": "JOLT",
         "sfxAt": [
-          40,
-          30
+          292,
+          8
         ]
       },
       "variants": {

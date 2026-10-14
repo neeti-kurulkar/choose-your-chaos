@@ -65,7 +65,7 @@ export const COMMUTE_ART = {
   /* Stage 1: noticing */
   'c-crowd': {
     gsap: true,
-    svg: svg(`${coach('cc')}${led('cc', 'PLEASE MOVE INSIDE THE COACH · PLEASE MOVE INSIDE THE COACH')}
+    svg: svg(`${coach('cc')}<g transform="translate(-2 -4) scale(0.8)">${led('cc', 'PLEASE MOVE INSIDE THE COACH · PLEASE MOVE INSIDE THE COACH')}</g>
       ${back(40, 150, { top: '#4a7a5a', s: 1.1 })}${back(360, 150, { top: '#5a6a8a', s: 1.1, bun: true })}
       ${looming(250, 104, { id: 'cc-man', phone: true })}
       <g transform="translate(70 26)">${you('cc', { phone: false })}</g>

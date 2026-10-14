@@ -603,6 +603,8 @@ body[data-view='serious'] { background-image: none; }
 }
 .scene > svg { display: block; width: 100%; height: 100%; }
 .scene__caption { top: var(--s-3); left: var(--s-3); right: var(--s-3); max-width: 38rem; margin: 0 auto; z-index: 2; }
+/* Wide screens: a wider caption takes fewer lines, which leaves more room for the scene */
+@media (min-width: 56rem) { .scene__caption { max-width: 52rem; } }
 .scene__sfx {
   right: auto; bottom: auto;
   left: calc(var(--band-left, 0px) + var(--band-s, 1) * var(--sx, 288) * 1px);
@@ -611,12 +613,13 @@ body[data-view='serious'] { background-image: none; }
   z-index: 1;
 }
 .scene__bubble {
-  right: auto; bottom: auto;
-  left: calc(var(--band-left, 0px) + var(--band-s, 1) * var(--bx) * 1px);
-  top: calc(var(--band-top, 0px) + var(--band-s, 1) * var(--by) * 1px);
-  max-width: min(18rem, calc(100% - var(--band-left, 0px) - var(--band-s, 1) * var(--bx) * 1px - 12px));
+  /* placed by the player: under the caption, over the speaker */
+  right: auto; bottom: auto; left: 12px; top: 0;
+  width: max-content;
+  max-width: min(20rem, calc(100% - 24px));
   z-index: 1;
 }
+.scene__bubble::after { left: var(--tail-x, 28px); }
 .player__tray,
 .player .player__tray {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
@@ -632,10 +635,10 @@ body[data-view='serious'] { background-image: none; }
 @media (min-width: 56rem) { .player .choices { grid-template-columns: 1fr 1fr; } }
 .player .choice { background: rgba(46, 37, 48, 0.94); }
 
-/* Narrator reaction: a tappable bubble at the top that fades by itself */
+/* Narrator reaction: a tappable caption where the choices were; it fades by itself */
 .reaction {
   position: absolute; z-index: 4;
-  top: var(--s-3); left: var(--s-3); right: var(--s-3); bottom: auto;
+  top: auto; left: var(--s-3); right: var(--s-3); bottom: var(--s-3);
   max-width: 34rem; margin: 0 auto;
   display: grid; gap: var(--s-1); justify-items: start;
   font: inherit; text-align: left; cursor: pointer;
@@ -684,10 +687,6 @@ body[data-view='serious'] { background-image: none; }
 .gag svg { display: block; width: 100%; height: 100%; }
 
 .scene__bubble { opacity: 0; }
-.player .scene__bubble { max-width: min(12rem, calc(100% - var(--band-left, 0px) - var(--band-s, 1) * var(--bx) * 1px - 12px)); }
-
-/* Bubble tail on the right, pointing at a speaker to the bubble's right */
-.bubble--right::after { left: auto; right: 28px; border-right: 0; border-left: var(--line) solid var(--c-ink); transform: skewX(35deg); }
 
 /* ---------- Stage 5: sound toggle, test-mode tag, fallbacks ---------- */
 .sound-toggle {
@@ -860,3 +859,8 @@ body:not(.is-ready) #main { min-height: 100vh; }
   .hcard__body { padding: var(--s-1) var(--s-3); gap: 2px; }
   .hcard__title { font-size: var(--t-sm); letter-spacing: 0.03em; }
 }
+
+/* Invisible copy of the choices and reactions, measured to size the scene */
+.player__probe { position: absolute; left: 0; right: 0; top: 0; visibility: hidden; pointer-events: none; }
+.player .player__probe .player__tray { position: static; max-height: none; overflow: visible; padding-top: var(--s-6); }
+.player .player__probe .reaction { position: static; width: calc(100% - 2 * var(--s-3)); margin: 0 auto var(--s-3); }

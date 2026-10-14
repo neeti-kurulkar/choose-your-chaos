@@ -88,7 +88,7 @@ src/data/
 | `art` | string | Key in `src/art/index.js` (see `illustrations.md`). Each art entry has an SVG and a `play()` entrance animation. |
 | `alt` | string | **Required.** Must carry the full meaning of the picture. |
 | `sfx` | string? | Optional sound-effect burst word. Also read out as "Sound effect: SCREECH". |
-| `bubble` | object? | Optional speech bubble; `speaker` is announced to screen readers. |
+| `bubble` | object? | Optional speech bubble; `speaker` is announced to screen readers. `at: [x, y]` is the point on the 400×250 art the tail points to (the speaker’s head). The bubble itself sits between the narrator caption and the art, so it never covers the scene. |
 
 ### Choice
 

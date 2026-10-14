@@ -124,7 +124,7 @@ export const WEDDING_ART = {
       <g ${INK} stroke-width="2">${[50, 110, 170, 230].map((x) => `<ellipse cx="${x}" cy="138" rx="24" ry="7" fill="#c0c0c8"/>`).join('')}</g>
       ${['PANEER', 'PULAO', 'PURI', 'JAMUN'].map((t, i) => txt(50 + i * 60, 132, t, 9, { font: BANG, color: '#f5c55a', anchor: 'middle' })).join('')}
       <g id="wb-uncle">${bunty(310, 112, { s: 1.15 })}${plate('wb-plate', 352, 156, 3)}</g>
-      ${counter('wb', 296, 46, 0, 1)}
+      ${counter('wb', 24, 62, 0, 1)}
       <g transform="translate(-6 30) scale(0.9)">${you('wb', { phone: false })}</g>`),
     play: (scene, { gsap, track, reduced }) => {
       party(gsap, track, scene, 'wb', reduced);
@@ -146,7 +146,7 @@ export const WEDDING_ART = {
         <path d="M196 156 L150 132" stroke="#c99a3a" stroke-width="12" stroke-linecap="round"/><circle cx="148" cy="131" r="6" fill="#c68a5c" ${INK} stroke-width="2"/></g>
       <g id="wc-speed" stroke="#f5c55a" stroke-width="2.5">${[0, 1, 2].map((i) => `<path d="M${276 + i * 4} ${130 + i * 12}h28"/>`).join('')}</g>
       ${plate('wc-plate', 330, 168, 7)}
-      ${counter('wc', 300, 46, 1, 4, ['Salary?', 'Weight?', 'Marriage?'])}
+      ${counter('wc', 24, 62, 1, 4, ['Salary?', 'Weight?', 'Marriage?'])}
       <g transform="translate(14 22) scale(0.9)">${you('wc', { phone: false })}</g>`),
     play: (scene, { gsap, track, pop, reduced }) => {
       party(gsap, track, scene, 'wc', reduced);
